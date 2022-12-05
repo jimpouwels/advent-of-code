@@ -1,8 +1,8 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import Hand from './hand.js';
 
-const input = readFileSync(join(process.cwd(), 'input.txt')).toString();
+const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
 const lines = input.split('\n');
 
 const types = createTypes();
