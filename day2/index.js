@@ -18,15 +18,6 @@ for (let i = 0; i < types.length; i++) {
     types[i].beats = types[previous];
 }
 
-function indexAt(index, max) {
-    if (index > max) {
-        return 0;
-    } else if (index < 0) {
-        return max;
-    }
-    return index;
-}
-
 let playerScore = lines.map(line => parse(line))
                        .map(hands => hands.p2.battle(hands.p1))
                        .reduce((total, score) => total + score);
