@@ -11,8 +11,11 @@ const types = [ new Hand("ROCK", 1, 'A', 'X'),
 
 
 for (let i = 0; i < types.length; i++) {
-    types[i].beats = types[indexAt(i - 1, types.length - 1)];
-    types[i].beatenBy = types[indexAt(i + 1, types.length - 1)];
+    let previous = i - 1;
+    if (previous < 0) {
+        previous = types.length - 1;
+    }
+    types[i].beats = types[previous];
 }
 
 function indexAt(index, max) {

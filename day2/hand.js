@@ -2,7 +2,6 @@ export default class Hand {
     name;
     value;
     beats;
-    beatenBy;
     matches = [];
 
     constructor(name, value, ...matches) {
