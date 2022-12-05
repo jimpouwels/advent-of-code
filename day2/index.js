@@ -4,7 +4,6 @@ import Hand from './hand.js';
 
 const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
 const lines = input.split('\n');
-
 const types = createTypes();
 
 let playerScore = lines.map(line => parse(line))
