@@ -9,7 +9,6 @@ const types = [ new Hand("ROCK", 1, 'A', 'X'),
                 new Hand("PAPER", 2, 'B', 'Y'),
                 new Hand("SCISSORS", 3, 'C', 'Z') ];
 
-
 for (let i = 0; i < types.length; i++) {
     let previous = i - 1;
     if (previous < 0) {
