@@ -5,17 +5,7 @@ import Hand from './hand.js';
 const input = readFileSync(join(process.cwd(), 'input.txt')).toString();
 const lines = input.split('\n');
 
-const types = [ new Hand("ROCK", 1, 'A', 'X'),
-                new Hand("PAPER", 2, 'B', 'Y'),
-                new Hand("SCISSORS", 3, 'C', 'Z') ];
-
-for (let i = 0; i < types.length; i++) {
-    let previous = i - 1;
-    if (previous < 0) {
-        previous = types.length - 1;
-    }
-    types[i].beats = types[previous];
-}
+const types = createTypes();
 
 let playerScore = lines.map(line => parse(line))
                        .map(hands => hands.p2.battle(hands.p1))
@@ -30,5 +20,20 @@ function parse(line) {
 
 function parseHandString(value) {
     return types.find(t => t.hasMatch(value));
+}
+
+function createTypes() {
+    const types = [ new Hand("ROCK", 1, 'A', 'X'),
+                new Hand("PAPER", 2, 'B', 'Y'),
+                new Hand("SCISSORS", 3, 'C', 'Z') ];
+
+    for (let i = 0; i < types.length; i++) {
+        let previous = i - 1;
+        if (previous < 0) {
+            previous = types.length - 1;
+        }
+        types[i].beats = types[previous];
+    }
+    return types;
 }
 
