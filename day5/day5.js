@@ -1,11 +1,11 @@
-import assert from '../assert.js';
-import { readLines } from '../readlines.js';
+export default function day5(input) {
+    const moves = parseMoves(input);
 
-const lines = readLines('day5/input.txt');
-const moves = parseMoves(lines);
-
-assert('HNSNMTLHQ', rearrange(moves, parseStacks(lines), false));
-assert('RNLFDJMCT', rearrange(moves, parseStacks(lines), true));
+    return {
+        part1: rearrange(moves, parseStacks(input), false),
+        part2: rearrange(moves, parseStacks(input), true)
+    };
+}
 
 function rearrange(moves, stacks, moveStacks) {
     moves.forEach(move => {

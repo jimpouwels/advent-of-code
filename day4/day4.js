@@ -1,25 +1,24 @@
-import assert from '../assert.js';
-import { readLines } from '../readlines.js';
+export default function(input) {
+    let numberCompletelyInclude = 0;
+    let numberPartiallyInclude = 0;
 
-const lines = readLines('day4/input.txt');
+    input.forEach(line => {
+        const ranges = parseRanges(line);
+        if (ranges.range1.filter(r1 => ranges.range2.includes(r1)).length === ranges.range1.length ||
+            ranges.range2.filter(r2 => ranges.range1.includes(r2)).length === ranges.range2.length) {
+            numberCompletelyInclude++;
+            numberPartiallyInclude++;
+        } else if (ranges.range1.find(r1 => ranges.range2.includes(r1)) ||
+            ranges.range2.find(r2 => ranges.range1.includes(r2))) {
+            numberPartiallyInclude++;
+        }
+    });
 
-let numberCompletelyInclude = 0;
-let numberPartiallyInclude = 0;
-
-lines.forEach(line => {
-    const ranges = parseRanges(line);
-    if (ranges.range1.filter(r1 => ranges.range2.includes(r1)).length === ranges.range1.length ||
-        ranges.range2.filter(r2 => ranges.range1.includes(r2)).length === ranges.range2.length) {
-        numberCompletelyInclude++;
-        numberPartiallyInclude++;
-    } else if (ranges.range1.find(r1 => ranges.range2.includes(r1)) ||
-        ranges.range2.find(r2 => ranges.range1.includes(r2))) {
-        numberPartiallyInclude++;
-    }
-});
-
-assert(526, numberCompletelyInclude);
-assert(886, numberPartiallyInclude);
+    return {
+        part1: numberCompletelyInclude,
+        part2: numberPartiallyInclude
+    };
+}
 
 function parseRanges(line) {
     const ranges = line.split(',');

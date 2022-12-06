@@ -1,19 +1,21 @@
-import assert from '../assert.js';
-import { readLines } from '../readlines.js';
 import Hand from './hand.js';
 
-const lines = readLines('day2/input.txt');
-const handTypes = createHandTypes();
+let handTypes = [];
 const LOSE = 'X';
 const DRAW = 'Y';
 const WIN = 'Z';
 
-let battlesStrat1 = lines.map(line => parseBattleStrat1(line));
-let battlesStrat2 = lines.map(line => parseBattleStrat2(line));
+export default function day2(input) {
+    handTypes = createHandTypes();
 
-assert(15572, playBattles(battlesStrat1));
-assert(16098, playBattles(battlesStrat2));
+    let battlesStrat1 = input.map(line => parseBattleStrat1(line));
+    let battlesStrat2 = input.map(line => parseBattleStrat2(line));
 
+    return {
+        part1: playBattles(battlesStrat1),
+        part2: playBattles(battlesStrat2)
+    };
+}
 function playBattles(battles) {
     return battles.map(battle => battle.p2.fight(battle.p1))
                   .reduce((total, score) => total + score);
