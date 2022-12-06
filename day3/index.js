@@ -7,20 +7,14 @@ const rucksacks = input.split('\n');
 const lowerCaseAsciiOffset = 96; // maps to ascii '1'
 const upperCaseAsciiOffset = 38; // maps to ascii '65'
 
-const duplicates = [];
+let duplicates = [];
 
-for (const rucksack of rucksacks) {
+rucksacks.forEach(rucksack => {
     const half = Math.ceil(rucksack.length / 2);    
-    const comp1 = rucksack.slice(0, half);
-    const comp2 = rucksack.slice(half);
-
-    for (const itemA of comp1) {
-        if ([...comp2].find(itemB => itemA === itemB)) {
-            duplicates.push(itemA);
-            break;
-        }
-    }
-}
+    const comp1 = [...new Set(rucksack.slice(0, half))];
+    const comp2 = [...new Set(rucksack.slice(half))];
+    duplicates = [...duplicates, ...comp1.filter(itemA => comp2.find(itemB => itemA === itemB))];
+});
 
 const total = duplicates.reduce((total, i) => total + valueOf(i), 0);
 
