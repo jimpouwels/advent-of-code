@@ -10,17 +10,15 @@ assert('RNLFDJMCT', rearrange(moves, parseStacks(lines), true));
 function rearrange(moves, stacks, moveStacks) {
     moves.forEach(move => {
         if (moveStacks) {
-            moveMultiple(stacks, move);
+            executeStackMove(stacks, move);
         } else {
-            for (let i = 0; i < move.count; i++) {
-                moveSingle(stacks, move);
-            }
+            executeSingleMove(stacks, move);
         }
     });
     return printTopRow(stacks);
 }
 
-function moveMultiple(stacks, move) {
+function executeStackMove(stacks, move) {
     let stackToMove = [];
     for (let i = 0; i < move.count; i++) {
         stackToMove.push(stacks[move.from].shift());
@@ -30,9 +28,11 @@ function moveMultiple(stacks, move) {
     })
 }
 
-function moveSingle(stacks, move) {
-    let moveValue = stacks[move.from].shift();
-    stacks[move.to].unshift(moveValue);
+function executeSingleMove(stacks, move) {
+    for (let i = 0; i < move.count; i++) {
+        let moveValue = stacks[move.from].shift();
+        stacks[move.to].unshift(moveValue);
+    }
 }
 
 function printTopRow(stacks) {
