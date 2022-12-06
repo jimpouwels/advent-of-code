@@ -6,15 +6,42 @@ const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
 const lines = input.split('\n');
 const handTypes = createHandTypes();
 
-let playerScore = lines.map(line => parseBattle(line))
+let playerScorePart1 = lines.map(line => parseBattleStrat1(line))
+                            .map(battle => battle.p2.fight(battle.p1))
+                            .reduce((total, score) => total + score);
+
+console.log(`Part1: My score: ${playerScorePart1}`);
+
+let playerScorePart2 = lines.map(line => parseBattleStrat2(line))
                        .map(battle => battle.p2.fight(battle.p1))
                        .reduce((total, score) => total + score);
 
-console.log(`Part1: My score: ${playerScore}`);
+console.log(`Part2: My score: ${playerScorePart2}`);
 
-function parseBattle(line) {
+function parseBattleStrat1(line) {
     const splitted = line.split(' ');
     return { p1: parseHandString(splitted[0]), p2: parseHandString(splitted[1]) };
+}
+
+function parseBattleStrat2(line) {
+    const splitted = line.split(' ');
+    const p1 = parseHandString(splitted[0]);
+
+    let p2Index = handTypes.indexOf(p1);
+    switch (splitted[1]) {
+        case 'X':
+            p2Index = handTypes.indexOf(p1) - 1;
+            break;
+        case 'Z':
+            p2Index = handTypes.indexOf(p1) + 1;
+            break;
+    }
+    if (p2Index == handTypes.length) {
+        p2Index = 0;
+    } else if (p2Index < 0) {
+        p2Index = handTypes.length - 1;
+    }
+    return { p1: p1, p2: handTypes[p2Index] };
 }
 
 function parseHandString(value) {
