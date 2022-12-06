@@ -63,13 +63,9 @@ function parseStacks(lines) {
 
 function parseMoves(lines) {
     const moves = [];
-    for (const line of lines) {
-        if (!line.startsWith('move')) {
-            continue;
-        } else {
-            const parts = line.split(' ');
-            moves.push({ count: parts[1], from: parts[3] - 1, to: parts[5] - 1 });
-        }
-    }
+    lines.filter(line => line.startsWith('move')).forEach(line => {
+        const parts = line.split(' ');
+        moves.push({ count: parts[1], from: parts[3] - 1, to: parts[5] - 1 });
+    });
     return moves;
 }
