@@ -14,12 +14,10 @@ for (const rucksack of rucksacks) {
     const comp1 = rucksack.slice(0, half);
     const comp2 = rucksack.slice(half);
 
-    comp1Loop: for (const itemA of comp1) {
-        for (const itemB of comp2) {
-            if (itemA === itemB) {
-                duplicates.push(itemA);
-                break comp1Loop;
-            }
+    for (const itemA of comp1) {
+        if ([...comp2].find(itemB => itemA === itemB)) {
+            duplicates.push(itemA);
+            break;
         }
     }
 }
