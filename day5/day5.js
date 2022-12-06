@@ -4,21 +4,18 @@ import { readLines } from '../readlines.js';
 const lines = readLines('day5/input.txt');
 const moves = parseMoves(lines);
 
-assert('HNSNMTLHQ', rearrangeWithCrane9000(moves, parseStacks(lines)));
-assert('RNLFDJMCT', rearrangeWithCrane9001(moves, parseStacks(lines)));
+assert('HNSNMTLHQ', rearrange(moves, parseStacks(lines), false));
+assert('RNLFDJMCT', rearrange(moves, parseStacks(lines), true));
 
-function rearrangeWithCrane9000(moves, stacks) {
+function rearrange(moves, stacks, is9001) {
     moves.forEach(move => {
-        for (let i = 0; i < move.count; i++) {
-            moveSingle(stacks, move);
+        if (is9001) {
+            moveMultiple(stacks, move);
+        } else {
+            for (let i = 0; i < move.count; i++) {
+                moveSingle(stacks, move);
+            }
         }
-    });
-    return printTopRow(stacks);
-}
-
-function rearrangeWithCrane9001(moves, stacks) {
-    moves.forEach(move => {
-        moveMultiple(stacks, move);
     });
     return printTopRow(stacks);
 }
