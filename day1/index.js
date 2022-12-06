@@ -4,22 +4,18 @@ import * as path from 'path';
 const inputText = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
 const lines = inputText.split('\n');
 
-const elfs = [];
+const caloriesPerElf = [];
 
-lines.map(l => toInt(l))
+lines.map(l => l.trim() != '' ? parseInt(l) : 0)
     .map(calories => {
-        if (calories >= 0) {
-            elfs[elfs.length -1] += calories;
+        if (calories > 0) {
+            caloriesPerElf[caloriesPerElf.length -1] += calories;
         } else {
-            elfs.push(0);
+            caloriesPerElf.push(0);
         }
     });
 
-const sortedElfs = elfs.sort((a, b) => b - a);
+const sortedCaloriesPerElf = caloriesPerElf.sort((a, b) => b - a);
 
-console.log(`Part 1: ${sortedElfs[0]}`);
-console.log(`Part 2: ${sortedElfs[0] + sortedElfs[1] + sortedElfs[2]}`);
-
-function toInt(value) {
-    return value.trim() === '' ? -1 : parseInt(value);
-}
+console.log(`Part 1: ${sortedCaloriesPerElf[0]}`);
+console.log(`Part 2: ${sortedCaloriesPerElf[0] + sortedCaloriesPerElf[1] + sortedCaloriesPerElf[2]}`);
