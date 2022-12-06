@@ -6,6 +6,7 @@ const lines = input.split('\n');
 
 let numberCompletelyInclude = 0;
 let numberPartiallyInclude = 0;
+
 lines.forEach(line => {
     const ranges = parseRanges(line);
     if (ranges.range1.filter(r1 => ranges.range2.includes(r1)).length === ranges.range1.length ||
