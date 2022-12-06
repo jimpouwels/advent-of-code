@@ -44,22 +44,20 @@ function printTopRow(stacks) {
 
 function parseStacks(lines) {
     let stacks = []
-    for (const line of lines) {
-        if (!line.trim().startsWith('[')) {
-            break;
-        }
-        for (let i = 0; i < line.length; i += 4) {
-            if (!stacks[i/4]) {
-                stacks[i/4] = [];
+    lines.filter(line => line.trim().startsWith('['))
+         .map(line => {
+            for (let i = 0; i < line.length; i += 4) {
+                if (!stacks[i/4]) {
+                    stacks[i/4] = [];
+                }
+                let crate = line.slice(i, i + 4).trim();
+                if (!crate) {
+                    continue;
+                } else {
+                    stacks[i/4].push(crate);
+                }
             }
-            let crate = line.slice(i, i + 4).trim();
-            if (!crate) {
-                continue;
-            } else {
-                stacks[i/4].push(crate);
-            }
-        }
-    }
+        });
     return stacks;
 }
 
