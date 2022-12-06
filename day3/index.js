@@ -7,13 +7,11 @@ const rucksacks = input.split('\n');
 const lowerCaseAsciiOffset = 96; // maps to ascii '1'
 const upperCaseAsciiOffset = 38; // maps to ascii '65'
 
-let duplicates = [];
-
-rucksacks.forEach(rucksack => {
+let duplicates = rucksacks.flatMap(rucksack => {
     const half = Math.ceil(rucksack.length / 2);    
     const comp1 = [...new Set(rucksack.slice(0, half))];
     const comp2 = [...new Set(rucksack.slice(half))];
-    duplicates = [...duplicates, ...comp1.filter(itemA => comp2.find(itemB => itemA === itemB))];
+    return comp1.filter(itemA => comp2.find(itemB => itemA === itemB));
 });
 
 const total = duplicates.reduce((total, i) => total + valueOf(i), 0);
