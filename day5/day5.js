@@ -7,9 +7,9 @@ const moves = parseMoves(lines);
 assert('HNSNMTLHQ', rearrange(moves, parseStacks(lines), false));
 assert('RNLFDJMCT', rearrange(moves, parseStacks(lines), true));
 
-function rearrange(moves, stacks, is9001) {
+function rearrange(moves, stacks, moveStacks) {
     moves.forEach(move => {
-        if (is9001) {
+        if (moveStacks) {
             moveMultiple(stacks, move);
         } else {
             for (let i = 0; i < move.count; i++) {
