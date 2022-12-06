@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
+const input = fs.readFileSync(path.join(process.cwd(), 'day4/input.txt')).toString();
 const lines = input.split('\n');
 
 let numberCompletelyInclude = 0;

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const inputText = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
+const inputText = fs.readFileSync(path.join(process.cwd(), 'day1/input.txt')).toString();
 const lines = inputText.split('\n');
 
 const caloriesPerElf = [];

@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import Hand from './hand.js';
 
-const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
+const input = fs.readFileSync(path.join(process.cwd(), 'day2/input.txt')).toString();
 const lines = input.split('\n');
 const handTypes = createHandTypes();
 

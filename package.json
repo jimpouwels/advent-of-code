@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
+    "day1": "node day1/day1.js",
+    "day2": "node day1/day2.js",
+    "day3": "node day1/day3.js",
+    "day4": "node day1/day4.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC"

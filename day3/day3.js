@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
+const input = fs.readFileSync(path.join(process.cwd(), 'day3/input.txt')).toString();
 const rucksacks = input.split('\n');
 
 const lowerCaseAsciiOffset = 96; // maps to ascii '1'
