@@ -22,9 +22,11 @@ function parseHandString(value) {
 }
 
 function createHandTypes() {
-    const handTypes = [ new Hand("ROCK", 1, 'A', 'X'),
+    const handTypes = [ 
+                new Hand("ROCK", 1, 'A', 'X'),
                 new Hand("PAPER", 2, 'B', 'Y'),
-                new Hand("SCISSORS", 3, 'C', 'Z') ];
+                new Hand("SCISSORS", 3, 'C', 'Z') 
+    ];
 
     for (let i = 0; i < handTypes.length; i++) {
         let previous = i - 1;
