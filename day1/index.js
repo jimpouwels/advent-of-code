@@ -13,7 +13,7 @@ lines.map(l => toInt(l))
         } else {
             elfs.push(0);
         }
-    }, [])
+    });
 
 const sortedElfs = elfs.sort((a, b) => b - a);
 
