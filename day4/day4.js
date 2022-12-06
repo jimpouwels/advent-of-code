@@ -1,9 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import assert from '../assert.js';
+import readLines from '../readlines.js';
 
-const input = fs.readFileSync(path.join(process.cwd(), 'day4/input.txt')).toString();
-const lines = input.split('\n');
+const lines = readLines('day4/input.txt');
 
 let numberCompletelyInclude = 0;
 let numberPartiallyInclude = 0;

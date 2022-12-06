@@ -1,10 +1,8 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import assert from '../assert.js';
+import readLines from '../readlines.js';
 import Hand from './hand.js';
 
-const input = fs.readFileSync(path.join(process.cwd(), 'day2/input.txt')).toString();
-const lines = input.split('\n');
+const lines = readLines('day2/input.txt');
 const handTypes = createHandTypes();
 
 let battlesStrat1 = lines.map(line => parseBattleStrat1(line));

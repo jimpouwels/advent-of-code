@@ -1,9 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import assert from '../assert.js';
+import readLines from '../readlines.js';
 
-const input = fs.readFileSync(path.join(process.cwd(), 'day3/input.txt')).toString();
-const rucksacks = input.split('\n');
+const rucksacks = readLines('day3/input.txt');
 
 const lowerCaseAsciiOffset = 96; // maps to ascii '1'
 const upperCaseAsciiOffset = 38; // maps to ascii '65'

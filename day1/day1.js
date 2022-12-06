@@ -1,10 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import assert from '../assert.js';
+import readLines from '../readlines.js';
 
-const inputText = fs.readFileSync(path.join(process.cwd(), 'day1/input.txt')).toString();
-const lines = inputText.split('\n');
-
+const lines = readLines('day1/input.txt');
 const caloriesPerElf = [];
 
 lines.map(l => l.trim() != '' ? parseInt(l) : 0)
