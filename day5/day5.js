@@ -17,8 +17,8 @@ function parseStacks(lines) {
             if (!stacks[i/4]) {
                 stacks[i/4] = [];
             }
-            let crate = line.slice(i, i + 4);
-            if (!crate.trim()) {
+            let crate = line.slice(i, i + 4).trim();
+            if (!crate) {
                 continue;
             } else {
                 stacks[i/4].push(crate);
