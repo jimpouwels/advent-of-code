@@ -17,7 +17,7 @@ lines.forEach(line => {
         ranges.range2.find(r2 => ranges.range1.includes(r2))) {
         numberPartiallyInclude++;
     }
-}, 0);
+});
 
 console.log(`Part 1: ${numberCompletelyInclude}`);
 console.log(`Part 2: ${numberPartiallyInclude}`);
