@@ -10,7 +10,7 @@ export default class Hand {
         this.matches = matches;
     }
 
-    battle(other) {
+    fight(other) {
         let score = 0;
         if (other.name === this.name) {
             score += 3;

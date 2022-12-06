@@ -6,13 +6,13 @@ const input = fs.readFileSync(path.join(process.cwd(), 'input.txt')).toString();
 const lines = input.split('\n');
 const handTypes = createHandTypes();
 
-let playerScore = lines.map(line => parse(line))
-                       .map(hands => hands.p2.battle(hands.p1))
+let playerScore = lines.map(line => parseBattle(line))
+                       .map(battle => battle.p2.fight(battle.p1))
                        .reduce((total, score) => total + score);
 
 console.log(`Part1: My score: ${playerScore}`);
 
-function parse(line) {
+function parseBattle(line) {
     const splitted = line.split(' ');
     return { p1: parseHandString(splitted[0]), p2: parseHandString(splitted[1]) };
 }
