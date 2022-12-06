@@ -19,6 +19,7 @@ let duplicateTotal = rucksacks
 console.log(`Part 1: ${duplicateTotal}`);
 
 let badgesTotal = 0;
+
 for (let i = 0; i < rucksacks.length; i += 3) {
     r1Loop: for (let r1 of rucksacks[i]) {
         for (let r2 of rucksacks[i+1]) {
@@ -35,7 +36,6 @@ for (let i = 0; i < rucksacks.length; i += 3) {
 }
 
 console.log(`Part 2: ${badgesTotal}`);
-
 
 function valueOf(char) {
     const value = char.charCodeAt(0);
