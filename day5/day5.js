@@ -2,24 +2,40 @@ import assert from '../assert.js';
 import readLines from '../readlines.js';
 
 const lines = readLines('day5/input.txt');
-
-const stacks = parseStacks(lines);
 const moves = parseMoves(lines);
 
-assert('HNSNMTLHQ', rearrangeWithCrane9000(moves, stacks, true));
+assert('HNSNMTLHQ', rearrangeWithCrane9000(moves, parseStacks(lines)));
+assert('RNLFDJMCT', rearrangeWithCrane9001(moves, parseStacks(lines)));
 
 function rearrangeWithCrane9000(moves, stacks) {
     moves.forEach(move => {
         for (let i = 0; i < move.count; i++) {
-            moveSingle(stacks, move.from, move.to);
+            moveSingle(stacks, move);
         }
     });
     return printTopRow(stacks);
 }
 
-function moveSingle(stacks, from, to) {
-    let moveValue = stacks[from - 1].shift();
-    stacks[to - 1].unshift(moveValue);
+function rearrangeWithCrane9001(moves, stacks) {
+    moves.forEach(move => {
+        moveMultiple(stacks, move);
+    });
+    return printTopRow(stacks);
+}
+
+function moveSingle(stacks, move) {
+    let moveValue = stacks[move.from].shift();
+    stacks[move.to].unshift(moveValue);
+}
+
+function moveMultiple(stacks, move) {
+    let stackToMove = [];
+    for (let i = 0; i < move.count; i++) {
+        stackToMove.push(stacks[move.from].shift());
+    }
+    stackToMove.reverse().forEach(i => {
+        stacks[move.to].unshift(i);
+    })
 }
 
 function printTopRow(stacks) {
@@ -54,7 +70,7 @@ function parseMoves(lines) {
             continue;
         } else {
             const parts = line.split(' ');
-            moves.push({ count: parts[1], from: parts[3], to: parts[5] });
+            moves.push({ count: parts[1], from: parts[3] - 1, to: parts[5] - 1 });
         }
     }
     return moves;
