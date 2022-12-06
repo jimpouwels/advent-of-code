@@ -4,6 +4,9 @@ import Hand from './hand.js';
 
 const lines = readLines('day2/input.txt');
 const handTypes = createHandTypes();
+const LOSE = 'X';
+const DRAW = 'Y';
+const WIN = 'Z';
 
 let battlesStrat1 = lines.map(line => parseBattleStrat1(line));
 let battlesStrat2 = lines.map(line => parseBattleStrat2(line));
@@ -25,14 +28,16 @@ function parseBattleStrat2(line) {
     const splitted = line.split(' ');
     const p1 = parseHandString(splitted[0]);
     const p1Index = handTypes.indexOf(p1);
+    
     let p2Index = p1Index;
-
     switch (splitted[1]) {
-        case 'X':
+        case LOSE:
             p2Index = p2Index == 0 ? handTypes.length - 1 : p2Index - 1;
             break;
-        case 'Z':
+        case WIN:
             p2Index = p2Index == handTypes.length - 1 ? 0 : p2Index + 1;
+            break;
+        case DRAW:
             break;
     }
     return { p1: p1, p2: handTypes[p2Index] };
