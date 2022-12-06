@@ -1,5 +1,5 @@
 import assert from '../assert.js';
-import readLines from '../readlines.js';
+import { readLines } from '../readlines.js';
 
 const lines = readLines('day5/input.txt');
 const moves = parseMoves(lines);
@@ -23,11 +23,6 @@ function rearrangeWithCrane9001(moves, stacks) {
     return printTopRow(stacks);
 }
 
-function moveSingle(stacks, move) {
-    let moveValue = stacks[move.from].shift();
-    stacks[move.to].unshift(moveValue);
-}
-
 function moveMultiple(stacks, move) {
     let stackToMove = [];
     for (let i = 0; i < move.count; i++) {
@@ -36,6 +31,11 @@ function moveMultiple(stacks, move) {
     stackToMove.reverse().forEach(i => {
         stacks[move.to].unshift(i);
     })
+}
+
+function moveSingle(stacks, move) {
+    let moveValue = stacks[move.from].shift();
+    stacks[move.to].unshift(moveValue);
 }
 
 function printTopRow(stacks) {

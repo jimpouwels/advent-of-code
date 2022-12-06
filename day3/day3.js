@@ -1,5 +1,5 @@
 import assert from '../assert.js';
-import readLines from '../readlines.js';
+import { readLines } from '../readlines.js';
 
 const rucksacks = readLines('day3/input.txt');
 

@@ -1,5 +1,5 @@
 import assert from '../assert.js';
-import readLines from '../readlines.js';
+import { readLines } from '../readlines.js';
 import Hand from './hand.js';
 
 const lines = readLines('day2/input.txt');
