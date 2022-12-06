@@ -1,20 +1,18 @@
 export default class Hand {
-    name;
     value;
     beats;
     matches = [];
 
-    constructor(name, value, ...matches) {
-        this.name = name;
+    constructor(value, ...matches) {
         this.value = value;
         this.matches = matches;
     }
 
     fight(other) {
         let score = 0;
-        if (other.name === this.name) {
+        if (other === this) {
             score += 3;
-        } else if (other.name === this.beats.name) {
+        } else if (other === this.beats) {
             score += 6;
         }
         return score + this.value;
