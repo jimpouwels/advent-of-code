@@ -4,8 +4,16 @@ import readLines from '../readlines.js';
 const lines = readLines('day5/input.txt');
 
 const stacks = parseStacks(lines);
+const moves = parseMoves(lines);
 
-console.log(stacks);
+for (const move of moves) {
+    for (let i = 0; i < move.count; i++) {
+        let moveValue = stacks[move.from - 1].shift();
+        stacks[move.to - 1].unshift(moveValue);
+    }
+}
+
+assert('HNSNMTLHQ', stacks.map(s => s[0].replace('[', '').replace(']', '')).join(''));
 
 function parseStacks(lines) {
     let stacks = []
@@ -26,4 +34,17 @@ function parseStacks(lines) {
         }
     }
     return stacks;
+}
+
+function parseMoves(lines) {
+    const moves = [];
+    for (const line of lines) {
+        if (!line.startsWith('move')) {
+            continue;
+        } else {
+            const parts = line.split(' ');
+            moves.push({ count: parts[1], from: parts[3], to: parts[5] });
+        }
+    }
+    return moves;
 }
