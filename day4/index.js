@@ -12,8 +12,8 @@ lines.forEach(line => {
     if (ranges.range1.filter(r1 => ranges.range2.includes(r1)).length === ranges.range1.length ||
         ranges.range2.filter(r2 => ranges.range1.includes(r2)).length === ranges.range2.length) {
         numberCompletelyInclude++;
-    }
-    if (ranges.range1.find(r1 => ranges.range2.includes(r1)) ||
+        numberPartiallyInclude++;
+    } else if (ranges.range1.find(r1 => ranges.range2.includes(r1)) ||
         ranges.range2.find(r2 => ranges.range1.includes(r2))) {
         numberPartiallyInclude++;
     }
