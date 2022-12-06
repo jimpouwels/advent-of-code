@@ -9,11 +9,11 @@ const moves = parseMoves(lines);
 assert('HNSNMTLHQ', rearrangeWithCrane9000(moves, stacks, true));
 
 function rearrangeWithCrane9000(moves, stacks) {
-    for (const move of moves) {
+    moves.forEach(move => {
         for (let i = 0; i < move.count; i++) {
             moveSingle(stacks, move.from, move.to);
         }
-    }
+    });
     return printTopRow(stacks);
 }
 
