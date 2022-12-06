@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import assert from '../assert.js';
 
 const input = fs.readFileSync(path.join(process.cwd(), 'day3/input.txt')).toString();
 const rucksacks = input.split('\n');
@@ -16,7 +17,7 @@ let duplicateTotal = rucksacks
                         })
                         .reduce((total, i) => total + valueOf(i), 0);
 
-console.log(`Part 1: ${duplicateTotal}`);
+assert(7878, duplicateTotal);
 
 let badgesTotal = 0;
 
@@ -35,7 +36,7 @@ for (let i = 0; i < rucksacks.length; i += 3) {
     }
 }
 
-console.log(`Part 2: ${badgesTotal}`);
+assert(2760, badgesTotal);
 
 function valueOf(char) {
     const value = char.charCodeAt(0);

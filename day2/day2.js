@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import assert from '../assert.js';
 import Hand from './hand.js';
 
 const input = fs.readFileSync(path.join(process.cwd(), 'day2/input.txt')).toString();
@@ -9,8 +10,8 @@ const handTypes = createHandTypes();
 let battlesStrat1 = lines.map(line => parseBattleStrat1(line));
 let battlesStrat2 = lines.map(line => parseBattleStrat2(line));
 
-console.log(`Part1: My score: ${playBattles(battlesStrat1)}`);
-console.log(`Part2: My score: ${playBattles(battlesStrat2)}`);
+assert(15572, playBattles(battlesStrat1));
+assert(16098, playBattles(battlesStrat2));
 
 function playBattles(battles) {
     return battles.map(battle => battle.p2.fight(battle.p1))

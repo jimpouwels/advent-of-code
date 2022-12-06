@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import assert from '../assert.js';
 
 const input = fs.readFileSync(path.join(process.cwd(), 'day4/input.txt')).toString();
 const lines = input.split('\n');
@@ -19,8 +20,8 @@ lines.forEach(line => {
     }
 });
 
-console.log(`Part 1: ${numberCompletelyInclude}`);
-console.log(`Part 2: ${numberPartiallyInclude}`);
+assert(526, numberCompletelyInclude);
+assert(886, numberPartiallyInclude);
 
 function parseRanges(line) {
     const ranges = line.split(',');
