@@ -1,9 +1,11 @@
 export default function day5(input) {
     const moves = parseMoves(input);
 
+    const part1Stack = rearrange(parseStacks(input), moves, true);
+    const part2Stack = rearrange(parseStacks(input), moves, false);
     return {
-        part1: topCratesAsString(rearrange(parseStacks(input), moves, true)),
-        part2: topCratesAsString(rearrange(parseStacks(input), moves, false))
+        part1: topCratesAsString(part1Stack),
+        part2: topCratesAsString(part2Stack)
     };
 }
 
