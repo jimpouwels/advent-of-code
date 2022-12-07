@@ -13,10 +13,7 @@ function rearrange(moves, stacks, moveStack) {
         if (!moveStack) {
             stackToMove = stackToMove.reverse();
         }
-        stacks[move.to] = [ 
-            ...stackToMove, 
-            ...stacks[move.to] 
-        ];
+        stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
     });
     return printTopRow(stacks);
 }
