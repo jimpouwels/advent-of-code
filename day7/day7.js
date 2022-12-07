@@ -1,8 +1,14 @@
+import CdCommand from "./commands/cd-command.js";
+import Command from "./commands/command.js";
+import DirCommand from "./commands/dir-command.js";
+import FileCommand from "./commands/file-command.js";
+import Dir from "./model/dir.js";
+
 export default function day7(input, spaceToBeFreed = 0) {
     const root = new Dir(null);
     let context = { currentDir: root };    
 
-    parseCommands(input, root).forEach(c => c.execute(context));
+    parseCommands(input).forEach(c => c.execute(context));
     const sizePart1 = root.getDirsRecursive().filter(d => d.getTotalSize() <= 100000)
                                              .reduce((sum, val) => sum + val.getTotalSize(), 0);
     const sizePart2 = root.getDirsRecursive().filter(d => d.getTotalSize() >= spaceToBeFreed)
@@ -13,12 +19,12 @@ export default function day7(input, spaceToBeFreed = 0) {
     };
 }
 
-function parseCommands(commandsArray, root) {
+function parseCommands(commandsArray) {
     return commandsArray.map(c => {
         let splitted = c.split(' ');  
         if (c.startsWith('$')) {      
             if (splitted[1] === 'cd') {
-                return new CdCommand(splitted[2], root);
+                return new CdCommand(splitted[2]);
             } else {
                 return new Command();
             }
@@ -30,103 +36,4 @@ function parseCommands(commandsArray, root) {
             }
         }
     });
-}
-
-class Dir {
-    name;
-    parentDir;
-    dirs = [];
-    files = [];
-
-    constructor(name, parentDir) {
-        this.name = name;
-        this.parentDir = parentDir;
-    }
-
-    getTotalSize() {
-        let totalSize = this.files.reduce((sum, file) => sum + file.size, 0);
-        if (this.dirs.length > 0) {
-            totalSize += this.dirs.reduce((sum, dir) => sum + dir.getTotalSize(), 0);
-        }
-        return totalSize;
-    }
-
-    getDirsRecursive() {
-        return [ ...this.dirs, ...this.dirs.flatMap(subDir => subDir.getDirsRecursive()) ];
-    }
-
-    print(depth = '  ') {
-        let fullString = `- ${this.name || '/'} (dir)\n`;
-        this.files.forEach(f => fullString += `${depth}${f.print(depth + '  ')}`);
-        this.dirs.forEach(d => fullString += `${depth}${d.print(depth +  '  ')}`);
-        return fullString;
-    }
-}
-
-class File {
-    name;
-    size = 0;
-
-    constructor(name, size) {
-        this.name = name;
-        this.size = size;
-    }
-
-    print() {
-        return `- ${this.name} ${this.size}\n`;
-    }
-}
-
-class Command {
-    param;
-
-    constructor(param) {
-        this.param = param;
-    }
-
-    execute() {}
-}
-
-class DirCommand extends Command {
-    constructor(param) {
-        super(param);
-    }
-
-    execute(context) {
-        context.currentDir.dirs.push(new Dir(this.param, context.currentDir));
-    }
-}
-
-class CdCommand extends Command {
-
-    root;
-
-    constructor(param, root) {
-        super(param);
-        this.root = root;
-    }
-
-    execute(context) {
-        if (this.param === '/') {
-            context.currentDir = this.root;
-        } else if (this.param === '..') {
-            context.currentDir = context.currentDir.parentDir;
-        } else {
-            context.currentDir = context.currentDir.dirs.find(d => d.name === this.param);
-        }
-    }
-}
-
-class FileCommand extends Command {
-
-    name;
-
-    constructor(name, param) {
-        super(param);
-        this.name = name;
-    }
-
-    execute(context) {
-        context.currentDir.files.push(new File(this.name, this.param));
-    }
 }
