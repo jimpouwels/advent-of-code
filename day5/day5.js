@@ -10,15 +10,15 @@ export default function day5(input) {
 function rearrange(moves, stacks, moveStack) {
     moves.forEach(move => {
         if (moveStack) {
-            executeStackMove(stacks, move);
+            moveStackMultiple(stacks, move);
         } else {
-            executeSingleMove(stacks, move);
+            moveStackSingle(stacks, move);
         }
     });
     return printTopRow(stacks);
 }
 
-function executeStackMove(stacks, move) {
+function moveStackMultiple(stacks, move) {
     let stackToMove = [];
     for (let i = 0; i < move.count; i++) {
         stackToMove.push(stacks[move.from].shift());
@@ -26,7 +26,7 @@ function executeStackMove(stacks, move) {
     stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
 }
 
-function executeSingleMove(stacks, move) {
+function moveStackSingle(stacks, move) {
     for (let i = 0; i < move.count; i++) {
         stacks[move.to].unshift(stacks[move.from].shift());
     }
