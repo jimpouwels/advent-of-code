@@ -2,15 +2,15 @@ export default function day5(input) {
     const moves = parseMoves(input);
 
     return {
-        part1: rearrange(moves, parseStacks(input), false),
-        part2: rearrange(moves, parseStacks(input), true)
+        part1: rearrange(moves, parseStacks(input), true),
+        part2: rearrange(moves, parseStacks(input), false)
     };
 }
 
-function rearrange(moves, stacks, moveStack) {
+function rearrange(moves, stacks, oneByOne) {
     moves.forEach(move => {
         let stackToMove = stacks[move.from].splice(0, move.count);
-        if (!moveStack) {
+        if (oneByOne) {
             stackToMove = stackToMove.reverse();
         }
         stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
