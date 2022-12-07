@@ -15,10 +15,10 @@ function rearrange(stacks, moves, oneByOne) {
         }
         stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
     });
-    return printTopCrates(stacks);
+    return topCratesAsString(stacks);
 }
 
-function printTopCrates(stacks) {
+function topCratesAsString(stacks) {
     return stacks.map(s => s[0].replace('[', '').replace(']', '')).join('');
 }
 
