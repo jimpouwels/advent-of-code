@@ -31,7 +31,7 @@ function parseBattleStrat2(line) {
     const p1 = parseHandString(splitted[0]);
     const p1Index = handTypes.indexOf(p1);
     
-    let p2Index = p1Index;
+    let p2Index;
     switch (splitted[1]) {
         case LOSE:
             p2Index = previousIndexOf(p1Index, handTypes.length);
@@ -40,6 +40,7 @@ function parseBattleStrat2(line) {
             p2Index = nextIndexOf(p1Index, handTypes.length);
             break;
         case DRAW:
+            p2Index = p1Index;
             break;
     }
     return { p1: p1, p2: handTypes[p2Index] };
