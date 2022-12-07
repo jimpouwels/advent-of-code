@@ -33,9 +33,7 @@ function parseCrateRow(line) {
     for (let i = 0; i < line.length; i += 4) {
         const stackIndex = i / 4;
         let crate = readChars(line, i, i + 4).trim();
-        if (!crate) {
-            continue;
-        } else {
+        if (crate) {
             crates.push({ crate: crate, stackIndex: stackIndex });
         }
     }
