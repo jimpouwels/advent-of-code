@@ -39,22 +39,23 @@ function printTopRow(stacks) {
 }
 
 function parseStacks(lines) {
-    let stacks = []
-    lines.filter(line => line.trim().startsWith('['))
-         .map(line => {
-            for (let i = 0; i < line.length; i += 4) {
-                if (!stacks[i/4]) {
-                    stacks[i/4] = [];
-                }
-                let crate = line.slice(i, i + 4).trim();
-                if (!crate) {
-                    continue;
-                } else {
-                    stacks[i/4].push(crate);
-                }
-            }
-        });
-    return stacks;
+    let crateRows = lines.filter(line => line.trim().startsWith('['))
+                          .map(line => parseCrateRow(line));
+    return toStacks(crateRows);    
+}
+
+function parseCrateRow(line) {
+    const crates = [];
+    for (let i = 0; i < line.length; i += 4) {
+        const stackIndex = i / 4;
+        let crate = readChars(line, i, i + 4).trim();
+        if (!crate) {
+            continue;
+        } else {
+            crates.push({ crate: crate, stackIndex: stackIndex });
+        }
+    }
+    return crates;
 }
 
 function parseMoves(lines) {
@@ -64,4 +65,19 @@ function parseMoves(lines) {
         moves.push({ count: parts[1], from: parts[3] - 1, to: parts[5] - 1 });
     });
     return moves;
+}
+
+function toStacks(crateRows) {
+    const stacks = [];
+    crateRows.forEach(row => row.forEach(crate => {
+        if (!stacks[crate.stackIndex]) {
+            stacks[crate.stackIndex] = [];
+        }
+        stacks[crate.stackIndex].push(crate.crate);
+    }));
+    return stacks;
+}
+
+function readChars(value, from, to) {
+    return value.slice(from, to);
 }
