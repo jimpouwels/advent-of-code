@@ -1,16 +1,11 @@
 export default function day6(input, distinctCharCount) {
-    let startOfMarker = -1;
-
-    for (let i = 0; i < input.length; i++) {
-        let mostRecent = input.slice(i, i + distinctCharCount);
+    let cursor;
+    for (cursor = distinctCharCount - 1; cursor < input.length; cursor++) {
+        let mostRecent = input.slice(cursor - (distinctCharCount - 1), cursor + 1);
         if ([...new Set(mostRecent)].length == distinctCharCount) {
-            startOfMarker = i + distinctCharCount;
             break;
         }
     }
 
-    return {
-        part1: startOfMarker,
-        part2: null
-    };
+    return cursor + 1;
 }
