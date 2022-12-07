@@ -23,9 +23,7 @@ function executeStackMove(stacks, move) {
     for (let i = 0; i < move.count; i++) {
         stackToMove.push(stacks[move.from].shift());
     }
-    stackToMove.reverse().forEach(i => {
-        stacks[move.to].unshift(i);
-    })
+    stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
 }
 
 function executeSingleMove(stacks, move) {
