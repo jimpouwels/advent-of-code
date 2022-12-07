@@ -20,9 +20,9 @@ export default function day7(input, spaceToBeFreed = 0) {
 }
 
 function parseCommands(commandsArray) {
-    return commandsArray.map(c => {
-        let splitted = c.split(' ');  
-        if (c.startsWith('$')) {      
+    return commandsArray.map(command => {
+        let splitted = command.split(' ');  
+        if (command.startsWith('$')) {      
             if (splitted[1] === 'cd') {
                 return new CdCommand(splitted[2]);
             } else {
