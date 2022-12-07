@@ -1,4 +1,4 @@
-export default function day7(input) {
+export default function day7(input, spaceToBeFreed = 0) {
     const root = new Dir(null);
     let context = { currentDir: root };    
 
@@ -7,9 +7,11 @@ export default function day7(input) {
     }
     const sizePart1 = root.getDirsRecursive().filter(d => d.getTotalSize() <= 100000)
                                              .reduce((sum, val) => sum + val.getTotalSize(), 0);
-
+    const sizePart2 = root.getDirsRecursive().filter(d => d.getTotalSize() >= 8381165)
+                                             .sort((a, b) => a.getTotalSize() - b.getTotalSize())[0].getTotalSize();
     return { 
-        part1: sizePart1
+        part1: sizePart1,
+        part2: sizePart2
     };
 }
 
