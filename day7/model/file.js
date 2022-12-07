@@ -1,4 +1,5 @@
 export default class File {
+    
     name;
     size = 0;
 

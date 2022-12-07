@@ -2,6 +2,7 @@ import Command from './command.js';
 import Dir from '../model/dir.js';
 
 export default class DirCommand extends Command {
+    
     constructor(param) {
         super(param);
     }

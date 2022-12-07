@@ -1,4 +1,5 @@
 export default class Command {
+    
     param;
 
     constructor(param) {
