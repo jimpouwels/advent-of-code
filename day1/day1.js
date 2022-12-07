@@ -1,6 +1,7 @@
 export default function day1(input) {
     const elfs = input.split('\n\n')
-                  .map(elf => elf.split('\n').map(val => parseInt(val))
+                  .map(elf => elf.split('\n')
+                  .map(val => parseInt(val))
                   .reduce((sum, val) => sum + val))
                   .sort((a, b) => b - a);
 
