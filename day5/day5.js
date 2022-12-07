@@ -41,7 +41,7 @@ function printTopRow(stacks) {
 function parseStacks(lines) {
     let crateRows = lines.filter(line => line.trim().startsWith('['))
                           .map(line => parseCrateRow(line));
-    return toStacks(crateRows);    
+    return convertToStacks(crateRows);    
 }
 
 function parseCrateRow(line) {
@@ -67,7 +67,7 @@ function parseMoves(lines) {
     return moves;
 }
 
-function toStacks(crateRows) {
+function convertToStacks(crateRows) {
     const stacks = [];
     crateRows.forEach(row => row.forEach(crate => {
         if (!stacks[crate.stackIndex]) {
