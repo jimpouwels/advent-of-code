@@ -7,9 +7,9 @@ export default function day5(input) {
     };
 }
 
-function rearrange(moves, stacks, moveStacks) {
+function rearrange(moves, stacks, moveStack) {
     moves.forEach(move => {
-        if (moveStacks) {
+        if (moveStack) {
             executeStackMove(stacks, move);
         } else {
             executeSingleMove(stacks, move);
@@ -30,8 +30,7 @@ function executeStackMove(stacks, move) {
 
 function executeSingleMove(stacks, move) {
     for (let i = 0; i < move.count; i++) {
-        let moveValue = stacks[move.from].shift();
-        stacks[move.to].unshift(moveValue);
+        stacks[move.to].unshift(stacks[move.from].shift());
     }
 }
 
