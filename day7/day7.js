@@ -22,18 +22,10 @@ export default function day7(input, spaceToBeFreed = 0) {
 function parseCommands(commandsArray) {
     return commandsArray.map(command => {
         let splitted = command.split(' ');  
-        if (command.startsWith('$')) {      
-            if (splitted[1] === 'cd') {
-                return new CdCommand(splitted[2]);
-            } else {
-                return new Command();
-            }
+        if (command.startsWith('$')) { 
+            return splitted[1] === 'cd' ? new CdCommand(splitted[2]) : new Command();  
         } else {
-            if (splitted[0] === 'dir') {
-                return new DirCommand(splitted[1]);
-            } else {
-                return new FileCommand(splitted[1], parseInt(splitted[0]));
-            }
+            return splitted[0] === 'dir' ? new DirCommand(splitted[1]) : new FileCommand(splitted[1], parseInt(splitted[0]));;  
         }
     });
 }
