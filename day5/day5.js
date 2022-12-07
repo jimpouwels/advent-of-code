@@ -9,26 +9,16 @@ export default function day5(input) {
 
 function rearrange(moves, stacks, moveStack) {
     moves.forEach(move => {
-        if (moveStack) {
-            moveStackMultiple(stacks, move);
-        } else {
-            moveStackSingle(stacks, move);
+        let stackToMove = stacks[move.from].splice(0, move.count);
+        if (!moveStack) {
+            stackToMove = stackToMove.reverse();
         }
+        stacks[move.to] = [ 
+            ...stackToMove, 
+            ...stacks[move.to] 
+        ];
     });
     return printTopRow(stacks);
-}
-
-function moveStackMultiple(stacks, move) {
-    stacks[move.to] = [ 
-        ...(stacks[move.from].splice(0, move.count)), 
-        ...stacks[move.to] 
-    ];
-}
-
-function moveStackSingle(stacks, move) {
-    for (let i = 0; i < move.count; i++) {
-        stacks[move.to].unshift(stacks[move.from].shift());
-    }
 }
 
 function printTopRow(stacks) {
