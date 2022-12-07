@@ -19,11 +19,10 @@ function rearrange(moves, stacks, moveStack) {
 }
 
 function moveStackMultiple(stacks, move) {
-    let stackToMove = [];
-    for (let i = 0; i < move.count; i++) {
-        stackToMove.push(stacks[move.from].shift());
-    }
-    stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
+    stacks[move.to] = [ 
+        ...(stacks[move.from].splice(0, move.count)), 
+        ...stacks[move.to] 
+    ];
 }
 
 function moveStackSingle(stacks, move) {
