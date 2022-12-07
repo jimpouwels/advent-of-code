@@ -2,8 +2,8 @@ export default function day5(input) {
     const moves = parseMoves(input);
 
     return {
-        part1: rearrange(parseStacks(input), moves, true),
-        part2: rearrange(parseStacks(input), moves, false)
+        part1: topCratesAsString(rearrange(parseStacks(input), moves, true)),
+        part2: topCratesAsString(rearrange(parseStacks(input), moves, false))
     };
 }
 
@@ -13,9 +13,9 @@ function rearrange(stacks, moves, oneByOne) {
         if (oneByOne) {
             stackToMove = stackToMove.reverse();
         }
-        stacks[move.to] = [ ...stackToMove, ...stacks[move.to] ];
+        stacks[move.to] = [...stackToMove, ...stacks[move.to]];
     });
-    return topCratesAsString(stacks);
+    return stacks;
 }
 
 function topCratesAsString(stacks) {
