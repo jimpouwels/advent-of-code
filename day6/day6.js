@@ -6,6 +6,5 @@ export default function day6(input, distinctCharCount) {
             break;
         }
     }
-
     return cursor + 1;
 }
