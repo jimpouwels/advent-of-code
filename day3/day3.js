@@ -12,14 +12,10 @@ export default function day3(rucksacks) {
                             .reduce((total, i) => total + valueOf(i), 0);
 
     let badgesTotal = 0;
-
-   
-
     for (let i = 0; i < rucksacks.length; i += 3) {
-        let val = [...rucksacks[i]].find(item1 => {
-            return [...rucksacks[i+1]].filter(item2 => item1 === item2)
-                .find(item2 => [...rucksacks[i+2]].includes(item2));
-        });
+        let val = [...rucksacks[i]].find(item1 => [...rucksacks[i+1]]
+                                   .filter(item2 => item1 === item2)
+                                   .find(item2 => [...rucksacks[i+2]].includes(item2)));
         badgesTotal += valueOf(val);
     }
 
