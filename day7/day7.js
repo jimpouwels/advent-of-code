@@ -2,12 +2,10 @@ export default function day7(input, spaceToBeFreed = 0) {
     const root = new Dir(null);
     let context = { currentDir: root };    
 
-    for (const command of parseCommands(input, root)) {
-        command.execute(context);
-    }
+    parseCommands(input, root).forEach(c => c.execute(context));
     const sizePart1 = root.getDirsRecursive().filter(d => d.getTotalSize() <= 100000)
                                              .reduce((sum, val) => sum + val.getTotalSize(), 0);
-    const sizePart2 = root.getDirsRecursive().filter(d => d.getTotalSize() >= 8381165)
+    const sizePart2 = root.getDirsRecursive().filter(d => d.getTotalSize() >= spaceToBeFreed)
                                              .sort((a, b) => a.getTotalSize() - b.getTotalSize())[0].getTotalSize();
     return { 
         part1: sizePart1,
