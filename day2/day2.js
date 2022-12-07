@@ -34,10 +34,10 @@ function parseBattleStrat2(line) {
     let p2Index = p1Index;
     switch (splitted[1]) {
         case LOSE:
-            p2Index = previousIndexOf(p2Index, handTypes.length);
+            p2Index = previousIndexOf(p1Index, handTypes.length);
             break;
         case WIN:
-            p2Index = nextIndexOf(p2Index, handTypes.length);
+            p2Index = nextIndexOf(p1Index, handTypes.length);
             break;
         case DRAW:
             break;
