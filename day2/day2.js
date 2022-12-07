@@ -34,10 +34,10 @@ function parseBattleStrat2(line) {
     let p2Index = p1Index;
     switch (splitted[1]) {
         case LOSE:
-            p2Index = previousIndex(p2Index, handTypes.length);
+            p2Index = previousIndexOf(p2Index, handTypes.length);
             break;
         case WIN:
-            p2Index = nextIndex(p2Index, handTypes.length);
+            p2Index = nextIndexOf(p2Index, handTypes.length);
             break;
         case DRAW:
             break;
@@ -58,19 +58,19 @@ function createHandTypes() {
 
     handTypes.forEach(handType => {
         const handTypeIndex = handTypes.indexOf(handType);
-        handTypes[handTypeIndex].beats = handTypes[previousIndex(handTypeIndex, handTypes.length)];
+        handTypes[handTypeIndex].beats = handTypes[previousIndexOf(handTypeIndex, handTypes.length)];
     });
     return handTypes;
 }
 
-function previousIndex(current, arrayLength) {
+function previousIndexOf(current, arrayLength) {
     if (current == 0) {
         return arrayLength - 1;
     }
     return --current;
 }
 
-function nextIndex(current, arrayLength) {
+function nextIndexOf(current, arrayLength) {
     if (current == arrayLength - 1) {
         return 0;
     }
