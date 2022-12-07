@@ -4,8 +4,7 @@ export default function(input) {
 
     input.forEach(line => {
         const ranges = parseRanges(line);
-        if (ranges.range1.filter(r1 => ranges.range2.includes(r1)).length === ranges.range1.length ||
-            ranges.range2.filter(r2 => ranges.range1.includes(r2)).length === ranges.range2.length) {
+        if (fullyIncludes(ranges.range1, ranges.range2) || fullyIncludes(ranges.range2, ranges.range1)) {
             numberCompletelyInclude++;
             numberPartiallyInclude++;
         } else if (ranges.range1.find(r1 => ranges.range2.includes(r1)) ||
@@ -18,6 +17,10 @@ export default function(input) {
         part1: numberCompletelyInclude,
         part2: numberPartiallyInclude
     };
+}
+
+function fullyIncludes(array1, array2) {
+    return array1.filter(array1Item => array2.includes(array1Item)).length === array1.length;
 }
 
 function parseRanges(line) {
