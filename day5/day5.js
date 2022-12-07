@@ -2,12 +2,12 @@ export default function day5(input) {
     const moves = parseMoves(input);
 
     return {
-        part1: rearrange(moves, parseStacks(input), true),
-        part2: rearrange(moves, parseStacks(input), false)
+        part1: rearrange(parseStacks(input), moves, true),
+        part2: rearrange(parseStacks(input), moves, false)
     };
 }
 
-function rearrange(moves, stacks, oneByOne) {
+function rearrange(stacks, moves, oneByOne) {
     moves.forEach(move => {
         let stackToMove = stacks[move.from].splice(0, move.count);
         if (oneByOne) {
