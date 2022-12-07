@@ -45,17 +45,17 @@ function parseStacks(lines) {
 }
 
 function parseCrateRow(line) {
-    const crateRows = [];
+    const crates = [];
     for (let i = 0; i < line.length; i += 4) {
         const stackIndex = i / 4;
         let crate = readChars(line, i, i + 4).trim();
         if (!crate) {
             continue;
         } else {
-            crateRows.push({ crate: crate, stackIndex: stackIndex });
+            crates.push({ crate: crate, stackIndex: stackIndex });
         }
     }
-    return crateRows;
+    return crates;
 }
 
 function parseMoves(lines) {
