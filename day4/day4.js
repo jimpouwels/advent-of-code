@@ -7,8 +7,7 @@ export default function(input) {
         if (fullyIncludes(ranges.range1, ranges.range2) || fullyIncludes(ranges.range2, ranges.range1)) {
             numberCompletelyInclude++;
             numberPartiallyInclude++;
-        } else if (ranges.range1.find(r1 => ranges.range2.includes(r1)) ||
-            ranges.range2.find(r2 => ranges.range1.includes(r2))) {
+        } else if (partiallyIncludes(ranges.range1, ranges.range2) || partiallyIncludes(ranges.range2, ranges.range1)) {
             numberPartiallyInclude++;
         }
     });
@@ -17,6 +16,10 @@ export default function(input) {
         part1: numberCompletelyInclude,
         part2: numberPartiallyInclude
     };
+}
+
+function partiallyIncludes(array1, array2) {
+    return array1.find(array1Item => array2.includes(array1Item));
 }
 
 function fullyIncludes(array1, array2) {
