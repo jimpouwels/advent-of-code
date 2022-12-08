@@ -1,18 +1,13 @@
 export default function day8(input) {
     const forest = parseForest(input);
-    let numberOfVisibleTrees = 0;
-    forest.forEach((treeRow, rowIndex) => treeRow.forEach((tree, treeIndex) => {
-        if (matchOuter(treeRow, rowIndex, treeIndex, forest)) {
-            numberOfVisibleTrees++;
-            return;
-        }
-        if (visibleFromLeft(treeRow, treeIndex, tree) ||
+    
+    let numberOfVisibleTrees = forest.flatMap((treeRow, rowIndex) => treeRow.filter((tree, treeIndex) => {
+        return matchOuter(treeRow, rowIndex, treeIndex, forest) ||
+            visibleFromLeft(treeRow, treeIndex, tree) ||
             visibleFromRight(treeRow, treeIndex, tree) ||
             visibleFromTop(forest, rowIndex, treeIndex, tree) ||
-            visibleFromBottom(forest, rowIndex, treeIndex, tree)) {
-                numberOfVisibleTrees++;
-        }
-    })); 
+            visibleFromBottom(forest, rowIndex, treeIndex, tree);
+    })).length; 
 
     return {
         part1: numberOfVisibleTrees
