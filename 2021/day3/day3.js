@@ -9,12 +9,8 @@ export default function run(input) {
 
 function getGamma(input) {
     return [...input[0]].flatMap((_bit, index) => {
-        let ones = 0;
-        let zeros = 0;
-        input.forEach((line) => {
-            line[index] === '1' ? ones++ : zeros++;
-        });
-        return ones > zeros ? "1" : "0";
+        const ones = input.reduce((sum, line) => sum + (line[index] === '1' ? 1 : 0), 0);
+        return ones > input.length / 2 ? "1" : "0";
     }).join('');
 }
 
