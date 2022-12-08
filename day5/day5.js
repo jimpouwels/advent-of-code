@@ -43,12 +43,10 @@ function parseCrateRow(line) {
 }
 
 function parseMoves(lines) {
-    const moves = [];
-    lines.filter(line => line.startsWith('move')).forEach(line => {
-        const parts = line.split(' ');
-        moves.push({ count: parts[1], from: parts[3] - 1, to: parts[5] - 1 });
+    return lines.filter(line => line.startsWith('move')).map(move => {
+        const parts = move.split(' ');
+        return { count: parts[1], from: parts[3] - 1, to: parts[5] - 1 };
     });
-    return moves;
 }
 
 function convertToStacks(crateRows) {
