@@ -12,19 +12,10 @@ export default function run(input) {
 class Submarine {
 
     location = { horizontal: 0, depth: 0, aim: 0 };
+    moves = { 'forward': this.forward, 'up': this.up, 'down': this.down };
 
     move(move) {
-        switch (move.direction) {
-            case 'forward':
-                this.forward(move.value);
-                break;
-            case 'up':
-                this.up(move.value);
-                break;
-            case 'down':
-                this.down(move.value);
-                break;
-        }    
+        this.moves[move.direction].call(this, move.value);
     }
 
     getPosition() {
