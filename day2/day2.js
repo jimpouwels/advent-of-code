@@ -1,6 +1,3 @@
-import { array } from 'yargs';
-import Hand from './hand.js';
-
 let handTypes = [];
 const LOSE = 'X';
 const DRAW = 'Y';
@@ -9,8 +6,8 @@ const WIN = 'Z';
 export default function day2(input) {
     handTypes = createHandTypes();
 
-    let battlesStrat1 = input.map(line => parseBattleStrat1(line));
-    let battlesStrat2 = input.map(line => parseBattleStrat2(line));
+    let battlesStrat1 = input.map(line => parseBattleStrategy1(line));
+    let battlesStrat2 = input.map(line => parseBattleStrategy2(line));
 
     return {
         part1: playBattles(battlesStrat1),
@@ -22,12 +19,12 @@ function playBattles(battles) {
                   .reduce((total, score) => total + score);
 }
 
-function parseBattleStrat1(line) {
+function parseBattleStrategy1(line) {
     const splitted = line.split(' ');
     return { p1: parseHandString(splitted[0]), p2: parseHandString(splitted[1]) };
 }
 
-function parseBattleStrat2(line) {
+function parseBattleStrategy2(line) {
     const splitted = line.split(' ');
     const p1 = parseHandString(splitted[0]);
     const p1Index = handTypes.indexOf(p1);
@@ -48,14 +45,14 @@ function parseBattleStrat2(line) {
 }
 
 function parseHandString(value) {
-    return handTypes.find(t => t.hasMatch(value));
+    return handTypes.find(t => t.hasRepresentation(value));
 }
 
 function createHandTypes() {
     const handTypes = [ 
-                new Hand(1, 'A', 'X'),
-                new Hand(2, 'B', 'Y'),
-                new Hand(3, 'C', 'Z') 
+                createHand(1, 'A', 'X'),
+                createHand(2, 'B', 'Y'),
+                createHand(3, 'C', 'Z') 
     ];
 
     handTypes.forEach(handType => {
@@ -71,5 +68,25 @@ function previousIndexOf(current, arrayLength) {
 
 function nextIndexOf(current, arrayLength) {
     return current == arrayLength - 1 ? 0 : ++current;
+}
+
+function createHand(value, ...representations) {
+    return {
+        value: value,
+        representations: representations,
+        beats: null,
+        fight: function(other) {
+            let score = 0;
+            if (other === this) {
+                score += 3;
+            } else if (other === this.beats) {
+                score += 6;
+            }
+            return score + value;
+        },
+        hasRepresentation: function(representation) {
+            return representations.includes(representation);
+        }
+    }
 }
 
