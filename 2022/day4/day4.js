@@ -1,4 +1,4 @@
-export default function day4(input) {
+export default function run(input) {
     let numberCompletelyInclude = 0;
     let numberPartiallyInclude = 0;
 

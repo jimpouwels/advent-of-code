@@ -3,7 +3,7 @@ const LOSE = 'X';
 const DRAW = 'Y';
 const WIN = 'Z';
 
-export default function day2(input) {
+export default function run(input) {
     handTypes = createHandTypes();
 
     let battlesStrat1 = input.map(line => parseBattleStrategy1(line));

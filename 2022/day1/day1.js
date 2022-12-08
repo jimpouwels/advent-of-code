@@ -1,4 +1,4 @@
-export default function day1(input) {
+export default function run(input) {
     const elves = input.split('\n\n')
                   .map(elf => elf.split('\n')
                   .map(val => parseInt(val))

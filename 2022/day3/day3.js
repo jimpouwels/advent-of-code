@@ -1,7 +1,7 @@
 const lowerCaseAsciiOffset = 96; // maps to ascii '1'
 const upperCaseAsciiOffset = 38; // maps to ascii '65'
 
-export default function day3(rucksacks) {
+export default function run(rucksacks) {
     let duplicateTotal = rucksacks
                             .flatMap(rucksack => {
                                 const half = Math.ceil(rucksack.length / 2);    

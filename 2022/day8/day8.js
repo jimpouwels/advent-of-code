@@ -1,4 +1,4 @@
-export default function day8(input) {
+export default function run(input) {
     const treeRows = parseForest(input);
     
     const numberOfVisibleTrees = treeRows.flatMap((treeRow, rowIndex) => treeRow.filter((tree, treeIndex) =>

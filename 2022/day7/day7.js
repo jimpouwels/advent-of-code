@@ -1,7 +1,7 @@
 import Dir from "./model/dir.js";
 import File from "./model/file.js";
 
-export default function day7(input, spaceToBeFreed = 0) {
+export default function run(input, spaceToBeFreed = 0) {
     const root = new Dir(null);
     let context = { currentDir: root };    
 
