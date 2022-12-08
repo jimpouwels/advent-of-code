@@ -1,3 +1,4 @@
+import { array } from 'yargs';
 import Hand from './hand.js';
 
 let handTypes = [];
@@ -65,16 +66,10 @@ function createHandTypes() {
 }
 
 function previousIndexOf(current, arrayLength) {
-    if (current == 0) {
-        return arrayLength - 1;
-    }
-    return --current;
+    return current == 0 ? arrayLength - 1 : --current;
 }
 
 function nextIndexOf(current, arrayLength) {
-    if (current == arrayLength - 1) {
-        return 0;
-    }
-    return ++current;
+    return current == arrayLength - 1 ? 0 : ++current;
 }
 
