@@ -1,8 +1,8 @@
-export default function run(input) {
-    const gamma = getGamma(input);
+export default function run(numbers) {
+    const gamma = getGamma(numbers);
     const epsilon = inverseOf(gamma);
-    const oxygen = getLifeSupportRating(input, false);
-    const co2 = getLifeSupportRating(input, true);
+    const oxygen = getLifeSupportRating(numbers, false);
+    const co2 = getLifeSupportRating(numbers, true);
 
     return {
         part1: parseInt(gamma, 2) * parseInt(epsilon, 2),
@@ -10,16 +10,16 @@ export default function run(input) {
     }
 }
 
-function getGamma(input) {
-    return [...input[0]].flatMap((_bit, bitIndex) => 
-                            countInColumns(input, bitIndex, "1") > input.length / 2 ? "1" : "0")
+function getGamma(numbers) {
+    return [...numbers[0]].flatMap((_bit, bitIndex) => 
+                            countInColumns(numbers, bitIndex, "1") > numbers.length / 2 ? "1" : "0")
                         .join('');
 }
 
-function getLifeSupportRating(input, inverse, column = 0) {
-    let mostCommon = countInColumns(input, column, "1") >= input.length / 2 ? "1" : "0";
+function getLifeSupportRating(numbers, inverse, column = 0) {
+    let mostCommon = countInColumns(numbers, column, "1") >= numbers.length / 2 ? "1" : "0";
     mostCommon = inverse ? inverseOf(mostCommon) : mostCommon;
-    const remainingNumbers = input.filter(number => number[column] === mostCommon);
+    const remainingNumbers = numbers.filter(number => number[column] === mostCommon);
     return remainingNumbers.length > 1 ? getLifeSupportRating(remainingNumbers, inverse, column + 1) : remainingNumbers.join('');
 }
 
