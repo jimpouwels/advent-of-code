@@ -11,8 +11,7 @@ export default function run(numbers) {
 }
 
 function getGamma(numbers) {
-    return [...numbers[0]].flatMap((_bit, column) => 
-                            getMostCommonBitInColumn(numbers, column))
+    return [...numbers[0]].flatMap((_bit, column) => getMostCommonBitInColumn(numbers, column))
                           .join('');
 }
 
