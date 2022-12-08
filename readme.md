@@ -8,10 +8,16 @@ npm install
 
 ## Usage
 
-This runs all the tests.
+To run all tests:
 
 ```sh
 npm run test
+```
+
+To run tests from a specific year:
+
+```sh
+npm run test 20xx
 ```
 
 If you want execute an assignment based on your own input:
