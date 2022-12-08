@@ -1,18 +1,18 @@
 export default function day8(input) {
-    const forest = parseForest(input);
+    const treeRows = parseForest(input);
     
-    const numberOfVisibleTrees = forest.flatMap((treeRow, rowIndex) => treeRow.filter((tree, treeIndex) =>
-            isOuterTree(treeRow, rowIndex, treeIndex, forest) ||
+    const numberOfVisibleTrees = treeRows.flatMap((treeRow, rowIndex) => treeRow.filter((tree, treeIndex) =>
+            isOuterTree(treeRow, rowIndex, treeIndex, treeRows) ||
             isVisibleFromLeft(treeRow, treeIndex, tree) ||
             isVisibleFromRight(treeRow, treeIndex, tree) ||
-            isVisibleFromTop(forest, rowIndex, treeIndex, tree) ||
-            isVisibleFromBottom(forest, rowIndex, treeIndex, tree
+            isVisibleFromTop(treeRows, rowIndex, treeIndex, tree) ||
+            isVisibleFromBottom(treeRows, rowIndex, treeIndex, tree
     ))).length;
 
-    let highestScenicScore = Math.max(...forest.flatMap((treeRow, rowIndex) => treeRow.map((tree, treeIndex) => {
-        return getScoreFor(tree, getTreesAbove(forest, rowIndex, treeIndex)) *
+    let highestScenicScore = Math.max(...treeRows.flatMap((treeRow, rowIndex) => treeRow.map((tree, treeIndex) => {
+        return getScoreFor(tree, getTreesAbove(treeRows, rowIndex, treeIndex)) *
                getScoreFor(tree, getTreesToLeft(treeRow, treeIndex)) *
-               getScoreFor(tree, getTreesBelow(forest, rowIndex, treeIndex)) *
+               getScoreFor(tree, getTreesBelow(treeRows, rowIndex, treeIndex)) *
                getScoreFor(tree, getTreesToRight(treeRow, treeIndex));
     })));
 
