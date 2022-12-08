@@ -2,7 +2,7 @@ export default function day8(input) {
     const forest = parseForest(input);
     
     let numberOfVisibleTrees = forest.flatMap((treeRow, rowIndex) => treeRow.filter((tree, treeIndex) =>
-            matchOuter(treeRow, rowIndex, treeIndex, forest) ||
+            isOuterTree(treeRow, rowIndex, treeIndex, forest) ||
             visibleFromLeft(treeRow, treeIndex, tree) ||
             visibleFromRight(treeRow, treeIndex, tree) ||
             visibleFromTop(forest, rowIndex, treeIndex, tree) ||
@@ -40,7 +40,7 @@ function getTreesBelow(forest, rowIndex, treeIndex) {
                  .map(row => row[treeIndex]);
 }
 
-function matchOuter(treeRow, rowIndex, treeIndex, forest) {
+function isOuterTree(treeRow, rowIndex, treeIndex, forest) {
     return rowIndex == 0 || rowIndex == forest.length - 1 || 
            treeIndex == 0 || treeIndex == treeRow.length - 1;
 }
