@@ -13,14 +13,8 @@ class Submarine {
     location = { horizontal: 0, depth: 0, aim: 0 };
     moves = { 'forward': this.forward, 'up': this.up, 'down': this.down };
 
-    move(move) {
-        this.moves[move.direction].call(this, move.value);
-    }
-
-    getPosition() {
-        return this.location.horizontal * this.location.depth;
-    }
-
+    move(move) { this.moves[move.direction].call(this, move.value); }
+    getPosition() { return this.location.horizontal * this.location.depth; }
     forward(_value) { throw new Error("Not implemented"); }
     up(_value) { throw new Error("Not implemented"); }
     down(_value) { throw new Error("Not implemented"); }
