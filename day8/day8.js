@@ -3,10 +3,10 @@ export default function day8(input) {
     
     let numberOfVisibleTrees = forest.flatMap((treeRow, rowIndex) => treeRow.filter((tree, treeIndex) =>
             isOuterTree(treeRow, rowIndex, treeIndex, forest) ||
-            visibleFromLeft(treeRow, treeIndex, tree) ||
-            visibleFromRight(treeRow, treeIndex, tree) ||
-            visibleFromTop(forest, rowIndex, treeIndex, tree) ||
-            visibleFromBottom(forest, rowIndex, treeIndex, tree
+            isVisibleFromLeft(treeRow, treeIndex, tree) ||
+            isVisibleFromRight(treeRow, treeIndex, tree) ||
+            isVisibleFromTop(forest, rowIndex, treeIndex, tree) ||
+            isVisibleFromBottom(forest, rowIndex, treeIndex, tree
     ))).length; 
 
     return {
@@ -14,19 +14,19 @@ export default function day8(input) {
     };
 }
 
-function visibleFromBottom(forest, rowIndex, treeIndex, tree) {
+function isVisibleFromBottom(forest, rowIndex, treeIndex, tree) {
     return Math.max(...getTreesBelow(forest, rowIndex, treeIndex)) < tree;
 }
 
-function visibleFromTop(forest, rowIndex, treeIndex, tree) {
+function isVisibleFromTop(forest, rowIndex, treeIndex, tree) {
     return Math.max(...getTreesAbove(forest, rowIndex, treeIndex)) < tree;
 }
 
-function visibleFromRight(treeRow, treeIndex, tree) {
+function isVisibleFromRight(treeRow, treeIndex, tree) {
     return Math.max(...treeRow.slice(treeIndex + 1, treeRow.length)) < tree;
 }
 
-function visibleFromLeft(treeRow, treeIndex, tree) {
+function isVisibleFromLeft(treeRow, treeIndex, tree) {
     return Math.max(...treeRow.slice(0, treeIndex)) < tree;
 }
 
