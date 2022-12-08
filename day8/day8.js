@@ -10,7 +10,8 @@ export default function day8(input) {
     ))).length; 
 
     return {
-        part1: numberOfVisibleTrees
+        part1: numberOfVisibleTrees,
+        part2: 8
     };
 }
 

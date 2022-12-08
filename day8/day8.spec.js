@@ -9,6 +9,7 @@ describe('day8', () => {
     });
 
     it('part2', () => {
+        // expect(day8(readLines('day8/testdata_p1_1.txt')).part2).toEqual(8);
     });
 
 });
