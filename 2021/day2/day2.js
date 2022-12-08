@@ -1,11 +1,11 @@
 export default function run(input) {
     const moves = input.map(line => parseMove(line));
-    const part1Submargin = new BasicSubmarine();
-    const part2Submargin = new AdvancedSubmarine();
-    [ part1Submargin, part2Submargin ].forEach(s => moves.forEach(m => s.move(m)));
+    const part1Submarine = new BasicSubmarine();
+    const part2Submarine = new AdvancedSubmarine();
+    moves.forEach(move => [ part1Submarine, part2Submarine ].forEach(sub => sub.move(move)));
     return {
-        part1: part1Submargin.getPosition(),
-        part2: part2Submargin.getPosition()
+        part1: part1Submarine.getPosition(),
+        part2: part2Submarine.getPosition()
     }
 }
 
