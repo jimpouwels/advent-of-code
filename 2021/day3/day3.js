@@ -23,8 +23,8 @@ function getLifeSupportRating(numbers, inverse, column = 0) {
     return remainingNumbers.length > 1 ? getLifeSupportRating(remainingNumbers, inverse, column + 1) : remainingNumbers.join('');
 }
 
-function countInColumn(input, column, bit) {
-    return input.reduce((sum, line) => sum + (line[column] === bit ? 1 : 0), 0);
+function countInColumn(input, column, bitToCount) {
+    return input.reduce((sum, line) => sum + (line[column] === bitToCount ? 1 : 0), 0);
 }
 
 function inverseOf(value) {
