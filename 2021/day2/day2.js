@@ -10,7 +10,6 @@ export default function run(input) {
 }
 
 class Submarine {
-
     location = { horizontal: 0, depth: 0, aim: 0 };
     moves = { 'forward': this.forward, 'up': this.up, 'down': this.down };
 
