@@ -1,8 +1,5 @@
-import CdCommand from "./commands/cd-command.js";
-import Command from "./commands/command.js";
-import DirCommand from "./commands/dir-command.js";
-import FileCommand from "./commands/file-command.js";
 import Dir from "./model/dir.js";
+import File from "./model/file.js";
 
 export default function day7(input, spaceToBeFreed = 0) {
     const root = new Dir(null);
@@ -20,12 +17,65 @@ export default function day7(input, spaceToBeFreed = 0) {
 }
 
 function parseCommands(commandsArray) {
-    return commandsArray.map(command => {
-        let splitted = command.split(' ');  
-        if (command.startsWith('$')) { 
-            return splitted[1] === 'cd' ? new CdCommand(splitted[2]) : new Command();  
-        } else {
-            return splitted[0] === 'dir' ? new DirCommand(splitted[1]) : new FileCommand(splitted[1], parseInt(splitted[0]));;  
-        }
+    return commandsArray.map(command => { 
+        return createCommand(command.split(' '));
     });
+}
+
+function createCommand(commandComponents) {
+    if (commandComponents[0] === '$') {
+        return commandComponents[1] === 'cd' ? 
+            createCdCommand(commandComponents) : 
+            createDummyCommand();
+    } else {
+        return commandComponents[0] === 'dir' ? 
+            createDirCommand(commandComponents) : 
+            createFileCommand(commandComponents);
+    }
+}
+
+function changeDirectory(context, dirName) {
+    if (dirName === '/') {
+        context.currentDir = context.currentDir.getRoot();
+    } else if (dirName === '..') {
+        context.currentDir = context.currentDir.parentDir;
+    } else {
+        context.currentDir = context.currentDir.dirs.find(d => d.name === dirName);
+    }
+}
+
+function createDirectory(context, dirName) {
+    context.currentDir.dirs.push(new Dir(dirName, context.currentDir));
+}
+
+function createFile(context, name, size) {
+    context.currentDir.files.push(new File(name, size));
+}
+
+function createFileCommand(commandComponents) {
+    return {
+        name: commandComponents[1],
+        size: parseInt(commandComponents[0]),
+        execute: function (context) { createFile(context, this.name, this.size); }
+    };
+}
+
+function createDirCommand(commandComponents) {
+    return {
+        dirName: commandComponents[1],
+        execute: function (context) { createDirectory(context, this.dirName); }
+    };
+}
+
+function createDummyCommand() {
+    return {
+        execute: function (_context) { }
+    };
+}
+
+function createCdCommand(commandComponents) {
+    return {
+        dirName: commandComponents[2],
+        execute: function (context) { changeDirectory(context, this.dirName); }
+    };
 }
