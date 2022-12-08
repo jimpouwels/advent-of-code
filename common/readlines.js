@@ -2,8 +2,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export function readLines(filePath) {
-    const inputText = readFile(filePath);
-    return inputText.split('\n');
+    return readFile(filePath).split('\n');
+}
+
+export function readLinesAsInts(filePath) {
+    return readLines(filePath).map(l => parseInt(l));
 }
 
 export function readFile(filePath) {
