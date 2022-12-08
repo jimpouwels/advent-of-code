@@ -9,10 +9,28 @@ export default function day8(input) {
             isVisibleFromBottom(forest, rowIndex, treeIndex, tree
     ))).length;
 
+    let highestScenicScore = Math.max(...forest.flatMap((treeRow, rowIndex) => treeRow.map((_tree, treeIndex) => {
+        return getScoreFor(getTreesToRight(treeRow, treeIndex)) *
+               getScoreFor(getTreesToRight(treeRow, treeIndex)) *
+               getScoreFor(getTreesAbove(forest, rowIndex, treeIndex)) *
+               getScoreFor(getTreesToLeft(forest, rowIndex, treeIndex));  
+    })));
+
     return {
         part1: numberOfVisibleTrees,
-        part2: 8
+        part2: highestScenicScore
     };
+}
+
+function getScoreFor(treesAdjacent) {
+    let score = 0;
+    for (const tree of treesAdjacent) {
+        if (tree >= tree) {
+            score += tree;
+            break;
+        }
+    }
+    return score;
 }
 
 function isVisibleFromBottom(forest, rowIndex, treeIndex, tree) {
