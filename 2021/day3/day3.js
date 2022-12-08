@@ -13,7 +13,7 @@ export default function run(numbers) {
 function getGamma(numbers) {
     return [...numbers[0]].flatMap((_bit, column) => 
                             countInColumn(numbers, column, "1") > numbers.length / 2 ? "1" : "0")
-                        .join('');
+                          .join('');
 }
 
 function getLifeSupportRating(numbers, inverse, column = 0) {
