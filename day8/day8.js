@@ -9,11 +9,11 @@ export default function day8(input) {
             isVisibleFromBottom(forest, rowIndex, treeIndex, tree
     ))).length;
 
-    let highestScenicScore = Math.max(...forest.flatMap((treeRow, rowIndex) => treeRow.map((_tree, treeIndex) => {
-        return getScoreFor(getTreesToRight(treeRow, treeIndex)) *
-               getScoreFor(getTreesToRight(treeRow, treeIndex)) *
-               getScoreFor(getTreesAbove(forest, rowIndex, treeIndex)) *
-               getScoreFor(getTreesToLeft(forest, rowIndex, treeIndex));  
+    let highestScenicScore = Math.max(...forest.flatMap((treeRow, rowIndex) => treeRow.map((tree, treeIndex) => {
+        return getScoreFor(tree, getTreesAbove(forest, rowIndex, treeIndex)) *
+               getScoreFor(tree, getTreesToLeft(treeRow, treeIndex)) *
+               getScoreFor(tree, getTreesBelow(forest, rowIndex, treeIndex)) *
+               getScoreFor(tree, getTreesToRight(treeRow, treeIndex));
     })));
 
     return {
@@ -22,11 +22,11 @@ export default function day8(input) {
     };
 }
 
-function getScoreFor(treesAdjacent) {
+function getScoreFor(treehouseHeight, treesAdjacent) {
     let score = 0;
     for (const tree of treesAdjacent) {
-        if (tree >= tree) {
-            score += tree;
+        score++;
+        if (tree >= treehouseHeight) {
             break;
         }
     }
@@ -63,12 +63,12 @@ function getTreesToRight(treeRow, treeIndex) {
 }
 
 function getTreesAbove(forest, rowIndex, treeIndex) {
-    return forest.filter(row => forest.indexOf(row) < rowIndex)
-          .map(row => row[treeIndex]);
+    return forest.filter((_row, index) => index < rowIndex)
+          .map(row => row[treeIndex]).reverse();
 }
 
 function getTreesBelow(forest, rowIndex, treeIndex) {
-    return forest.filter(row => forest.indexOf(row) > rowIndex)
+    return forest.filter((_row, index) => index > rowIndex)
                  .map(row => row[treeIndex]);
 }
 
