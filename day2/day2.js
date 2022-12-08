@@ -19,6 +19,16 @@ function playBattles(battles) {
                   .reduce((total, score) => total + score);
 }
 
+function executeFight(hand1, hand2) {
+    let score = 0;
+    if (hand1 === hand2) {
+        score += 3;
+    } else if (hand2 === hand1.beats) {
+        score += 6;
+    }
+    return score + hand1.value;
+}
+
 function parseBattleStrategy1(line) {
     const splitted = line.split(' ');
     return { p1: parseHandString(splitted[0]), p2: parseHandString(splitted[1]) };
@@ -75,13 +85,7 @@ function createHand(value, ...representations) {
         representations: representations,
         beats: null,
         fight: function(other) {
-            let score = 0;
-            if (other === this) {
-                score += 3;
-            } else if (other === this.beats) {
-                score += 6;
-            }
-            return score + value;
+            return executeFight(this, other);
         },
         hasRepresentation: function(representation) {
             return representations.includes(representation);
