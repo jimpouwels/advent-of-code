@@ -45,10 +45,6 @@ function isOuterTree(treeRow, rowIndex, treeIndex, forest) {
            treeIndex == 0 || treeIndex == treeRow.length - 1;
 }
 
-function matchInner(treeRow, rowIndex, tree, treeIndex, forest) {
-    return false;
-}
-
 function parseForest(input) {
     return input.map(line => line.split('')
                      .flatMap(tree => parseInt(tree)));
