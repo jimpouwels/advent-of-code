@@ -1,7 +1,15 @@
-export default function day1(input) {
+export default function day1(input, windowSize) {
 
-    return {
-        part1: input.filter((x, i) => i < input.length - 1 ? parseInt(x) < input[i + 1] : false).length,
-        part2: 0
-    }
+    const increasedCount = input.filter((_x, i) => i <= input.length - windowSize)
+                                .filter((_x, i) => {
+                                    const current = sumWindow(input, i, i + windowSize);
+                                    const next = sumWindow(input, i + 1, i + windowSize + 1);
+                                    return current < next;
+                                }).length;
+
+    return increasedCount;
+}
+
+function sumWindow(input, from, to) {
+    return input.slice(from, to).reduce((sum, val) => sum + parseInt(val), 0)
 }
