@@ -12,15 +12,19 @@ export default function run(numbers) {
 
 function getGamma(numbers) {
     return [...numbers[0]].flatMap((_bit, column) => 
-                            countInColumn(numbers, column, "1") > numbers.length / 2 ? "1" : "0")
+                            getMostCommonBitInColumn(numbers, column))
                           .join('');
 }
 
 function getLifeSupportRating(numbers, inverse, column = 0) {
-    let mostCommon = countInColumn(numbers, column, "1") >= numbers.length / 2 ? "1" : "0";
+    let mostCommon = getMostCommonBitInColumn(numbers, column);
     mostCommon = inverse ? inverseOf(mostCommon) : mostCommon;
     const remainingNumbers = numbers.filter(number => number[column] === mostCommon);
     return remainingNumbers.length > 1 ? getLifeSupportRating(remainingNumbers, inverse, column + 1) : remainingNumbers.join('');
+}
+
+function getMostCommonBitInColumn(numbers, column) {
+    return countInColumn(numbers, column, "1") >= (numbers.length / 2) ? "1" : "0";
 }
 
 function countInColumn(input, column, bitToCount) {
