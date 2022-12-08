@@ -8,10 +8,13 @@ export default function run(input) {
 }
 
 function getGamma(input) {
-    return [...input[0]].flatMap((_bit, index) => {
-        const ones = input.reduce((sum, line) => sum + (line[index] === '1' ? 1 : 0), 0);
-        return ones > input.length / 2 ? "1" : "0";
-    }).join('');
+    return [...input[0]].flatMap((_bit, index) => 
+                            countInColumns(input, index, "1") > input.length / 2 ? "1" : "0")
+                        .join('');
+}
+
+function countInColumns(input, index, bit) {
+    return input.reduce((sum, line) => sum + (line[index] === bit ? 1 : 0), 0);
 }
 
 function inverseOf(value) {
