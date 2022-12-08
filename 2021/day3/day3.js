@@ -1,21 +1,23 @@
-import { parse } from "path";
-
 export default function run(input) {
-    let gamma = '';
-    let epsilon = '';
+    const gamma = getGamma(input);
+    const epsilon = inverseOf(gamma);
+    return {
+        part1: parseInt(gamma, 2) * parseInt(epsilon, 2),
+        part2: 0
+    }
+}
 
-    [...input[0]].forEach((_bit, index) => {
+function getGamma(input) {
+    return [...input[0]].flatMap((_bit, index) => {
         let ones = 0;
         let zeros = 0;
         input.forEach((line) => {
             line[index] === '1' ? ones++ : zeros++;
         });
-        gamma += ones > zeros ? "1" : "0";
-        epsilon += ones < zeros ? "1" : "0";
-    });
+        return ones > zeros ? "1" : "0";
+    }).join('');
+}
 
-    return {
-        part1: parseInt(gamma, 2) * parseInt(epsilon, 2),
-        part2: 0
-    }
+function inverseOf(value) {
+    return [...value].flatMap(bit => bit === "1" ? "0" : "1").join('');
 }
