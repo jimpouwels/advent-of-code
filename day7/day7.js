@@ -9,7 +9,8 @@ export default function day7(input, spaceToBeFreed = 0) {
     const sizePart1 = root.getDirsRecursive().filter(dir => dir.getTotalSize() <= 100000)
                                              .reduce((sum, val) => sum + val.getTotalSize(), 0);
     const sizePart2 = root.getDirsRecursive().filter(dir => dir.getTotalSize() >= spaceToBeFreed)
-                                             .sort((dirA, dirB) => dirA.getTotalSize() - dirB.getTotalSize())[0].getTotalSize();
+                                             .sort((dirA, dirB) => dirA.getTotalSize() - dirB.getTotalSize())[0]
+                                             .getTotalSize();
     return { 
         part1: sizePart1,
         part2: sizePart2
