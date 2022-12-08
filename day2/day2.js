@@ -55,9 +55,8 @@ function createHandTypes() {
                 createHand(3, 'C', 'Z') 
     ];
 
-    handTypes.forEach(handType => {
-        const handTypeIndex = handTypes.indexOf(handType);
-        handTypes[handTypeIndex].beats = handTypes[previousIndexOf(handTypeIndex, handTypes.length)];
+    handTypes.forEach((handType, handTypeIndex) => {
+        handType.beats = handTypes[previousIndexOf(handTypeIndex, handTypes.length)];
     });
     return handTypes;
 }
