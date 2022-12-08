@@ -11,8 +11,8 @@ export default function run(numbers) {
 }
 
 function getGamma(numbers) {
-    return [...numbers[0]].flatMap((_bit, bitIndex) => 
-                            countInColumns(numbers, bitIndex, "1") > numbers.length / 2 ? "1" : "0")
+    return [...numbers[0]].flatMap((_bit, column) => 
+                            countInColumns(numbers, column, "1") > numbers.length / 2 ? "1" : "0")
                         .join('');
 }
 
@@ -23,8 +23,8 @@ function getLifeSupportRating(numbers, inverse, column = 0) {
     return remainingNumbers.length > 1 ? getLifeSupportRating(remainingNumbers, inverse, column + 1) : remainingNumbers.join('');
 }
 
-function countInColumns(input, bitIndex, bit) {
-    return input.reduce((sum, line) => sum + (line[bitIndex] === bit ? 1 : 0), 0);
+function countInColumns(input, column, bit) {
+    return input.reduce((sum, line) => sum + (line[column] === bit ? 1 : 0), 0);
 }
 
 function inverseOf(value) {
