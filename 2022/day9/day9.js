@@ -37,11 +37,11 @@ function createDeltas(delta, count) {
 
 function createKnots(count) {
     const knots = [];
-    let knotToFollow = null;
+    let knotInFront = null;
     for (let i = 0; i < count; i++) {
-        const knot = new Knot(knotToFollow);
+        const knot = new Knot(knotInFront);
         knots.push(knot);
-        knotToFollow = knot;
+        knotInFront = knot;
     }
     return knots;
 }
