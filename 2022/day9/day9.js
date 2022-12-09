@@ -81,9 +81,9 @@ function parseMoves(lines) {
 }
 
 function createDeltas(delta, times) {
-    return new Array(times).fill(0).map(_t => { return delta });
+    return new Array(times).fill(0).map(_t => delta);
 }
 
 function createKnots(count) {
-    return new Array(count).fill(0).map(_t => { return { x: 0, y: 0, visitedPlaces: [] } });
+    return new Array(count).fill(0).map(_t => ({ x: 0, y: 0, visitedPlaces: [] }));
 }
