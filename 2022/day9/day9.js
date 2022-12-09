@@ -1,13 +1,17 @@
-export default function run(lines) {
+export default function run(lines, numberOfKnots) {
     const moves = parseMoves(lines);
     const head = { x: 0, y: 0 };
-    const tail = { x: 0, y: 0, visitedPlaces: [] };
+    const tails = createTails(numberOfKnots);
     
     moves.forEach(move => {
         add(head, move);
-        follow(tail, head);
+        let pointToFollow = head;
+        tails.forEach(tail => {
+            follow(tail, pointToFollow);
+            pointToFollow = tail;
+        });
     });
-    return tail.visitedPlaces.length;
+    return tails[tails.length - 1].visitedPlaces.length;
 }
 
 function follow(point, pointToFollow) {
@@ -76,4 +80,8 @@ function parseMoves(lines) {
 
 function repeatPoint(point, times) {
     return new Array(times).fill(0).map(_t => { return point });
+}
+
+function createTails(count) {
+    return new Array(count).fill(0).map(_t => { return { x: 0, y: 0, visitedPlaces: [] } });
 }
