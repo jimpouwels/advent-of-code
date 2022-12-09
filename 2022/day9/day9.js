@@ -2,12 +2,13 @@ export default function run(lines, numberOfKnots) {
     const deltas = parseMoves(lines);
     const knots = createKnots(numberOfKnots);
     const head = knots[0];
+    const followingKnots = knots.slice(1);
     const tail = knots[knots.length -1];
 
     deltas.forEach(delta => {
         move(head, delta);
         let knotToFollow = head;
-        knots.slice(1).forEach(knot => {
+        followingKnots.forEach(knot => {
             follow(knot, knotToFollow);
             knotToFollow = knot;
         });
