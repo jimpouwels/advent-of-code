@@ -4,12 +4,6 @@ export default class Knot {
     y = 0;
     uniquePositions = [];
 
-    recordPosition() {
-        if (!this.uniquePositions.find(p => p.x == this.x && p.y == this.y)) {
-            this.uniquePositions.push({ x: this.x, y: this.y });
-        }
-    }
-
     add(delta) {
         this.x += delta.x;
         this.y += delta.y;
@@ -53,5 +47,11 @@ export default class Knot {
     
     distanceXTo(otherKnot) {
         return Math.abs(this.x - otherKnot.x);
+    }
+
+    recordPosition() {
+        if (!this.uniquePositions.find(p => p.x == this.x && p.y == this.y)) {
+            this.uniquePositions.push({ x: this.x, y: this.y });
+        }
     }
 }
