@@ -7,9 +7,9 @@ export default function run(lines, numberOfKnots) {
     deltas.forEach(delta => {
         move(head, delta);
         let knotToFollow = head;
-        knots.forEach(tail => {
-            follow(tail, knotToFollow);
-            knotToFollow = tail;
+        knots.forEach(knot => {
+            follow(knot, knotToFollow);
+            knotToFollow = knot;
         });
     });
     return tail.visitedPlaces.length;
