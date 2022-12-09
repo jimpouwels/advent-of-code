@@ -1,16 +1,18 @@
 export default function run(lines, numberOfKnots) {
     const deltas = parseMoves(lines);
     const knots = createKnots(numberOfKnots);
-    
+    const head = knots[0];
+    const tail = knots[knots.length -1];
+
     deltas.forEach(delta => {
-        move(knots[0], delta);
-        let pointToFollow = knots[0];
+        move(head, delta);
+        let pointToFollow = head;
         knots.forEach(tail => {
             follow(tail, pointToFollow);
             pointToFollow = tail;
         });
     });
-    return knots[knots.length - 1].visitedPlaces.length;
+    return tail.visitedPlaces.length;
 }
 
 function follow(point, pointToFollow) {
