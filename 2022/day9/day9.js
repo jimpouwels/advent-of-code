@@ -9,51 +9,11 @@ export default function run(lines, numberOfKnots) {
         head.add(delta);
         let knotToFollow = head;
         followingKnots.forEach(knot => {
-            follow(knot, knotToFollow);
+            knot.follow(knotToFollow);
             knotToFollow = knot;
         });
     });
     return tail.uniquePositions.length;
-}
-
-function follow(knot, knotToFollow) {
-    followX(knot, knotToFollow);
-    followY(knot, knotToFollow);
-    knot.recordPosition();
-}
-
-function followX(knot, knotToFollow) {
-    if (distanceX(knot, knotToFollow) > 1) {
-        if (distanceY(knot, knotToFollow) > 0) {
-            moveTowardsY(knot, knotToFollow);
-        }
-        moveTowardsX(knot, knotToFollow);
-    }
-}
-
-function followY(knot, knotToFollow) {
-    if (distanceY(knot, knotToFollow) > 1) {
-        if (distanceX(knot, knotToFollow) > 0) {
-            moveTowardsX(knot, knotToFollow);
-        }
-        moveTowardsY(knot, knotToFollow);
-    }
-}
-
-function moveTowardsX(knot, knotToFollow) {
-    knot.add({ x: knotToFollow.x > knot.x ? 1 : -1, y: 0 });
-}
-
-function moveTowardsY(knot, knotToFollow) {
-    knot.add({ x: 0, y: knotToFollow.y > knot.y ? 1 : -1 });
-}
-
-function distanceY(knot1, knot2) {
-    return Math.abs(knot1.y - knot2.y);
-}
-
-function distanceX(knot1, knot2) {
-    return Math.abs(knot1.x - knot2.x);
 }
 
 function parseMoves(lines) {
@@ -78,20 +38,62 @@ function createDeltas(delta, count) {
 }
 
 function createKnots(count) {
-    return Array(count).fill(0).map(_i => (
-        { 
-            x: 0, 
-            y: 0,
-            uniquePositions: [],
-            recordPosition: function() {
-                if (!this.uniquePositions.find(p => p.x == this.x && p.y == this.y)) {
-                    this.uniquePositions.push({ x: this.x, y: this.y });
-                }
-            },
-            add: function(delta) {
-                this.x += delta.x;
-                this.y += delta.y;
-            }
+    return Array(count).fill(0).map(_i => new Knot());
+}
+
+class Knot {
+    x = 0;
+    y = 0;
+    uniquePositions = [];
+
+    recordPosition() {
+        if (!this.uniquePositions.find(p => p.x == this.x && p.y == this.y)) {
+            this.uniquePositions.push({ x: this.x, y: this.y });
         }
-    ));
+    }
+
+    add(delta) {
+        this.x += delta.x;
+        this.y += delta.y;
+    }
+
+    follow(otherKnot) {
+        this.followX(otherKnot);
+        this.followY(otherKnot);
+        this.recordPosition();
+    }
+
+    followX(otherKnot) {
+        if (this.distanceXTo(otherKnot) > 1) {
+            if (this.distanceYTo(otherKnot) > 0) {
+                this.moveTowardsY(otherKnot);
+            }
+            this.moveTowardsX(otherKnot);
+        }
+    }
+    
+    followY(otherKnot) {
+        if (this.distanceYTo(otherKnot) > 1) {
+            if (this.distanceXTo(otherKnot) > 0) {
+                this.moveTowardsX(otherKnot);
+            }
+            this.moveTowardsY(otherKnot);
+        }
+    }
+    
+    moveTowardsX(otherKnot) {
+        this.add({ x: otherKnot.x > this.x ? 1 : -1, y: 0 });
+    }
+    
+    moveTowardsY(otherKnot) {
+        this.add({ x: 0, y: otherKnot.y > this.y ? 1 : -1 });
+    }
+    
+    distanceYTo(otherKnot) {
+        return Math.abs(this.y - otherKnot.y);
+    }
+    
+    distanceXTo(otherKnot) {
+        return Math.abs(this.x - otherKnot.x);
+    }
 }
