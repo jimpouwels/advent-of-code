@@ -1,6 +1,6 @@
 export default function run(lines, numberOfKnots) {
     const deltas = parseMoves(lines);
-    const knots = createTails(numberOfKnots);
+    const knots = createKnots(numberOfKnots);
     
     deltas.forEach(delta => {
         move(knots[0], delta);
@@ -81,6 +81,6 @@ function repeatPoint(point, times) {
     return new Array(times).fill(0).map(_t => { return point });
 }
 
-function createTails(count) {
+function createKnots(count) {
     return new Array(count).fill(0).map(_t => { return { x: 0, y: 0, visitedPlaces: [] } });
 }
