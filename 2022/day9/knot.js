@@ -1,4 +1,5 @@
 export default class Knot {
+    
     x = 0;
     y = 0;
     uniquePositions = [];
