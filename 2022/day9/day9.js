@@ -1,11 +1,10 @@
 export default function run(lines, numberOfKnots) {
     const moves = parseMoves(lines);
-    const head = { x: 0, y: 0 };
     const knots = createTails(numberOfKnots);
     
     moves.forEach(move => {
-        add(head, move);
-        let pointToFollow = head;
+        add(knots[0], move);
+        let pointToFollow = knots[0];
         knots.forEach(tail => {
             follow(tail, pointToFollow);
             pointToFollow = tail;
