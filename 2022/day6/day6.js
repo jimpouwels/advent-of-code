@@ -1,4 +1,4 @@
-export default function day6(input, distinctCharCount) {
+export default function run(input, distinctCharCount) {
     let cursor;
     for (cursor = distinctCharCount - 1; cursor < input.length; cursor++) {
         let charsTillNow = input.slice(cursor - distinctCharCount + 1, cursor + 1);
