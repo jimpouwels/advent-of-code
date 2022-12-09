@@ -4,6 +4,7 @@ export default function run(lines, numberOfKnots) {
     const head = knots[0];
     const followingKnots = knots.slice(1);
     const tail = knots[knots.length -1];
+    let tailRecord = [];
 
     deltas.forEach(delta => {
         move(head, delta);
@@ -12,16 +13,14 @@ export default function run(lines, numberOfKnots) {
             follow(knot, knotToFollow);
             knotToFollow = knot;
         });
+        recordPosition(tailRecord, tail);
     });
-    return tail.visitedPlaces.length;
+    return tailRecord.length;
 }
 
 function follow(knot, knotToFollow) {
     followX(knot, knotToFollow);
     followY(knot, knotToFollow);
-    if (!knot.visitedPlaces.find(p => p.x == knot.x && p.y == knot.y)) {
-        knot.visitedPlaces.push({ x: knot.x, y: knot.y });
-    }
 }
 
 function followX(knot, knotToFollow) {
@@ -63,6 +62,12 @@ function move(knot1, knot2) {
     knot1.y += knot2.y;
 }
 
+function recordPosition(positionRecord, knot) {
+    if (!positionRecord.find(p => p.x == knot.x && p.y == knot.y)) {
+        positionRecord.push({ x: knot.x, y: knot.y });
+    }
+}
+
 function parseMoves(lines) {
     return lines.flatMap(line => {
         const split = line.split(' ');
@@ -80,10 +85,10 @@ function parseMoves(lines) {
     });
 }
 
-function createDeltas(delta, times) {
-    return new Array(times).fill(0).map(_t => delta);
+function createDeltas(delta, count) {
+    return Array(count).fill(delta);
 }
 
 function createKnots(count) {
-    return new Array(count).fill(0).map(_t => ({ x: 0, y: 0, visitedPlaces: [] }));
+    return Array(count).fill(0).map(_i => ({ x: 0, y: 0 }));
 }
