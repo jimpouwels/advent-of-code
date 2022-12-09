@@ -9,11 +9,7 @@ export default function run(lines, numberOfKnots) {
 
     deltas.forEach(delta => {
         head.add(delta);
-        let knotToFollow = head;
-        followingKnots.forEach(knot => {
-            knot.follow(knotToFollow);
-            knotToFollow = knot;
-        });
+        followingKnots.forEach(knot => knot.follow());
     });
     return tail.uniquePositions.length;
 }
@@ -40,5 +36,12 @@ function createDeltas(delta, count) {
 }
 
 function createKnots(count) {
-    return Array(count).fill(0).map(_i => new Knot());
+    const knots = [];
+    let knotToFollow = null;
+    for (let i = 0; i < count; i++) {
+        const knot = new Knot(knotToFollow);
+        knots.push(knot);
+        knotToFollow = knot;
+    }
+    return knots;
 }

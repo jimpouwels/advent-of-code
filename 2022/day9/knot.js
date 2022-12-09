@@ -2,16 +2,22 @@ export default class Knot {
     
     x = 0;
     y = 0;
+    knotToFollow;
     uniquePositions = [];
+
+    constructor(knotToFollow) {
+        this.knotToFollow = knotToFollow;
+    }
 
     add(delta) {
         this.x += delta.x;
         this.y += delta.y;
     }
 
-    follow(otherKnot) {
-        this.followX(otherKnot);
-        this.followY(otherKnot);
+    follow() {
+        if (!this.knotToFollow) return;
+        this.followX(this.knotToFollow);
+        this.followY(this.knotToFollow);
         this.recordPosition();
     }
 
