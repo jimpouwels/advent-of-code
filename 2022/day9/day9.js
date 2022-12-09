@@ -6,7 +6,7 @@ export default function run(lines, numberOfKnots) {
     const followingKnots = knots.slice(1);
 
     deltas.forEach(delta => {
-        head.move(delta);
+        head.add(delta);
         let knotToFollow = head;
         followingKnots.forEach(knot => {
             follow(knot, knotToFollow);
@@ -41,11 +41,11 @@ function followY(knot, knotToFollow) {
 }
 
 function moveTowardsX(knot, knotToFollow) {
-    knot.move({ x: knotToFollow.x > knot.x ? 1 : -1, y: 0 });
+    knot.add({ x: knotToFollow.x > knot.x ? 1 : -1, y: 0 });
 }
 
 function moveTowardsY(knot, knotToFollow) {
-    knot.move({ x: 0, y: knotToFollow.y > knot.y ? 1 : -1 });
+    knot.add({ x: 0, y: knotToFollow.y > knot.y ? 1 : -1 });
 }
 
 function distanceY(knot1, knot2) {
@@ -88,7 +88,7 @@ function createKnots(count) {
                     this.uniquePositions.push({ x: this.x, y: this.y });
                 }
             },
-            move: function(delta) {
+            add: function(delta) {
                 this.x += delta.x;
                 this.y += delta.y;
             }
