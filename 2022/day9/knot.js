@@ -2,11 +2,11 @@ export default class Knot {
     
     x = 0;
     y = 0;
-    knotToFollow;
+    knotInFront;
     uniquePositions = [];
 
-    constructor(knotToFollow) {
-        this.knotToFollow = knotToFollow;
+    constructor(knotInFront) {
+        this.knotInFront = knotInFront;
     }
 
     add(delta) {
@@ -15,42 +15,42 @@ export default class Knot {
     }
 
     follow() {
-        if (!this.knotToFollow) return;
-        this.followX(this.knotToFollow);
-        this.followY(this.knotToFollow);
+        if (!this.knotInFront) return;
+        this.followX();
+        this.followY();
         this.recordPosition();
     }
 
-    followX(otherKnot) {
-        const distance = this.distanceTo(otherKnot);
+    followX() {
+        const distance = this.distanceToKnotInFront();
         if (distance.x > 1) {
             if (distance.y > 0) {
-                this.moveTowardsY(otherKnot);
+                this.moveTowardsKnotInFrontY();
             }
-            this.moveTowardsX(otherKnot);
+            this.moveTowardsKnotInFrontX();
         }
     }
     
-    followY(otherKnot) {
-        const distance = this.distanceTo(otherKnot);
+    followY() {
+        const distance = this.distanceToKnotInFront();
         if (distance.y > 1) {
             if (distance.x > 0) {
-                this.moveTowardsX(otherKnot);
+                this.moveTowardsKnotInFrontX();
             }
-            this.moveTowardsY(otherKnot);
+            this.moveTowardsKnotInFrontY();
         }
     }
     
-    moveTowardsX(otherKnot) {
-        this.add({ x: otherKnot.x > this.x ? 1 : -1, y: 0 });
+    moveTowardsKnotInFrontX() {
+        this.add({ x: this.knotInFront.x > this.x ? 1 : -1, y: 0 });
     }
     
-    moveTowardsY(otherKnot) {
-        this.add({ x: 0, y: otherKnot.y > this.y ? 1 : -1 });
+    moveTowardsKnotInFrontY() {
+        this.add({ x: 0, y: this.knotInFront.y > this.y ? 1 : -1 });
     }
     
-    distanceTo(otherKnot) {
-        return { x: Math.abs(this.x - otherKnot.x), y: Math.abs(this.y - otherKnot.y) };
+    distanceToKnotInFront() {
+        return { x: Math.abs(this.x - this.knotInFront.x), y: Math.abs(this.y - this.knotInFront.y) };
     }
     
     recordPosition() {
