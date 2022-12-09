@@ -69,18 +69,18 @@ function parseMoves(lines) {
         const value = parseInt(split[1]);
         switch (split[0]) {
             case 'R':
-                return createDelta({ x: 1, y: 0 }, value);
+                return createDeltas({ x: 1, y: 0 }, value);
             case 'L':
-                return createDelta({ x: -1, y: 0 }, value);
+                return createDeltas({ x: -1, y: 0 }, value);
             case 'U':
-                return createDelta({ x: 0, y: 1 }, value);
+                return createDeltas({ x: 0, y: 1 }, value);
             case 'D':
-                return createDelta({ x: 0, y: -1 }, value);
+                return createDeltas({ x: 0, y: -1 }, value);
         }
     });
 }
 
-function createDelta(delta, times) {
+function createDeltas(delta, times) {
     return new Array(times).fill(0).map(_t => { return delta });
 }
 
