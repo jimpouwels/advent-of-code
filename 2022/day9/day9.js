@@ -21,19 +21,27 @@ function follow(point, pointToFollow) {
 function followX(point, pointToFollow) {
     if (distanceX(point, pointToFollow) > 1) {
         if (distanceY(point, pointToFollow) > 0) {
-            point.y += pointToFollow.y > point.y ? 1 : -1;
+            moveTowardsY(point, pointToFollow);
         }
-        point.x += pointToFollow.x > point.x ? 1 : -1;
+        moveTowardsX(point, pointToFollow);
     }
 }
 
 function followY(point, pointToFollow) {
     if (distanceY(point, pointToFollow) > 1) {
         if (distanceX(point, pointToFollow) > 0) {
-            point.x += pointToFollow.x > point.x ? 1 : -1;
+            moveTowardsX(point, pointToFollow);
         }
-        point.y += pointToFollow.y > point.y ? 1 : -1;
+        moveTowardsY(point, pointToFollow);
     }
+}
+
+function moveTowardsX(point, pointToFollow) {
+    add(point, { x: pointToFollow.x > point.x ? 1 : -1, y: 0 });
+}
+
+function moveTowardsY(point, pointToFollow) {
+    add(point, { x: 0, y: pointToFollow.y > point.y ? 1 : -1 });
 }
 
 function distanceY(point1, point2) {
