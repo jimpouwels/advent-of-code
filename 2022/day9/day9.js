@@ -1,9 +1,9 @@
 export default function run(lines, numberOfKnots) {
-    const moves = parseMoves(lines);
+    const deltas = parseMoves(lines);
     const knots = createTails(numberOfKnots);
     
-    moves.forEach(move => {
-        add(knots[0], move);
+    deltas.forEach(delta => {
+        delta(knots[0], delta);
         let pointToFollow = knots[0];
         knots.forEach(tail => {
             follow(tail, pointToFollow);
@@ -40,11 +40,11 @@ function followY(point, pointToFollow) {
 }
 
 function moveTowardsX(point, pointToFollow) {
-    add(point, { x: pointToFollow.x > point.x ? 1 : -1, y: 0 });
+    move(point, { x: pointToFollow.x > point.x ? 1 : -1, y: 0 });
 }
 
 function moveTowardsY(point, pointToFollow) {
-    add(point, { x: 0, y: pointToFollow.y > point.y ? 1 : -1 });
+    move(point, { x: 0, y: pointToFollow.y > point.y ? 1 : -1 });
 }
 
 function distanceY(point1, point2) {
@@ -55,7 +55,7 @@ function distanceX(point1, point2) {
     return Math.abs(point1.x - point2.x);
 }
 
-function add(point1, point2) {
+function move(point1, point2) {
     point1.x += point2.x;
     point1.y += point2.y;
 }
