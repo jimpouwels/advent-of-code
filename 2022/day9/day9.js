@@ -2,25 +2,24 @@ export default function run(lines, numberOfKnots) {
     const deltas = parseMoves(lines);
     const knots = createKnots(numberOfKnots);
     const head = knots[0];
+    const tail = knots[knots.length - 1];
     const followingKnots = knots.slice(1);
-    const tail = knots[knots.length -1];
-    let tailRecord = [];
 
     deltas.forEach(delta => {
-        move(head, delta);
+        head.move(delta);
         let knotToFollow = head;
         followingKnots.forEach(knot => {
             follow(knot, knotToFollow);
             knotToFollow = knot;
         });
-        recordPosition(tailRecord, tail);
     });
-    return tailRecord.length;
+    return tail.uniquePositions.length;
 }
 
 function follow(knot, knotToFollow) {
     followX(knot, knotToFollow);
     followY(knot, knotToFollow);
+    knot.recordPosition();
 }
 
 function followX(knot, knotToFollow) {
@@ -42,11 +41,11 @@ function followY(knot, knotToFollow) {
 }
 
 function moveTowardsX(knot, knotToFollow) {
-    move(knot, { x: knotToFollow.x > knot.x ? 1 : -1, y: 0 });
+    knot.move({ x: knotToFollow.x > knot.x ? 1 : -1, y: 0 });
 }
 
 function moveTowardsY(knot, knotToFollow) {
-    move(knot, { x: 0, y: knotToFollow.y > knot.y ? 1 : -1 });
+    knot.move({ x: 0, y: knotToFollow.y > knot.y ? 1 : -1 });
 }
 
 function distanceY(knot1, knot2) {
@@ -55,17 +54,6 @@ function distanceY(knot1, knot2) {
 
 function distanceX(knot1, knot2) {
     return Math.abs(knot1.x - knot2.x);
-}
-
-function move(knot1, knot2) {
-    knot1.x += knot2.x;
-    knot1.y += knot2.y;
-}
-
-function recordPosition(positionRecord, knot) {
-    if (!positionRecord.find(p => p.x == knot.x && p.y == knot.y)) {
-        positionRecord.push({ x: knot.x, y: knot.y });
-    }
 }
 
 function parseMoves(lines) {
@@ -90,5 +78,20 @@ function createDeltas(delta, count) {
 }
 
 function createKnots(count) {
-    return Array(count).fill(0).map(_i => ({ x: 0, y: 0 }));
+    return Array(count).fill(0).map(_i => (
+        { 
+            x: 0, 
+            y: 0,
+            uniquePositions: [],
+            recordPosition: function() {
+                if (!this.uniquePositions.find(p => p.x == this.x && p.y == this.y)) {
+                    this.uniquePositions.push({ x: this.x, y: this.y });
+                }
+            },
+            move: function(delta) {
+                this.x += delta.x;
+                this.y += delta.y;
+            }
+        }
+    ));
 }
