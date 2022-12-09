@@ -11,28 +11,37 @@ export default function run(lines) {
 }
 
 function follow(point, pointToFollow) {
+    followX(point, pointToFollow);
+    followY(point, pointToFollow);
+    if (!point.visitedPlaces.find(p => p.x == point.x && p.y == point.y)) {
+        point.visitedPlaces.push({ x: point.x, y: point.y });
+    }
+}
+
+function followX(point, pointToFollow) {
     if (distanceX(point, pointToFollow) > 1) {
         if (distanceY(point, pointToFollow) > 0) {
-            point.y += pointToFollow.y > point.y ? 1 : -1;    
+            point.y += pointToFollow.y > point.y ? 1 : -1;
         }
         point.x += pointToFollow.x > point.x ? 1 : -1;
-    } else if (distanceY(point, pointToFollow) > 1) {
+    }
+}
+
+function followY(point, pointToFollow) {
+    if (distanceY(point, pointToFollow) > 1) {
         if (distanceX(point, pointToFollow) > 0) {
-            point.x += pointToFollow.x > point.x ? 1 : -1;    
+            point.x += pointToFollow.x > point.x ? 1 : -1;
         }
         point.y += pointToFollow.y > point.y ? 1 : -1;
     }
-    if (!point.visitedPlaces.find(p => p.x == point.x && p.y == point.y)) {
-        point.visitedPlaces.push({ x: point.x, y: point.y} );
-    }
 }
 
-function distanceY(pointToFollow, point) {
-    return Math.abs(pointToFollow.y - point.y);
+function distanceY(point1, point2) {
+    return Math.abs(point1.y - point2.y);
 }
 
-function distanceX(pointToFollow, point) {
-    return Math.abs(pointToFollow.x - point.x);
+function distanceX(point1, point2) {
+    return Math.abs(point1.x - point2.x);
 }
 
 function add(point1, point2) {
