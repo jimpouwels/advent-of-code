@@ -7,7 +7,7 @@ export default function run(lines, numberOfKnots) {
     deltas.forEach(delta => {
         move(head, delta);
         let knotToFollow = head;
-        knots.forEach(knot => {
+        knots.slice(1).forEach(knot => {
             follow(knot, knotToFollow);
             knotToFollow = knot;
         });
