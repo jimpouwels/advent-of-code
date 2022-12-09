@@ -16,8 +16,8 @@ export default class Knot {
     }
 
     followX(otherKnot) {
-        if (this.distanceXTo(otherKnot) > 1) {
-            if (this.distanceYTo(otherKnot) > 0) {
+        if (this.distanceTo(otherKnot).x > 1) {
+            if (this.distanceTo(otherKnot).y > 0) {
                 this.moveTowardsY(otherKnot);
             }
             this.moveTowardsX(otherKnot);
@@ -25,8 +25,8 @@ export default class Knot {
     }
     
     followY(otherKnot) {
-        if (this.distanceYTo(otherKnot) > 1) {
-            if (this.distanceXTo(otherKnot) > 0) {
+        if (this.distanceTo(otherKnot).y > 1) {
+            if (this.distanceTo(otherKnot).x > 0) {
                 this.moveTowardsX(otherKnot);
             }
             this.moveTowardsY(otherKnot);
@@ -41,14 +41,10 @@ export default class Knot {
         this.add({ x: 0, y: otherKnot.y > this.y ? 1 : -1 });
     }
     
-    distanceYTo(otherKnot) {
-        return Math.abs(this.y - otherKnot.y);
+    distanceTo(otherKnot) {
+        return { x: Math.abs(this.x - otherKnot.x), y: Math.abs(this.y - otherKnot.y) };
     }
     
-    distanceXTo(otherKnot) {
-        return Math.abs(this.x - otherKnot.x);
-    }
-
     recordPosition() {
         if (!this.uniquePositions.find(p => p.x == this.x && p.y == this.y)) {
             this.uniquePositions.push({ x: this.x, y: this.y });
