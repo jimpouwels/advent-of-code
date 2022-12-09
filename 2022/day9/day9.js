@@ -3,7 +3,7 @@ export default function run(lines, numberOfKnots) {
     const knots = createTails(numberOfKnots);
     
     deltas.forEach(delta => {
-        delta(knots[0], delta);
+        move(knots[0], delta);
         let pointToFollow = knots[0];
         knots.forEach(tail => {
             follow(tail, pointToFollow);
