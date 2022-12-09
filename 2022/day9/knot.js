@@ -16,8 +16,9 @@ export default class Knot {
     }
 
     followX(otherKnot) {
-        if (this.distanceTo(otherKnot).x > 1) {
-            if (this.distanceTo(otherKnot).y > 0) {
+        const distance = this.distanceTo(otherKnot);
+        if (distance.x > 1) {
+            if (distance.y > 0) {
                 this.moveTowardsY(otherKnot);
             }
             this.moveTowardsX(otherKnot);
@@ -25,8 +26,9 @@ export default class Knot {
     }
     
     followY(otherKnot) {
-        if (this.distanceTo(otherKnot).y > 1) {
-            if (this.distanceTo(otherKnot).x > 0) {
+        const distance = this.distanceTo(otherKnot);
+        if (distance.y > 1) {
+            if (distance.x > 0) {
                 this.moveTowardsX(otherKnot);
             }
             this.moveTowardsY(otherKnot);
