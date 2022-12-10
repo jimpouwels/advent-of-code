@@ -11,13 +11,12 @@ export default function run(lines) {
         if (cycle % 40 == 20) {
             signalStrengthsTotal += (xRegister.value * cycle);
         }
-        crtX = (cycle % 40);
+        crtX = cycle % 40;
         if (xRegister.value === crtX || xRegister.value +1 === crtX || xRegister.value + 2 === crtX) {
             crtOutput += "#";
         } else {
             crtOutput += '.';
         }
-        
         if (cycle % 40 == 0) {
             crtOutput += "\n";
         }
