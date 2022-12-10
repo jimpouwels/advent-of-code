@@ -1,34 +1,25 @@
 
 export default function run(lines) {
     let signalStrengthsTotal = 0;
-    let crtOutput = '';
+    const crt = new Crt();
     const xRegister = new XRegister();
     let instructions = parseCycles(lines, xRegister);
     let currentInstruction = instructions.shift();
 
-    let crtX = 1;
     for (let cycle = 1; currentInstruction; cycle++) {
         if (cycle % 40 == 20) {
             signalStrengthsTotal += (xRegister.value * cycle);
         }
-        crtX = cycle % 40;
-        if (xRegister.value === crtX || xRegister.value +1 === crtX || xRegister.value + 2 === crtX) {
-            crtOutput += "#";
-        } else {
-            crtOutput += '.';
-        }
-        if (cycle % 40 == 0) {
-            crtOutput += "\n";
-        }
+        
+        crt.tick(xRegister);
         currentInstruction.tick();
         if (currentInstruction.isFinished) {
             currentInstruction = instructions.shift();
         }
     };
-    console.log(crtOutput);
     return {
         part1: signalStrengthsTotal,
-        part2: crtOutput
+        part2: crt.output
     }
 }
 
@@ -86,6 +77,24 @@ class Add extends Instruction {
 
     onFinished() {
         this.xRegister.value += this.value;
+    }
+}
+
+class Crt {
+    output = '';
+    x = 0;
+
+    tick(xRegister) {
+        if (xRegister.value - 1 === this.x || xRegister.value === this.x || xRegister.value + 1 === this.x) {
+            this.output += "#";
+        } else {
+            this.output += '.';
+        }
+        this.x++;
+        if ((this.x) == 40) {
+            this.output += "\n";
+            this.x = 0;
+        }
     }
 }
 
