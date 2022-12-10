@@ -1,16 +1,16 @@
 export default function run(lines) {
     let signalStrengthsTotal = 0;
     const xRegister = new XRegister();
-    let operationBacklog = parseCycles(lines, xRegister);
-    let currentOperation = operationBacklog.shift();
+    let instructions = parseCycles(lines, xRegister);
+    let currentInstruction = instructions.shift();
 
-    for (let cycle = 1; currentOperation; cycle++) {
+    for (let cycle = 1; currentInstruction; cycle++) {
         if (cycle % 40 == 20) {
             signalStrengthsTotal += (xRegister.value * cycle);
         }
-        currentOperation.tick();
-        if (currentOperation.isFinished) {
-            currentOperation = operationBacklog.shift();
+        currentInstruction.tick();
+        if (currentInstruction.isFinished) {
+            currentInstruction = instructions.shift();
         }
     };
 
@@ -20,15 +20,16 @@ export default function run(lines) {
 function parseCycles(lines, xRegister) {
     return lines.map(line => {
         const split = line.split(' ');
-        if (split[0] === 'noop') {
-            return new Noop();
-        } else {
-            return new Add(parseInt(split[1]), xRegister);
+        switch (split[0]) {
+            case 'noop':
+                return new Noop();
+            case 'addx':
+                return new Add(parseInt(split[1]), xRegister);
         }
     });
 }
 
-class Operation {
+class Instruction {
     remainingCycles = 0;
     isFinished = false;
 
@@ -49,17 +50,16 @@ class Operation {
     }
 }
 
-class Noop extends Operation {
+class Noop extends Instruction {
     constructor() {
         super(1);
     }
 
     onFinished() {
     }
-
 }
 
-class Add extends Operation {
+class Add extends Instruction {
     value;
     xRegister;
 
