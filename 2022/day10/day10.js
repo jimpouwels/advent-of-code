@@ -1,15 +1,20 @@
 export default function run(lines) {
+    let signalStrengthsTotal = 0;
     const xRegister = new XRegister();
     let operationBacklog = parseCycles(lines, xRegister);
     let currentOperation = operationBacklog.shift();
+
     for (let cycle = 1; currentOperation; cycle++) {
+        if (cycle % 40 == 20) {
+            signalStrengthsTotal += (xRegister.value * cycle);
+        }
         currentOperation.tick();
         if (currentOperation.isFinished) {
             currentOperation = operationBacklog.shift();
         }
     };
 
-    return xRegister.value;
+    return signalStrengthsTotal;
 }
 
 function parseCycles(lines, xRegister) {
