@@ -1,20 +1,36 @@
+
 export default function run(lines) {
     let signalStrengthsTotal = 0;
+    let crtOutput = '';
     const xRegister = new XRegister();
     let instructions = parseCycles(lines, xRegister);
     let currentInstruction = instructions.shift();
 
+    let crtX = 1;
     for (let cycle = 1; currentInstruction; cycle++) {
         if (cycle % 40 == 20) {
             signalStrengthsTotal += (xRegister.value * cycle);
+        }
+        crtX = (cycle % 40);
+        if (xRegister.value === crtX || xRegister.value +1 === crtX || xRegister.value + 2 === crtX) {
+            crtOutput += "#";
+        } else {
+            crtOutput += '.';
+        }
+        
+        if (cycle % 40 == 0) {
+            crtOutput += "\n";
         }
         currentInstruction.tick();
         if (currentInstruction.isFinished) {
             currentInstruction = instructions.shift();
         }
     };
-
-    return signalStrengthsTotal;
+    console.log(crtOutput);
+    return {
+        part1: signalStrengthsTotal,
+        part2: crtOutput
+    }
 }
 
 function parseCycles(lines, xRegister) {
