@@ -1,4 +1,4 @@
-export default function day5(input) {
+export default function run(input) {
     const moves = parseMoves(input);
     const part1Result = rearrange(parseStacks(input), moves, true);
     const part2Result = rearrange(parseStacks(input), moves, false);
