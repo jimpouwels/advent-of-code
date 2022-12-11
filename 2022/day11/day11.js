@@ -14,6 +14,8 @@ function parseMonkeys(lines) {
         monkey.items = parseStartingItems(lines[i + 1]);
         monkey.operation = parseOperation(lines[i + 2]);
         monkey.testDivision = parseTestDivision(lines[i + 3]);
+        monkey.throwToMonkeyIfTrue = parseAction(lines[i + 4]);
+        monkey.throwToMonkeyIfFalse = parseAction(lines[i + 5]);
         monkeys.push(monkey);
     }
     return monkeys;
@@ -29,6 +31,10 @@ function parseOperation(line) {
 
 function parseTestDivision(line) {
     return parseInt(line.split(' by ')[1]);
+}
+
+function parseAction(line) {
+    return parseInt(line.split('monkey ')[1]);
 }
 
 class Monkey {
