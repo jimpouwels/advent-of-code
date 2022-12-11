@@ -4,7 +4,7 @@ import run from './day11.js';
 describe('day11', () => {
 
     it('part1', () => {
-        expect(run(readLines('2022/day11/testdata.txt')).part1).toEqual(0);
+        expect(run(readLines('2022/day11/testdata.txt')).part1).toEqual(117640);
     });
 
     it('part2', () => {

@@ -1,9 +1,33 @@
 export default function run(lines) {
     const monkeys = parseMonkeys(lines);
 
-    monkeys.forEach(m => console.log(m.operation));
+    for (let i = 0; i < 20; i++) {
+        monkeys.forEach(monkey => {
+            monkey.items.forEach((item, index) => {
+                const left = parseInt(monkey.operation.left.replace('{{old}}', item));
+                const right = parseInt(monkey.operation.right.replace('{{old}}', item));
+                if (monkey.operation.operator == '+') {
+                    monkey.items[index] = left + right;
+                } else {
+                    monkey.items[index] = left * right;
+                }
+                monkey.items[index] = Math.floor(monkey.items[index] /= 3);
+                if (monkey.items[index] % monkey.testDivision === 0) {
+                    monkeys[monkey.throwToMonkeyIfTrue].items.push(monkey.items[index]);
+                } else {
+                    monkeys[monkey.throwToMonkeyIfFalse].items.push(monkey.items[index]);
+                }
+                monkey.handleCount++;
+            });
+            monkey.items = [];
+        });
+    }
+
+    const bussiestMonkeys = monkeys.sort((a, b) => b.handleCount - a.handleCount)
+                       .slice(0, 2)
+
     return {
-        part1: 0,
+        part1: bussiestMonkeys[0].handleCount * bussiestMonkeys[1].handleCount,
         part2: 0
     }
 }
@@ -45,4 +69,6 @@ class Monkey {
     testDivision;
     throwToMonkeyIfTrue;
     throwToMonkeyIfFalse;
+
+    handleCount = 0;
 }
