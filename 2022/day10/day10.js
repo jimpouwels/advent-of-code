@@ -1,8 +1,8 @@
 
 export default function run(lines) {
     let signalStrengthsTotal = 0;
-    const crt = new Crt();
     const xRegister = new XRegister();
+    const crt = new Crt(xRegister);
     let instructions = parseCycles(lines, xRegister);
     let currentInstruction = instructions.shift();
 
@@ -83,6 +83,11 @@ class Add extends Instruction {
 class Crt {
     output = '';
     x = 0;
+    xRegister;
+
+    constructor(xRegister) {
+        this.xRegister = xRegister;
+    }
 
     tick(xRegister) {
         if (xRegister.value - 1 === this.x || xRegister.value === this.x || xRegister.value + 1 === this.x) {
@@ -91,7 +96,7 @@ class Crt {
             this.output += '.';
         }
         this.x++;
-        if ((this.x) == 40) {
+        if (this.x == 40) {
             this.output += "\n";
             this.x = 0;
         }
