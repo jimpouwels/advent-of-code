@@ -8,11 +8,16 @@ export default class Crt {
     }
 
     tick() {
-        this.output += this.x >= this.xRegister.value -1 && this.x <= this.xRegister.value + 1 ? "#" : ".";
-        this.x++;
-        if (this.x == 40) {
+        this.output += this.isXWithinSprite() ? "#" : ".";
+        if (this.x == 39) {
             this.output += "\n";
-            this.x = 0;
+            this.x = -1;
         }
+        this.x++;
+    }
+
+
+    isXWithinSprite() {
+        return this.x >= this.xRegister.value - 1 && this.x <= this.xRegister.value + 1;
     }
 }
