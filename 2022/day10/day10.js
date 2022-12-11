@@ -17,7 +17,7 @@ export default function run(lines) {
             signalStrengthsTotal += (xRegister.value * cycle);
         }
         
-        crt.tick(xRegister);
+        crt.tick();
         cpu.tick();
         cycle++;
     };

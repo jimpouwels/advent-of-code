@@ -7,12 +7,8 @@ export default class Crt {
         this.xRegister = xRegister;
     }
 
-    tick(xRegister) {
-        if (xRegister.value - 1 === this.x || xRegister.value === this.x || xRegister.value + 1 === this.x) {
-            this.output += "#";
-        } else {
-            this.output += '.';
-        }
+    tick() {
+        this.output += this.x >= this.xRegister.value -1 && this.x <= this.xRegister.value + 1 ? "#" : ".";
         this.x++;
         if (this.x == 40) {
             this.output += "\n";
