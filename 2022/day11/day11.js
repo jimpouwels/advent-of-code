@@ -1,35 +1,39 @@
-export default function run(lines) {
+export default function run(lines, divideBy3, rounds) {
     const monkeys = parseMonkeys(lines);
-
-    for (let i = 0; i < 20; i++) {
+    const overflow = monkeys.reduce((mod, monkey) => mod * monkey.testDivision, 1);
+    console.log(`over: ${overflow}`);
+    for (let i = 0; i < rounds; i++) {
         monkeys.forEach(monkey => {
-            monkey.items.forEach((item, index) => {
+            monkey.items.forEach((item) => {
+                item %= overflow;
+                let next = 0;
                 const left = parseInt(monkey.operation.left.replace('{{old}}', item));
                 const right = parseInt(monkey.operation.right.replace('{{old}}', item));
                 if (monkey.operation.operator == '+') {
-                    monkey.items[index] = left + right;
+                    next = left + right;
                 } else {
-                    monkey.items[index] = left * right;
+                    next = left * right;
                 }
-                monkey.items[index] = Math.floor(monkey.items[index] /= 3);
-                if (monkey.items[index] % monkey.testDivision === 0) {
-                    monkeys[monkey.throwToMonkeyIfTrue].items.push(monkey.items[index]);
+                if (divideBy3) {
+                    next = Math.floor(next /= 3);
                 } else {
-                    monkeys[monkey.throwToMonkeyIfFalse].items.push(monkey.items[index]);
+                    next = Math.floor(next);
+                }
+                if (next % monkey.testDivision === 0) {
+                    monkeys[monkey.throwToMonkeyIfTrue].items.push(next);
+                } else {
+                    monkeys[monkey.throwToMonkeyIfFalse].items.push(next);
                 }
                 monkey.handleCount++;
             });
             monkey.items = [];
         });
     }
-
+    // monkeys.forEach(el => console.log(el.handleCount));
     const bussiestMonkeys = monkeys.sort((a, b) => b.handleCount - a.handleCount)
                        .slice(0, 2)
 
-    return {
-        part1: bussiestMonkeys[0].handleCount * bussiestMonkeys[1].handleCount,
-        part2: 0
-    }
+    return bussiestMonkeys[0].handleCount * bussiestMonkeys[1].handleCount;
 }
 
 function parseMonkeys(lines) {
