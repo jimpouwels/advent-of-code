@@ -1,3 +1,7 @@
+import AddXInstruction from "./addx-instruction.js";
+import Crt from "./crt.js";
+import NoopInstruction from "./noop-instruction.js";
+import XRegister from "./x-register.js";
 
 export default function run(lines) {
     let signalStrengthsTotal = 0;
@@ -28,81 +32,9 @@ function parseCycles(lines, xRegister) {
         const split = line.split(' ');
         switch (split[0]) {
             case 'noop':
-                return new Noop();
+                return new NoopInstruction();
             case 'addx':
-                return new Add(parseInt(split[1]), xRegister);
+                return new AddXInstruction(parseInt(split[1]), xRegister);
         }
     });
-}
-
-class Instruction {
-    remainingCycles = 0;
-    isFinished = false;
-
-    constructor(remainingCycles) {
-        this.remainingCycles = remainingCycles;
-    }
-
-    tick() {
-        this.remainingCycles--;
-        if (this.remainingCycles == 0) {
-            this.isFinished = true;
-            this.onFinished();
-        }
-    }
-
-    onFinished() {
-        throw new Error('Not implemented');
-    }
-}
-
-class Noop extends Instruction {
-    constructor() {
-        super(1);
-    }
-
-    onFinished() {
-    }
-}
-
-class Add extends Instruction {
-    value;
-    xRegister;
-
-    constructor(value, xRegister) {
-        super(2);
-        this.value = value;
-        this.xRegister = xRegister;
-    }
-
-    onFinished() {
-        this.xRegister.value += this.value;
-    }
-}
-
-class Crt {
-    output = '';
-    x = 0;
-    xRegister;
-
-    constructor(xRegister) {
-        this.xRegister = xRegister;
-    }
-
-    tick(xRegister) {
-        if (xRegister.value - 1 === this.x || xRegister.value === this.x || xRegister.value + 1 === this.x) {
-            this.output += "#";
-        } else {
-            this.output += '.';
-        }
-        this.x++;
-        if (this.x == 40) {
-            this.output += "\n";
-            this.x = 0;
-        }
-    }
-}
-
-class XRegister {
-    value = 1;
 }
