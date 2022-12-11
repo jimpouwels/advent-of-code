@@ -26,7 +26,7 @@ function parseStartingItems(line) {
 }
 
 function parseOperation(line) {
-    const operationString = line.split(' = ')[1];
+    return line.split(' = ')[1];
 }
 
 function parseTestDivision(line) {
@@ -39,4 +39,8 @@ function parseAction(line) {
 
 class Monkey {
     items = [];
+    operation;
+    testDivision;
+    throwToMonkeyIfTrue;
+    throwToMonkeyIfFalse;
 }
