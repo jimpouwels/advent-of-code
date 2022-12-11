@@ -1,6 +1,7 @@
 export default function run(lines) {
     const monkeys = parseMonkeys(lines);
 
+    monkeys.forEach(m => console.log(m.operation));
     return {
         part1: 0,
         part2: 0
@@ -26,7 +27,8 @@ function parseStartingItems(line) {
 }
 
 function parseOperation(line) {
-    return line.split(' = ')[1];
+    const split = line.replaceAll('old', "{{old}}").split(' = ')[1].split(' ');
+    return { left: split[0], operator: split[1], right: split[2] };
 }
 
 function parseTestDivision(line) {
