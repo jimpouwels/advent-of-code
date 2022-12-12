@@ -24,7 +24,7 @@ function parseMonkeys(lines, divideBy3) {
         monkey.throwToMonkeyIfFalse = parseAction(lines[i + 5]);
         monkeys.push(monkey);
     }
-    const limit = monkeys.reduce((mod, monkey) => mod * monkey.testDivision, 1);
+    const limit = monkeys.reduce((total, monkey) => total * monkey.testDivision, 1);
     monkeys.forEach(monkey => { 
         monkey.onThrow = (item, targetMonkey) => monkeys[targetMonkey].items.push(item);
         monkey.limit = limit;
