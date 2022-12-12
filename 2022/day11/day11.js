@@ -5,10 +5,9 @@ export default function run(lines, divideBy3, rounds) {
         monkeys.forEach(monkey => monkey.inspectAndThrow());
     }
 
-    const bussiestMonkeys = monkeys.sort((a, b) => b.handleCount - a.handleCount)
-                                   .slice(0, 2);
-
-    return bussiestMonkeys[0].handleCount * bussiestMonkeys[1].handleCount;
+    return monkeys.sort((a, b) => b.handleCount - a.handleCount)
+                  .slice(0, 2)
+                  .reduce((sum, val) => sum * val.handleCount, 1);
 }
 
 function parseMonkeys(lines, divideBy3) {
