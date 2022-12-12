@@ -38,8 +38,7 @@ function parseStartingItems(line) {
 function parseOperation(line) {
     const formulaAsString = line.split(' = ')[1];
     return (old) => {
-        const formula = formulaAsString.replaceAll('old', old);
-        const formulaParts = formula.split(' ');
+        const formulaParts = formulaAsString.replaceAll('old', old).split(' ');
         const left = parseInt(formulaParts[0]);
         const right = parseInt(formulaParts[2]);
         return formulaParts[1] === '+' ? left + right : left * right;
