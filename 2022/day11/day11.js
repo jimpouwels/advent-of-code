@@ -39,10 +39,10 @@ function parseOperation(line) {
     const formulaAsString = line.split(' = ')[1];
     return (old) => {
         const formula = formulaAsString.replaceAll('old', old);
-        const split = formula.split(' ');
-        const left = parseInt(split[0]);
-        const right = parseInt(split[2]);
-        return split[1] === '+' ? left + right : left * right;
+        const formulaParts = formula.split(' ');
+        const left = parseInt(formulaParts[0]);
+        const right = parseInt(formulaParts[2]);
+        return formulaParts[1] === '+' ? left + right : left * right;
     }
 }
 
