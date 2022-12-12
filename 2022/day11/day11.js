@@ -84,7 +84,9 @@ class Monkey {
             if (this.divideBy3) {
                 valueToThrow = Math.floor(valueToThrow /= 3);
             }
-            this.throw(valueToThrow, this.isDivisable(valueToThrow) ? this.throwToMonkeyIfTrue : this.throwToMonkeyIfFalse);
+            this.throw(valueToThrow, this.isDivisable(valueToThrow) ? 
+                                        this.throwToMonkeyIfTrue : 
+                                        this.throwToMonkeyIfFalse);
             this.handleCount++;
         });
         this.items = [];
