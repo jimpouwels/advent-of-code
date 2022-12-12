@@ -1,5 +1,8 @@
 export default function run(lines, divideBy3, rounds) {
     const monkeys = parseMonkeys(lines);
+    monkeys.forEach(monkey => monkey.onThrow = (item, targetMonkey) => {
+        monkeys[targetMonkey].items.push(item);
+    });
     const overflow = monkeys.reduce((mod, monkey) => mod * monkey.testDivision, 1);
     console.log(`over: ${overflow}`);
     for (let i = 0; i < rounds; i++) {
@@ -20,16 +23,15 @@ export default function run(lines, divideBy3, rounds) {
                     next = Math.floor(next);
                 }
                 if (next % monkey.testDivision === 0) {
-                    monkeys[monkey.throwToMonkeyIfTrue].items.push(next);
+                    monkey.throw(next, monkey.throwToMonkeyIfTrue);
                 } else {
-                    monkeys[monkey.throwToMonkeyIfFalse].items.push(next);
+                    monkey.throw(next, monkey.throwToMonkeyIfFalse);
                 }
                 monkey.handleCount++;
             });
             monkey.items = [];
         });
     }
-    // monkeys.forEach(el => console.log(el.handleCount));
     const bussiestMonkeys = monkeys.sort((a, b) => b.handleCount - a.handleCount)
                        .slice(0, 2)
 
@@ -73,6 +75,10 @@ class Monkey {
     testDivision;
     throwToMonkeyIfTrue;
     throwToMonkeyIfFalse;
-
+    onThrow;
     handleCount = 0;
+
+    throw(item, targetMonkey) {
+        this.onThrow(item, targetMonkey);
+    }
 }
