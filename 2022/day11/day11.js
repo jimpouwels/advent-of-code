@@ -2,13 +2,11 @@ export default function run(lines, divideBy3, rounds) {
     const monkeys = parseMonkeys(lines, divideBy3);
     
     for (let i = 0; i < rounds; i++) {
-        monkeys.forEach(monkey => {
-            monkey.inspectAndThrow();
-        });
+        monkeys.forEach(monkey => monkey.inspectAndThrow());
     }
 
     const bussiestMonkeys = monkeys.sort((a, b) => b.handleCount - a.handleCount)
-                       .slice(0, 2)
+                                   .slice(0, 2);
 
     return bussiestMonkeys[0].handleCount * bussiestMonkeys[1].handleCount;
 }
