@@ -1,47 +1,22 @@
 export default function run(lines, divideBy3, rounds) {
-    const monkeys = parseMonkeys(lines);
-    monkeys.forEach(monkey => monkey.onThrow = (item, targetMonkey) => {
-        monkeys[targetMonkey].items.push(item);
-    });
-    const overflow = monkeys.reduce((mod, monkey) => mod * monkey.testDivision, 1);
-    console.log(`over: ${overflow}`);
+    const monkeys = parseMonkeys(lines, divideBy3);
+    
     for (let i = 0; i < rounds; i++) {
         monkeys.forEach(monkey => {
-            monkey.items.forEach((item) => {
-                item %= overflow;
-                let next = 0;
-                const left = parseInt(monkey.operation.left.replace('{{old}}', item));
-                const right = parseInt(monkey.operation.right.replace('{{old}}', item));
-                if (monkey.operation.operator == '+') {
-                    next = left + right;
-                } else {
-                    next = left * right;
-                }
-                if (divideBy3) {
-                    next = Math.floor(next /= 3);
-                } else {
-                    next = Math.floor(next);
-                }
-                if (next % monkey.testDivision === 0) {
-                    monkey.throw(next, monkey.throwToMonkeyIfTrue);
-                } else {
-                    monkey.throw(next, monkey.throwToMonkeyIfFalse);
-                }
-                monkey.handleCount++;
-            });
-            monkey.items = [];
+            monkey.inspectAndThrow();
         });
     }
+
     const bussiestMonkeys = monkeys.sort((a, b) => b.handleCount - a.handleCount)
                        .slice(0, 2)
 
     return bussiestMonkeys[0].handleCount * bussiestMonkeys[1].handleCount;
 }
 
-function parseMonkeys(lines) {
+function parseMonkeys(lines, divideBy3) {
     const monkeys = [];
     for (let i = 0; i < lines.length; i += 7) {
-        const monkey = new Monkey();
+        const monkey = new Monkey(divideBy3);
         monkey.items = parseStartingItems(lines[i + 1]);
         monkey.operation = parseOperation(lines[i + 2]);
         monkey.testDivision = parseTestDivision(lines[i + 3]);
@@ -49,6 +24,11 @@ function parseMonkeys(lines) {
         monkey.throwToMonkeyIfFalse = parseAction(lines[i + 5]);
         monkeys.push(monkey);
     }
+    const limit = monkeys.reduce((mod, monkey) => mod * monkey.testDivision, 1);
+    monkeys.forEach(monkey => { 
+        monkey.onThrow = (item, targetMonkey) => monkeys[targetMonkey].items.push(item);
+        monkey.limit = limit;
+    });
     return monkeys;
 }
 
@@ -70,15 +50,44 @@ function parseAction(line) {
 }
 
 class Monkey {
+    
     items = [];
     operation;
     testDivision;
     throwToMonkeyIfTrue;
     throwToMonkeyIfFalse;
     onThrow;
+    limit = 0;
     handleCount = 0;
+    divideBy3;
+
+    constructor(divideBy3) {
+        this.divideBy3 = divideBy3;
+    }
 
     throw(item, targetMonkey) {
         this.onThrow(item, targetMonkey);
+    }
+
+    inspectAndThrow() {
+        this.items.forEach(item => {
+            item %= this.limit;
+            const left = parseInt(this.operation.left.replace('{{old}}', item));
+            const right = parseInt(this.operation.right.replace('{{old}}', item));
+
+            let valueToThrow = 0;
+            valueToThrow = this.operation.operator == '+' ? left + right : left * right;
+            if (this.divideBy3) {
+                valueToThrow = valueToThrow /= 3;
+            } 
+            valueToThrow = Math.floor(valueToThrow);
+            this.throw(valueToThrow, this.isDivisable(valueToThrow) ? this.throwToMonkeyIfTrue : this.throwToMonkeyIfFalse);
+            this.handleCount++;
+        });
+        this.items = [];
+    }
+
+    isDivisable(value) {
+        return value % this.testDivision === 0;
     }
 }
