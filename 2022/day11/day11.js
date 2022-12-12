@@ -37,8 +37,14 @@ function parseStartingItems(line) {
 }
 
 function parseOperation(line) {
-    const split = line.replaceAll('old', "{{old}}").split(' = ')[1].split(' ');
-    return { left: split[0], operator: split[1], right: split[2] };
+    const formulaAsString = line.split(' = ')[1];
+    return (old) => {
+        const formula = formulaAsString.replaceAll('old', old);
+        const split = formula.split(' ');
+        const left = parseInt(split[0]);
+        const right = parseInt(split[2]);
+        return split[1] === '+' ? left + right : left * right;
+    }
 }
 
 function parseTestDivision(line) {
@@ -72,11 +78,9 @@ class Monkey {
     inspectAndThrow() {
         this.items.forEach(item => {
             item %= this.limit;
-            const left = parseInt(this.operation.left.replace('{{old}}', item));
-            const right = parseInt(this.operation.right.replace('{{old}}', item));
 
             let valueToThrow = 0;
-            valueToThrow = this.operation.operator == '+' ? left + right : left * right;
+            valueToThrow = this.operation(item);
             if (this.divideBy3) {
                 valueToThrow = valueToThrow /= 3;
             } 
