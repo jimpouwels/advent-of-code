@@ -1,3 +1,5 @@
+import Monkey from "./monkey.js";
+
 export default function run(lines, divideBy3, rounds) {
     const monkeys = parseMonkeys(lines, divideBy3);
     
@@ -23,7 +25,7 @@ function parseMonkeys(lines, divideBy3) {
     }
     const limit = monkeys.reduce((total, monkey) => total * monkey.testDivision, 1);
     monkeys.forEach(monkey => { 
-        monkey.onThrow = (item, targetMonkey) => monkeys[targetMonkey].items.push(item);
+        monkey.throwHandler = (item, targetMonkey) => monkeys[targetMonkey].items.push(item);
         monkey.limit = limit;
     });
     return monkeys;
@@ -50,46 +52,4 @@ function parseTestDivision(line) {
 
 function parseAction(line) {
     return parseInt(line.split('monkey ')[1]);
-}
-
-class Monkey {
-    
-    items = [];
-    operation;
-    testDivision;
-    throwToMonkeyIfTrue;
-    throwToMonkeyIfFalse;
-    onThrow;
-    limit = 0;
-    handleCount = 0;
-    divideBy3;
-
-    constructor(divideBy3) {
-        this.divideBy3 = divideBy3;
-    }
-
-    throw(item, targetMonkey) {
-        this.onThrow(item, targetMonkey);
-    }
-
-    inspectAndThrow() {
-        this.items.forEach(item => {
-            item %= this.limit;
-
-            let valueToThrow = 0;
-            valueToThrow = this.operation(item);
-            if (this.divideBy3) {
-                valueToThrow = Math.floor(valueToThrow /= 3);
-            }
-            this.throw(valueToThrow, this.isDivisable(valueToThrow) ? 
-                                        this.throwToMonkeyIfTrue : 
-                                        this.throwToMonkeyIfFalse);
-            this.handleCount++;
-        });
-        this.items = [];
-    }
-
-    isDivisable(value) {
-        return value % this.testDivision === 0;
-    }
 }
