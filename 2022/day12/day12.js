@@ -1,20 +1,20 @@
 export default function run(lines) {
     const input = parseInput(lines);
-    let result = aStar(input.from, input.to, input.grid);
-    return result.steps;
+    let destination = aStar(input.from, input.to, input.grid);
+    return getStepCount(destination);
 }
 
 function aStar(from, to, grid) {
     const open = [from];
     const closed = [];
 
-    let found = null;
-    while (!found) {
+    let destination = null;
+    while (!destination) {
         const current = open.sort((a, b) => b.cost - a.cost).shift();
         closed.push(current);
 
         if (current == to) {
-            found = current;
+            destination = current;
             break;
         }
         const surroundingTiles = getSurroundingTiles(current, grid);
@@ -33,25 +33,21 @@ function aStar(from, to, grid) {
         }
     }
 
-    const steps = getParentCount(found);
-    return steps;
+    return destination;
 }
 
 function cost(from, current, to) {
     return distanceTo(current, from) + distanceTo(current, to);
 }
 
-function getParentCount(found) {
-    let result = { steps: 0, path: '' };
+function getStepCount(found) {
+    let stepCount = 0;
     let current = found;
     while (current.parent) {
-        result.steps++;
-        result.path += String.fromCharCode(current.elevation + 97);
+        stepCount++;
         current = current.parent;
     }
-    result.path += String.fromCharCode(current.elevation + 97);
-    current.steps++;
-    return result;
+    return stepCount;
 }
 
 function distanceTo(pos1, pos2) {
