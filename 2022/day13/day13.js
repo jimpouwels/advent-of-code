@@ -3,7 +3,7 @@ export default function run(input) {
 
     let part1 = 0;
     pairs.forEach((pair, index) => {
-        if (comparePair(pair)) {
+        if (comparePair(pair) == 1) {
             part1 += (index + 1);
         }
     });
@@ -20,25 +20,46 @@ function comparePair(pair) {
 
 function compareList(left, right) {
     if (left.length() > right.length()) {
-        return false;
+        return -1;
     }
     for (let i = 0; i < left.length(); i++) {
         let leftItem = left.values[i];
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
-            return leftItem.values[0] <= rightItem;
+            if (leftItem.values[0] === rightItem) {
+                continue;
+            }
+            if (leftItem.values[0] < rightItem) {
+                return 1;
+            } else {
+                return -1;
+            }
         } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            return leftItem <= rightItem.values[0];
+            if (leftItem === rightItem.values[0]) {
+                continue;
+            }
+            if (leftItem < rightItem.values[0]) {
+                return 1;
+            } else {
+                return -1;
+            }
         }
         if (Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            if (!compareList(leftItem, rightItem)) {
-                return false;
+            const result = compareList(leftItem, rightItem);
+            if (result === 0) {
+                continue;
+            } else {
+                return result;
             }
         } else {
             if (leftItem === rightItem) {
                 continue;
             }
-            return leftItem < rightItem;
+            if (leftItem < rightItem) {
+                return 1;
+            } else {
+                return -1;
+            }
         }
     }
     return true;
