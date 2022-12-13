@@ -1,14 +1,13 @@
 export default function run(lines) {
-    const input1 = parseInput(lines);
-    const part1 = getStepCount(aStar(input1.from, input1.to, input1.grid));
+    const input = parseInput(lines);
+    const part1 = getStepCount(aStar(input.from, input.to, input.grid));
 
-    const froms = getAllPointsWithElevation(input1, 0);
-    console.log(froms);
-    let handle = 0;
+    resetGrid(input.grid);
+    const froms = getAllPointsWithElevation(input, 0);
     const part2 = Math.min(...froms.map(from => {
         try {
-            const input2 = parseInput(lines);
-            const stepCount = getStepCount(aStar({ x: from.x, y: from.y, elevation: from.elevation }, input2.to, input2.grid));
+            resetGrid(input.grid);
+            const stepCount = getStepCount(aStar(from, input.to, input.grid));
             return stepCount;
         } catch (error) {
             return Infinity;
@@ -20,6 +19,15 @@ export default function run(lines) {
     };
 }
 
+function resetGrid(grid) {
+    grid.forEach(row => {
+        row.forEach(position => {
+            position.cost = Infinity;
+            position.parent = null;
+        });
+    });
+}
+
 function getAllPointsWithElevation(input, elevationToFind) {
     return input.grid.flatMap(line => line.filter(position => position.elevation === elevationToFind));
 }
@@ -29,7 +37,7 @@ function aStar(from, to, grid) {
     const closed = [];
 
     while (true) {
-        const current = open.sort((a, b) => a.cost - b.cost).shift();
+        const current = open.shift();
         closed.push(current);
         
         if (current == to) {
