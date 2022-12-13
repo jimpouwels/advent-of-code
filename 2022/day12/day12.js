@@ -3,12 +3,12 @@ export default function run(lines) {
     const part1 = getStepCount(aStar(input1.from, input1.to, input1.grid));
 
     const froms = getAllPointsWithElevation(input1, 0);
+    console.log(froms);
     let handle = 0;
     const part2 = Math.min(...froms.map(from => {
         try {
             const input2 = parseInput(lines);
-            const stepCount = getStepCount(aStar(from, input2.to, input2.grid));
-            console.log(`Found steps ${stepCount}`);
+            const stepCount = getStepCount(aStar({ x: from.x, y: from.y, elevation: from.elevation }, input2.to, input2.grid));
             return stepCount;
         } catch (error) {
             return Infinity;
@@ -29,12 +29,9 @@ function aStar(from, to, grid) {
     const closed = [];
 
     while (true) {
-        const current = open.shift();
+        const current = open.sort((a, b) => a.cost - b.cost).shift();
         closed.push(current);
         
-        if (!current) {
-            throw new Error('no path found');
-        }
         if (current == to) {
             return current;
         }
