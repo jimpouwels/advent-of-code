@@ -18,4 +18,17 @@ export default class Position {
         }
         return 0;
     }
+
+    getCost(from, to) {
+        return this.getDistanceTo(this, from) + this.getDistanceTo(this, to);
+    }
+
+    getDistanceTo(otherPosition) {
+        return Math.abs(this.x - otherPosition.x) + Math.abs(this.y - otherPosition.y);
+    }
+
+    reset() {
+        this.cost = Infinity;
+        this.parent = null;
+    }
 }

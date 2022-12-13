@@ -31,30 +31,22 @@ function aStar(from, to, grid) {
         if (current == to) {
             return current;
         }
-        const neighbours = getNeighbours(current, grid).filter(n => n.elevation - current.elevation < 2);
-        for (const neighbour of neighbours) {
-            if (closed.includes(neighbour)) {
-                continue;
-            }
-            const newCost = getCost(from, neighbour, to);
-            if (newCost <= neighbour.cost || !open.includes(neighbour)) {
-                neighbour.cost = newCost;
-                neighbour.parent = current;
-                if (!open.includes(neighbour)) {
-                    open.push(neighbour);
+        getNeighbours(current, grid)
+            .filter(n => n.elevation - current.elevation < 2)
+            .forEach(neighbour => {
+                if (closed.includes(neighbour)) {
+                    return;
                 }
-            }
-        }
+                const newCost = neighbour.getCost(from, to);
+                if (newCost <= neighbour.cost || !open.includes(neighbour)) {
+                    neighbour.cost = newCost;
+                    neighbour.parent = current;
+                    if (!open.includes(neighbour)) {
+                        open.push(neighbour);
+                    }
+                }
+            });
     }
-
-}
-
-function getCost(from, current, to) {
-    return getDistanceTo(current, from) + getDistanceTo(current, to);
-}
-
-function getDistanceTo(pos1, pos2) {
-    return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 }
 
 function getNeighbours(currentPosition, grid) {
@@ -75,12 +67,7 @@ function getNeighbours(currentPosition, grid) {
 }
 
 function resetGrid(grid) {
-    grid.forEach(row => 
-        row.forEach(position => {
-            position.cost = Infinity;
-            position.parent = null;
-        })
-    );
+    grid.forEach(row => row.forEach(position => position.reset()));
 }
 
 function getAllPossibleStartingPoints(input, elevationToFind) {
