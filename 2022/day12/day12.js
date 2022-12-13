@@ -4,10 +4,8 @@ export default function run(lines) {
     const data = parseInput(lines);
     const part1 = aStar(data.from, data.to, data.grid).getDepth();
 
-    resetGrid(data.grid);
-    const froms = getAllPossibleStartingPoints(data, 0);
-    const part2 = Math.min(...froms.map(from => {
-        resetGrid(data.grid);
+    const startingPoints = getAllPossibleStartingPoints(data);
+    const part2 = Math.min(...startingPoints.map(from => {
         const destination = aStar(from, data.to, data.grid);
         return destination ? destination.getDepth() : Infinity;
     }));
@@ -18,6 +16,7 @@ export default function run(lines) {
 }
 
 function aStar(from, to, grid) {
+    resetGrid(grid);
     const open = [from];
     const closed = [];
 
@@ -70,8 +69,8 @@ function resetGrid(grid) {
     grid.forEach(row => row.forEach(position => position.reset()));
 }
 
-function getAllPossibleStartingPoints(input, elevationToFind) {
-    return input.grid.flatMap(line => line.filter(position => position.elevation === elevationToFind));
+function getAllPossibleStartingPoints(input) {
+    return input.grid.flatMap(line => line.filter(position => position.elevation === 0));
 }
 
 function parseInput(lines) {
