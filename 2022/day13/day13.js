@@ -1,22 +1,59 @@
 export default function run(input) {
     const pairs = parseLines(input);
 
-    console.log(compare(pairs[0]));
+    let part1 = 0;
+    pairs.forEach((pair, index) => {
+        if (comparePair(pair)) {
+            part1 += (index + 1);
+        }
+    });
 
     return {
-        part1: 0,
+        part1: part1,
         part2: 0
     };
 }
 
-function compare(pair) {
-    let isCorrect = true;
-    for (let i = 0; i < pair.left.length(); i++) {
-        if (pair.right.values[i] < pair.left.values[i]) {
-            isCorrect = false;
+function comparePair(pair) {
+    return compareList(pair.left, pair.right);
+}
+
+function compareList(left, right) {
+    if (left.length() > right.length() && !right.converted) {
+        return false;
+    }
+    for (let i = 0; i < left.length(); i++) {
+        if (i >= right.length()) {
+            return true;
+        }
+        let leftItem = left.values[i];
+        let rightItem = right.values[i];
+        if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
+            const newList = new List();
+            newList.converted = true;
+            newList.push(rightItem);
+            rightItem = newList;
+        } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
+            const newList = new List();
+            newList.converted = true;
+            newList.push(leftItem);
+            leftItem = newList;
+        }
+        if (Array.isArray(leftItem.values)) {
+            if (!compareList(leftItem, rightItem)) {
+                return false;
+            }
+        } else {
+            if (!compareInt(leftItem, rightItem)) {
+                return false;
+            }
         }
     }
-    return isCorrect;
+    return true;
+}
+
+function compareInt(left, right) {
+    return left <= right;
 }
 
 function parseLines(lines) {
@@ -63,6 +100,7 @@ function readChar(line, cursor) {
 class List {
     values = [];
     parent;
+    converted = false;
 
     constructor(parent) {
         this.parent = parent;
