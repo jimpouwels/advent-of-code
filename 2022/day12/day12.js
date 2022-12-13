@@ -1,13 +1,15 @@
-export default function run(lines) {
-    const input = parseInput(lines);
-    const part1 = getStepCount(aStar(input.from, input.to, input.grid));
+import Position from "./position.js";
 
-    resetGrid(input.grid);
-    const froms = getAllPossibleStartingPoints(input, 0);
+export default function run(lines) {
+    const data = parseInput(lines);
+    const part1 = aStar(data.from, data.to, data.grid).getDepth();
+
+    resetGrid(data.grid);
+    const froms = getAllPossibleStartingPoints(data, 0);
     const part2 = Math.min(...froms.map(from => {
-        resetGrid(input.grid);
-        const destination = aStar(from, input.to, input.grid);
-        return destination ? getStepCount(destination) : Infinity;
+        resetGrid(data.grid);
+        const destination = aStar(from, data.to, data.grid);
+        return destination ? destination.getDepth() : Infinity;
     }));
     return {
         part1: part1,
@@ -55,16 +57,6 @@ function getDistanceTo(pos1, pos2) {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 }
 
-function getStepCount(found) {
-    let stepCount = 0;
-    let current = found;
-    while (current.parent) {
-        stepCount++;
-        current = current.parent;
-    }
-    return stepCount;
-}
-
 function getNeighbours(currentPosition, grid) {
     const surroundingTiles = [];
     if (currentPosition.x > 0) {
@@ -100,13 +92,13 @@ function parseInput(lines) {
     const grid = lines.map((line, row) => line.split('').flatMap((char, column) => {
         switch (char) {
             case 'S':
-                from = { x: column, y: row, elevation: 0, cost: Infinity };
+                from = new Position(column, row, 0);
                 return from;
             case 'E':
-                to = { x: column, y: row, elevation: 25, cost: Infinity };
+                to = new Position(column, row, 25);
                 return to;
             default:
-                return { x: column, y: row, elevation: char.charCodeAt(0) % 97, cost: Infinity }; 
+                return new Position(column, row, char.charCodeAt(0) % 97); 
         }
     }));
     return {
