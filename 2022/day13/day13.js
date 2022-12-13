@@ -23,9 +23,6 @@ function compareList(left, right) {
         return false;
     }
     for (let i = 0; i < left.length(); i++) {
-        if (i >= right.length()) {
-            return true;
-        }
         let leftItem = left.values[i];
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
