@@ -19,7 +19,7 @@ function comparePair(pair) {
 }
 
 function compareList(left, right) {
-    if (left.length() > right.length() && !right.converted) {
+    if (left.length() > right.length()) {
         return false;
     }
     for (let i = 0; i < left.length(); i++) {
@@ -29,17 +29,17 @@ function compareList(left, right) {
         let leftItem = left.values[i];
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
-            const newList = new List();
-            newList.converted = true;
-            newList.push(rightItem);
-            rightItem = newList;
+            if (!compareInt(leftItem.values[0], rightItem)) {
+                return false;
+            }
+            break;
         } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            const newList = new List();
-            newList.converted = true;
-            newList.push(leftItem);
-            leftItem = newList;
+            if (!compareInt(leftItem, rightItem.values[0])) {
+                return false;
+            }
+            break;
         }
-        if (Array.isArray(leftItem.values)) {
+        if (Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
             if (!compareList(leftItem, rightItem)) {
                 return false;
             }
@@ -100,7 +100,6 @@ function readChar(line, cursor) {
 class List {
     values = [];
     parent;
-    converted = false;
 
     constructor(parent) {
         this.parent = parent;
