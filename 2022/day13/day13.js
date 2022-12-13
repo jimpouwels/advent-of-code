@@ -52,17 +52,26 @@ function compareList(left, right) {
                 return result;
             }
         } else {
-            if (leftItem === rightItem) {
+            const result = compareInt(leftItem, rightItem);
+            if (result === 0) {
                 continue;
-            }
-            if (leftItem < rightItem) {
-                return 1;
             } else {
-                return -1;
+                return result;
             }
         }
     }
     return true;
+}
+
+function compareInt(left, right) {
+    if (left === right) {
+        return 0;
+    }
+    if (left < right) {
+        return 1;
+    } else {
+        return -1;
+    }
 }
 
 function parseLines(lines) {
