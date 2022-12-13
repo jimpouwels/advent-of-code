@@ -1,19 +1,6 @@
 export default function run(lines) {
-    let from, to;
-    const grid = lines.map((line, row) => line.split('').flatMap((char, column) => {
-        switch (char) {
-            case 'S':
-                from = { x: column, y: row, elevation: 0, cost: 0 };
-                return from;
-            case 'E':
-                to = { x: column, y: row, elevation: 25, cost: Infinity };
-                return to;
-            default:
-                return { x: column, y: row, elevation: char.charCodeAt(0) % 97, cost: Infinity }; 
-        }
-    }));
-    let result = aStar(from, to, grid);
-    console.log(result.path);
+    const input = parseInput(lines);
+    let result = aStar(input.from, input.to, input.grid);
     return result.steps;
 }
 
@@ -98,4 +85,25 @@ function getSurroundingTiles(currentPosition, grid) {
         }
     }
     return surroundingTiles;
+}
+
+function parseInput(lines) {
+    let from, to;
+    const grid = lines.map((line, row) => line.split('').flatMap((char, column) => {
+        switch (char) {
+            case 'S':
+                from = { x: column, y: row, elevation: 0, cost: 0 };
+                return from;
+            case 'E':
+                to = { x: column, y: row, elevation: 25, cost: Infinity };
+                return to;
+            default:
+                return { x: column, y: row, elevation: char.charCodeAt(0) % 97, cost: Infinity }; 
+        }
+    }));
+    return {
+        grid: grid,
+        from: from,
+        to: to
+    }
 }
