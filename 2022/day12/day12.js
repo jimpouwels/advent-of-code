@@ -1,7 +1,10 @@
 export default function run(lines) {
     const input = parseInput(lines);
-    let destination = aStar(input.from, input.to, input.grid);
-    return getStepCount(destination);
+    
+    return {
+        part1: getStepCount(aStar(input.from, input.to, input.grid)),
+        part2: 0
+    };
 }
 
 function aStar(from, to, grid) {
@@ -20,7 +23,9 @@ function aStar(from, to, grid) {
             if (closed.includes(surroundingTile)) {
                 continue;
             }
-            if (!open.includes(surroundingTile)) {
+            const newCost = getCost(from, surroundingTile, to);
+            if (newCost <= surroundingTile.cost || !open.includes(surroundingTile)) {
+                surroundingTile.cost = newCost;
                 surroundingTile.parent = current;
                 if (!open.includes(surroundingTile)) {
                     open.push(surroundingTile);
@@ -28,6 +33,14 @@ function aStar(from, to, grid) {
             }
         }
     }
+}
+
+function getCost(from, current, to) {
+    return getDistanceTo(current, from) + getDistanceTo(current, to);
+}
+
+function getDistanceTo(pos1, pos2) {
+    return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 }
 
 function getStepCount(found) {
