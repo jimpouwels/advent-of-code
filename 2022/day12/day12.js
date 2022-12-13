@@ -8,23 +8,19 @@ function aStar(from, to, grid) {
     const open = [from];
     const closed = [];
 
-    let destination = null;
-    while (!destination) {
-        const current = open.sort((a, b) => b.cost - a.cost).shift();
+    while (true) {
+        const current = open.shift();
         closed.push(current);
 
         if (current == to) {
-            destination = current;
-            break;
+            return current;
         }
         const surroundingTiles = getSurroundingTiles(current, grid);
         for (const surroundingTile of surroundingTiles) {
             if (closed.includes(surroundingTile)) {
                 continue;
             }
-            const newCost = cost(from, surroundingTile, to) < surroundingTile.cost;
-            if (newCost || !open.includes(surroundingTile)) {
-                surroundingTile.cost = newCost;
+            if (!open.includes(surroundingTile)) {
                 surroundingTile.parent = current;
                 if (!open.includes(surroundingTile)) {
                     open.push(surroundingTile);
@@ -32,12 +28,6 @@ function aStar(from, to, grid) {
             }
         }
     }
-
-    return destination;
-}
-
-function cost(from, current, to) {
-    return distanceTo(current, from) + distanceTo(current, to);
 }
 
 function getStepCount(found) {
@@ -48,10 +38,6 @@ function getStepCount(found) {
         current = current.parent;
     }
     return stepCount;
-}
-
-function distanceTo(pos1, pos2) {
-    return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 }
 
 function getSurroundingTiles(currentPosition, grid) {
