@@ -3,33 +3,16 @@ export default function run(lines) {
     const part1 = getStepCount(aStar(input.from, input.to, input.grid));
 
     resetGrid(input.grid);
-    const froms = getAllPointsWithElevation(input, 0);
+    const froms = getAllPossibleStartingPoints(input, 0);
     const part2 = Math.min(...froms.map(from => {
-        try {
-            resetGrid(input.grid);
-            const stepCount = getStepCount(aStar(from, input.to, input.grid));
-            return stepCount;
-        } catch (error) {
-            return Infinity;
-        }
+        resetGrid(input.grid);
+        const destination = aStar(from, input.to, input.grid);
+        return destination ? getStepCount(destination) : Infinity;
     }));
     return {
         part1: part1,
         part2: part2
     };
-}
-
-function resetGrid(grid) {
-    grid.forEach(row => {
-        row.forEach(position => {
-            position.cost = Infinity;
-            position.parent = null;
-        });
-    });
-}
-
-function getAllPointsWithElevation(input, elevationToFind) {
-    return input.grid.flatMap(line => line.filter(position => position.elevation === elevationToFind));
 }
 
 function aStar(from, to, grid) {
@@ -40,10 +23,13 @@ function aStar(from, to, grid) {
         const current = open.shift();
         closed.push(current);
         
+        if (!current) {
+            return;
+        }
         if (current == to) {
             return current;
         }
-        const neighbours = getNeighbours(current, grid);
+        const neighbours = getNeighbours(current, grid).filter(n => n.elevation - current.elevation < 2);
         for (const neighbour of neighbours) {
             if (closed.includes(neighbour)) {
                 continue;
@@ -82,30 +68,31 @@ function getStepCount(found) {
 function getNeighbours(currentPosition, grid) {
     const surroundingTiles = [];
     if (currentPosition.x > 0) {
-        const adjacentTile = grid[currentPosition.y][currentPosition.x - 1];
-        if (adjacentTile.elevation - currentPosition.elevation < 2) {
-            surroundingTiles.push(adjacentTile);
-        }
+        surroundingTiles.push(grid[currentPosition.y][currentPosition.x - 1]);
     }
     if (currentPosition.x < grid[0].length - 1) {
-        const adjacentTile = grid[currentPosition.y][currentPosition.x + 1];
-        if (adjacentTile.elevation - currentPosition.elevation < 2) {
-            surroundingTiles.push(adjacentTile);
-        }
+        surroundingTiles.push(grid[currentPosition.y][currentPosition.x + 1]);
     }
     if (currentPosition.y > 0) {
-        const adjacentTile = grid[currentPosition.y - 1][currentPosition.x];
-        if (adjacentTile.elevation - currentPosition.elevation < 2) {
-            surroundingTiles.push(adjacentTile);
-        }
+        surroundingTiles.push(grid[currentPosition.y - 1][currentPosition.x]);
     }
     if (currentPosition.y < grid.length - 1) {
-        const adjacentTile = grid[currentPosition.y + 1][currentPosition.x];
-        if (adjacentTile.elevation - currentPosition.elevation < 2) {
-            surroundingTiles.push(adjacentTile);
-        }
+        surroundingTiles.push(grid[currentPosition.y + 1][currentPosition.x]);
     }
     return surroundingTiles;
+}
+
+function resetGrid(grid) {
+    grid.forEach(row => 
+        row.forEach(position => {
+            position.cost = Infinity;
+            position.parent = null;
+        })
+    );
+}
+
+function getAllPossibleStartingPoints(input, elevationToFind) {
+    return input.grid.flatMap(line => line.filter(position => position.elevation === elevationToFind));
 }
 
 function parseInput(lines) {
