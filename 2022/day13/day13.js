@@ -27,22 +27,18 @@ function compareList(left, right) {
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
             if (leftItem.values[0] === rightItem) {
-                continue;
+                if (leftItem.length() > 1) {
+                    return -1;
+                } else {
+                    continue;
+                }
             }
-            if (leftItem.values[0] < rightItem) {
-                return 1;
-            } else {
-                return -1;
-            }
+            return compareInt(leftItem.values[0] < rightItem);
         } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
             if (leftItem === rightItem.values[0]) {
                 continue;
             }
-            if (leftItem < rightItem.values[0]) {
-                return 1;
-            } else {
-                return -1;
-            }
+            return compareInt(leftItem < rightItem.values[0]);
         }
         if (Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
             const result = compareList(leftItem, rightItem);
@@ -60,7 +56,7 @@ function compareList(left, right) {
             }
         }
     }
-    return true;
+    return 0;
 }
 
 function compareInt(left, right) {
