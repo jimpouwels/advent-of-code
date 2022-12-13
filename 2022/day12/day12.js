@@ -1,10 +1,27 @@
 export default function run(lines) {
-    const input = parseInput(lines);
-    
+    const input1 = parseInput(lines);
+    const part1 = getStepCount(aStar(input1.from, input1.to, input1.grid));
+
+    const froms = getAllPointsWithElevation(input1, 0);
+    let handle = 0;
+    const part2 = Math.min(...froms.map(from => {
+        try {
+            const input2 = parseInput(lines);
+            const stepCount = getStepCount(aStar(from, input2.to, input2.grid));
+            console.log(`Found steps ${stepCount}`);
+            return stepCount;
+        } catch (error) {
+            return Infinity;
+        }
+    }));
     return {
-        part1: getStepCount(aStar(input.from, input.to, input.grid)),
-        part2: 0
+        part1: part1,
+        part2: part2
     };
+}
+
+function getAllPointsWithElevation(input, elevationToFind) {
+    return input.grid.flatMap(line => line.filter(position => position.elevation === elevationToFind));
 }
 
 function aStar(from, to, grid) {
@@ -14,25 +31,29 @@ function aStar(from, to, grid) {
     while (true) {
         const current = open.shift();
         closed.push(current);
-
+        
+        if (!current) {
+            throw new Error('no path found');
+        }
         if (current == to) {
             return current;
         }
-        const surroundingTiles = getSurroundingTiles(current, grid);
-        for (const surroundingTile of surroundingTiles) {
-            if (closed.includes(surroundingTile)) {
+        const neighbours = getNeighbours(current, grid);
+        for (const neighbour of neighbours) {
+            if (closed.includes(neighbour)) {
                 continue;
             }
-            const newCost = getCost(from, surroundingTile, to);
-            if (newCost <= surroundingTile.cost || !open.includes(surroundingTile)) {
-                surroundingTile.cost = newCost;
-                surroundingTile.parent = current;
-                if (!open.includes(surroundingTile)) {
-                    open.push(surroundingTile);
+            const newCost = getCost(from, neighbour, to);
+            if (newCost <= neighbour.cost || !open.includes(neighbour)) {
+                neighbour.cost = newCost;
+                neighbour.parent = current;
+                if (!open.includes(neighbour)) {
+                    open.push(neighbour);
                 }
             }
         }
     }
+
 }
 
 function getCost(from, current, to) {
@@ -53,7 +74,7 @@ function getStepCount(found) {
     return stepCount;
 }
 
-function getSurroundingTiles(currentPosition, grid) {
+function getNeighbours(currentPosition, grid) {
     const surroundingTiles = [];
     if (currentPosition.x > 0) {
         const adjacentTile = grid[currentPosition.y][currentPosition.x - 1];
@@ -87,7 +108,7 @@ function parseInput(lines) {
     const grid = lines.map((line, row) => line.split('').flatMap((char, column) => {
         switch (char) {
             case 'S':
-                from = { x: column, y: row, elevation: 0, cost: 0 };
+                from = { x: column, y: row, elevation: 0, cost: Infinity };
                 return from;
             case 'E':
                 to = { x: column, y: row, elevation: 25, cost: Infinity };
