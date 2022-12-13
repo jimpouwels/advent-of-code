@@ -19,26 +19,26 @@ function comparePair(pair) {
 }
 
 function compareList(left, right) {
-    if (left.length() > right.length()) {
-        return -1;
-    }
     for (let i = 0; i < left.length(); i++) {
+        if (i == right.length()) {
+            return -1;
+        }
         let leftItem = left.values[i];
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
-            if (leftItem.values[0] === rightItem) {
-                if (leftItem.length() > 1) {
-                    return -1;
-                } else {
-                    continue;
-                }
-            }
-            return compareInt(leftItem.values[0] < rightItem);
-        } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            if (leftItem === rightItem.values[0]) {
+            const result = compareInt(leftItem.values[0], rightItem);
+            if (result === 0) {
                 continue;
+            } else {
+                return result;
             }
-            return compareInt(leftItem < rightItem.values[0]);
+        } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
+            const result = compareInt(leftItem, rightItem.values[0]);
+            if (result === 0) {
+                continue;
+            } else {
+                return result;
+            }
         }
         if (Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
             const result = compareList(leftItem, rightItem);
@@ -55,6 +55,9 @@ function compareList(left, right) {
                 return result;
             }
         }
+    }
+    if (left.length() < right.length()) {
+        return 1;
     }
     return 0;
 }
