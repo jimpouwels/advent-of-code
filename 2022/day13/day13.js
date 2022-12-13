@@ -26,31 +26,22 @@ function compareList(left, right) {
         let leftItem = left.values[i];
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
-            if (!compareInt(leftItem.values[0], rightItem)) {
-                return false;
-            }
-            break;
+            return leftItem.values[0] <= rightItem;
         } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            if (!compareInt(leftItem, rightItem.values[0])) {
-                return false;
-            }
-            break;
+            return leftItem <= rightItem.values[0];
         }
         if (Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
             if (!compareList(leftItem, rightItem)) {
                 return false;
             }
         } else {
-            if (!compareInt(leftItem, rightItem)) {
-                return false;
+            if (leftItem === rightItem) {
+                continue;
             }
+            return leftItem < rightItem;
         }
     }
     return true;
-}
-
-function compareInt(left, right) {
-    return left <= right;
 }
 
 function parseLines(lines) {
