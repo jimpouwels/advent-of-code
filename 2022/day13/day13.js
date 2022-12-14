@@ -3,16 +3,16 @@ const distressMarkers = [[[2]], [[6]]];
 export default function run(input) {
     const pairs = parseLines(input);
 
-    let part1 = 0;
-    pairs.forEach((pair, index) => {
-        if (compareLists(pair.left, pair.right) == 1) {
-            part1 += (index + 1);
+    const part1 = pairs.reduce((sum, pair, index) => {
+        if (compareLists(pair.left, pair.right) === 1) {
+            return sum += index + 1;
         }
-    });
+        return sum;
+    }, 0);
 
     const part2 = [...pairs.flatMap(pair => [pair.left, pair.right]), ...distressMarkers]
-                    .sort((line1, line2) => -compareLists(line1, line2))
-                    .reduce((sum, val, i) => sum *= distressMarkers.includes(val) ? ++i : 1, 1);
+                           .sort((line1, line2) => -compareLists(line1, line2))
+                           .reduce((sum, val, i) => sum *= distressMarkers.includes(val) ? ++i : 1, 1);
 
     return {
         part1: part1,
