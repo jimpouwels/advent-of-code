@@ -1,9 +1,11 @@
+import List from './list.js';
+
 export default function run(input) {
     const pairs = parseLines(input);
 
     let part1 = 0;
     pairs.forEach((pair, index) => {
-        if (comparePair(pair) == 1) {
+        if (comparePair(pair.left, pair.right) == 1) {
             part1 += (index + 1);
         }
     });
@@ -14,11 +16,7 @@ export default function run(input) {
     };
 }
 
-function comparePair(pair) {
-    return compareList(pair.left, pair.right);
-}
-
-function compareList(left, right) {
+function comparePair(left, right) {
     for (let i = 0; i < left.length(); i++) {
         if (i == right.length()) {
             return -1;
@@ -30,7 +28,7 @@ function compareList(left, right) {
             rightItem = (typeof rightItem) === "number" ? convertToList(rightItem) : rightItem;
         }
         if (typeof leftItem !== "number") {
-            const result = compareList(leftItem, rightItem);
+            const result = comparePair(leftItem, rightItem);
             if (result != 0) {
                 return result;
             }
@@ -107,7 +105,7 @@ function readToken(line, cursor) {
     if (isNaN(token)) {
         return token;
     } else {
-        if (!isNaN(line.charAt(cursor + 1))) {
+        if (!isNumber(line, cursor)) {
             return token + readToken(line, cursor + 1);
         } else {
             return token;
@@ -115,19 +113,6 @@ function readToken(line, cursor) {
     }
 }
 
-class List {
-    values = [];
-    parent;
-
-    constructor(parent) {
-        this.parent = parent;
-    }
-    
-    push(value) {
-        this.values.push(value);
-    }
-
-    length() {
-        return this.values.length;
-    }
+function isNumber(line, cursor) {
+    return isNaN(line.charAt(cursor + 1));
 }
