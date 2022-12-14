@@ -25,33 +25,18 @@ function compareList(left, right) {
         }
         let leftItem = left.values[i];
         let rightItem = right.values[i];
-        if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
-            const result = compareList(leftItem, convertToList(rightItem));
-            if (result === 0) {
-                continue;
-            } else {
-                return result;
-            }
-        } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            const result = compareList(convertToList(leftItem), rightItem);
-            if (result === 0) {
-                continue;
-            } else {
-                return result;
-            }
+        if ((typeof leftItem) != (typeof rightItem)) {
+            leftItem = (typeof leftItem) === "number" ? convertToList(leftItem) : leftItem;
+            rightItem = (typeof rightItem) === "number" ? convertToList(rightItem) : rightItem;
         }
-        if (Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
+        if (typeof leftItem !== "number") {
             const result = compareList(leftItem, rightItem);
-            if (result === 0) {
-                continue;
-            } else {
+            if (result != 0) {
                 return result;
             }
         } else {
             const result = compareInt(leftItem, rightItem);
-            if (result === 0) {
-                continue;
-            } else {
+            if (result != 0) {
                 return result;
             }
         }
