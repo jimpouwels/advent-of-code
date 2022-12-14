@@ -4,55 +4,43 @@ export default function run(input) {
     const pairs = parseLines(input);
 
     const part1 = pairs.reduce((sum, pair, index) => {
-        if (compareLists(pair.left, pair.right) === 1) {
+        if (compareLists(pair) === 1) {
             return sum += index + 1;
         }
         return sum;
     }, 0);
 
-    const part2 = [...pairs.flatMap(pair => [pair.left, pair.right]), ...distressMarkers]
-                           .sort((line1, line2) => -compareLists(line1, line2))
-                           .reduce((sum, val, i) => sum *= distressMarkers.includes(val) ? ++i : 1, 1);
+    const sorted = [...pairs.flat(), ...distressMarkers]
+                           .sort((line1, line2) => -compareLists([line1, line2]));                         
 
     return {
         part1: part1,
-        part2: part2
+        part2: (sorted.indexOf(distressMarkers[0]) + 1) * (sorted.indexOf(distressMarkers[1]) + 1)
     };
 }
 
-function compareLists(left, right) {
+function compareLists([left, right]) {
+    const result = left.length < right.length ? 1 : 0;
     for (let i = 0; i < left.length; i++) {
         if (i == right.length) {
             return -1;
         }
         let leftItem = left[i];
         let rightItem = right[i];
-        if (isTypeMismatch(leftItem, rightItem)) {
-            leftItem = convertToListIfRequired(leftItem);
-            rightItem = convertToListIfRequired(rightItem);
+        if (typeof leftItem === "number" && typeof rightItem === "number") {
+            const result = leftItem === rightItem ? 0 : leftItem < rightItem ? 1 : -1;
+            if (result != 0) {
+                return result;
+            }
+        } else {
+            let result = compareLists([typeof leftItem === "number" ? [leftItem] : leftItem, 
+                                    typeof rightItem === "number" ? [rightItem] : rightItem]);
+            if (result != 0) {
+                return result;
+            }
         }
-        let result = Array.isArray(leftItem) && Array.isArray(rightItem) ? 
-                    compareLists(leftItem, rightItem) : 
-                    leftItem === rightItem ? 0 : leftItem < rightItem ? 1 : -1;
-        if (result != 0) {
-            return result;
-        }
     }
-    if (left.length < right.length) {
-        return 1;
-    }
-    return 0;
-}
-
-function isTypeMismatch(leftItem, rightItem) {
-    return typeof leftItem != typeof rightItem;
-}
-
-function convertToListIfRequired(item) {
-    if (typeof item === "number") {
-        return [item];
-    }
-    return item;
+    return result;
 }
 
 function parseLines(lines) {
@@ -60,6 +48,6 @@ function parseLines(lines) {
         const splittedPair = pair.split('\n');
         const left = JSON.parse(splittedPair[0]);
         const right = JSON.parse(splittedPair[1]);
-        return { left: left, right: right };
+        return [left, right];
     });
 }
