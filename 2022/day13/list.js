@@ -2,11 +2,9 @@ export default class List {
     
     values = [];
     parent;
-    isDistress;
 
-    constructor(parent, isDistress = false) {
+    constructor(parent) {
         this.parent = parent;
-        this.isDistress = isDistress;
     }
     
     push(value) {

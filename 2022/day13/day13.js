@@ -16,12 +16,12 @@ export default function run(input) {
     distressMarkers.forEach(marker => allLists.push(parseLine(marker)));
     allLists.sort((line1, line2) => -compareLists(line1, line2));
 
-    const distress = allLists.map((list) => list.toString())
+    const part2 = allLists.map((list) => list.toString())
                              .reduce((sum, val, i) => sum *= distressMarkers.includes(val) ? ++i : 1, 1);
 
     return {
         part1: part1,
-        part2: distress
+        part2: part2
     };
 }
 
@@ -83,7 +83,7 @@ function parseLine(line, isDistress = false) {
         cursor += token.length;
         switch (token) {
             case '[':
-                const subList = new List(currentList, isDistress);
+                const subList = new List(currentList);
                 if (!root) {
                     root = subList;
                     currentList = root;
