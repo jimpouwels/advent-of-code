@@ -10,9 +10,23 @@ export default function run(input) {
         }
     });
 
+    const allLists = pairs.flatMap(pair => [pair.left, pair.right]);
+    allLists.push(parseLine('[[2]]', true));
+    allLists.push(parseLine('[[6]]', true));
+    allLists.sort((line1, line2) => -comparePair(line1, line2));
+
+    let distress = 1
+    allLists.map((list) => list.toString())
+            .forEach((listAsString, index) => {
+                if (listAsString === '[[2]]' || listAsString === '[[6]]') {
+                    distress *= (index + 1);
+                }
+            });
+
+
     return {
         part1: part1,
-        part2: 0
+        part2: distress
     };
 }
 
@@ -46,7 +60,7 @@ function comparePair(left, right) {
 }
 
 function convertToList(item) {
-    const newList = new List();
+    const newList = new List(null);
     newList.push(item);
     return newList;
 }
@@ -71,7 +85,7 @@ function parseLines(lines) {
     });
 }
 
-function parseLine(line) {
+function parseLine(line, isDistress = false) {
     let cursor = 0;
     let root, currentList = null;
     while (cursor < line.length) {
@@ -79,7 +93,7 @@ function parseLine(line) {
         cursor += token.length;
         switch (token) {
             case '[':
-                const subList = new List(currentList);
+                const subList = new List(currentList, isDistress);
                 if (!root) {
                     root = subList;
                     currentList = root;
