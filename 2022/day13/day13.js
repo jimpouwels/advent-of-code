@@ -10,19 +10,18 @@ export default function run(input) {
         }
     });
 
+    const distressMarkers = ['[[2]]', '[[6]]'];
     const allLists = pairs.flatMap(pair => [pair.left, pair.right]);
-    allLists.push(parseLine('[[2]]', true));
-    allLists.push(parseLine('[[6]]', true));
+    distressMarkers.forEach(marker => allLists.push(parseLine(marker)));
     allLists.sort((line1, line2) => -comparePair(line1, line2));
 
     let distress = 1
     allLists.map((list) => list.toString())
             .forEach((listAsString, index) => {
-                if (listAsString === '[[2]]' || listAsString === '[[6]]') {
+                if (distressMarkers.includes(listAsString)) {
                     distress *= (index + 1);
                 }
             });
-
 
     return {
         part1: part1,
