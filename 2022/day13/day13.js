@@ -17,16 +17,14 @@ function compare([left, right]) {
         if (i == right.length) {
             return -1;
         }
-        let leftItem = left[i];
-        let rightItem = right[i];
-        if (isNumber(leftItem) && isNumber(rightItem)) {
-            const result = leftItem === rightItem ? 0 : leftItem < rightItem ? 1 : -1;
+        if (isNumber(left[i]) && isNumber(right[i])) {
+            const result = left[i] === right[i] ? 0 : left[i] < right[i] ? 1 : -1;
             if (result != 0) {
                 return result;
             }
         } else {
-            let result = compare([isNumber(leftItem) ? [leftItem] : leftItem, 
-                                  isNumber(rightItem) ? [rightItem] : rightItem]);
+            const result = compare([isNumber(left[i]) ? [left[i]] : left[i], 
+                                  isNumber(right[i]) ? [right[i]] : right[i]]);
             if (result != 0) {
                 return result;
             }
