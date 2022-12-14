@@ -7,14 +7,14 @@ export default function run(input) {
 
     let part1 = 0;
     pairs.forEach((pair, index) => {
-        if (comparePair(pair.left, pair.right) == 1) {
+        if (compareLists(pair.left, pair.right) == 1) {
             part1 += (index + 1);
         }
     });
 
     const allLists = pairs.flatMap(pair => [pair.left, pair.right]);
     distressMarkers.forEach(marker => allLists.push(parseLine(marker)));
-    allLists.sort((line1, line2) => -comparePair(line1, line2));
+    allLists.sort((line1, line2) => -compareLists(line1, line2));
 
     const distress = allLists.map((list) => list.toString())
                              .reduce((sum, val, i) => sum *= distressMarkers.includes(val) ? ++i : 1, 1);
@@ -25,27 +25,22 @@ export default function run(input) {
     };
 }
 
-function comparePair(left, right) {
+function compareLists(left, right) {
     for (let i = 0; i < left.length(); i++) {
         if (i == right.length()) {
             return -1;
         }
         let leftItem = left.values[i];
         let rightItem = right.values[i];
-        if ((typeof leftItem) != (typeof rightItem)) {
-            leftItem = (typeof leftItem) === "number" ? convertToList(leftItem) : leftItem;
-            rightItem = (typeof rightItem) === "number" ? convertToList(rightItem) : rightItem;
+        if (isTypeMismatch(leftItem, rightItem)) {
+            leftItem = convertToListIfRequired(leftItem);
+            rightItem = convertToListIfRequired(rightItem);
         }
-        if (typeof leftItem !== "number") {
-            const result = comparePair(leftItem, rightItem);
-            if (result != 0) {
-                return result;
-            }
-        } else {
-            const result = compareInt(leftItem, rightItem);
-            if (result != 0) {
-                return result;
-            }
+        let result = isNaN(leftItem) || isNaN(rightItem) ? 
+                    compareLists(leftItem, rightItem) : 
+                    compareInt(leftItem, rightItem);
+        if (result != 0) {
+            return result;
         }
     }
     if (left.length() < right.length()) {
@@ -54,21 +49,21 @@ function comparePair(left, right) {
     return 0;
 }
 
-function convertToList(item) {
-    const newList = new List(null);
-    newList.push(item);
-    return newList;
+function isTypeMismatch(leftItem, rightItem) {
+    return typeof leftItem != typeof rightItem;
+}
+
+function convertToListIfRequired(item) {
+    if (typeof item === "number") {
+        const newList = new List(null);
+        newList.push(item);
+        return newList;
+    }
+    return item;
 }
 
 function compareInt(left, right) {
-    if (left === right) {
-        return 0;
-    }
-    if (left < right) {
-        return 1;
-    } else {
-        return -1;
-    }
+    return left === right ? 0 : left < right ? 1 : -1;
 }
 
 function parseLines(lines) {
