@@ -86,8 +86,9 @@ function parseLine(line) {
     let cursor = 0;
     let root, currentList = null;
     while (cursor < line.length) {
-        const char = readChar(line, cursor++);
-        switch (char) {
+        const token = readToken(line, cursor);
+        cursor += token.length;
+        switch (token) {
             case '[':
                 const subList = new List(currentList);
                 if (!root) {
@@ -104,14 +105,23 @@ function parseLine(line) {
             case ',':
                 break;
             default:
-                currentList.push(parseInt(char));
+                currentList.push(parseInt(token));
         }
     }
     return root;
 }
 
-function readChar(line, cursor) {
-    return line.charAt(cursor);
+function readToken(line, cursor) {
+    let token = line.charAt(cursor);
+    if (isNaN(token)) {
+        return token;
+    } else {
+        if (!isNaN(line.charAt(cursor + 1))) {
+            return token + readToken(line, cursor + 1);
+        } else {
+            return token;
+        }
+    }
 }
 
 class List {
