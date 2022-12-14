@@ -26,14 +26,18 @@ function compareList(left, right) {
         let leftItem = left.values[i];
         let rightItem = right.values[i];
         if (Array.isArray(leftItem.values) && !Array.isArray(rightItem.values)) {
-            const result = compareInt(leftItem.values[0], rightItem);
+            const newRightItem = new List();
+            newRightItem.push(rightItem);
+            const result = compareList(leftItem, newRightItem);
             if (result === 0) {
                 continue;
             } else {
                 return result;
             }
         } else if (!Array.isArray(leftItem.values) && Array.isArray(rightItem.values)) {
-            const result = compareInt(leftItem, rightItem.values[0]);
+            const newLeftItem = new List();
+            newLeftItem.push(leftItem);
+            const result = compareList(newLeftItem, rightItem);
             if (result === 0) {
                 continue;
             } else {
@@ -63,6 +67,7 @@ function compareList(left, right) {
 }
 
 function compareInt(left, right) {
+    // console.log(`compare ${left} with ${right}`);
     if (left === right) {
         return 0;
     }
