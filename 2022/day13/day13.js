@@ -1,5 +1,7 @@
 import List from './list.js';
 
+const distressMarkers = ['[[2]]', '[[6]]'];
+
 export default function run(input) {
     const pairs = parseLines(input);
 
@@ -10,18 +12,17 @@ export default function run(input) {
         }
     });
 
-    const distressMarkers = ['[[2]]', '[[6]]'];
     const allLists = pairs.flatMap(pair => [pair.left, pair.right]);
     distressMarkers.forEach(marker => allLists.push(parseLine(marker)));
     allLists.sort((line1, line2) => -comparePair(line1, line2));
 
-    let distress = 1
-    allLists.map((list) => list.toString())
-            .forEach((listAsString, index) => {
+    const distress = allLists.map((list) => list.toString())
+            .reduce((distress, listAsString, index) => {
                 if (distressMarkers.includes(listAsString)) {
-                    distress *= (index + 1);
+                    return distress *= (index + 1);
                 }
-            });
+                return distress;
+            }, 1);
 
     return {
         part1: part1,
