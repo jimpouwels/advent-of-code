@@ -17,12 +17,7 @@ export default function run(input) {
     allLists.sort((line1, line2) => -comparePair(line1, line2));
 
     const distress = allLists.map((list) => list.toString())
-            .reduce((distress, listAsString, index) => {
-                if (distressMarkers.includes(listAsString)) {
-                    return distress *= (index + 1);
-                }
-                return distress;
-            }, 1);
+                             .reduce((sum, val, i) => sum *= distressMarkers.includes(val) ? ++i : 1, 1);
 
     return {
         part1: part1,
