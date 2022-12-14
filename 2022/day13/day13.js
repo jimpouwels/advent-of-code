@@ -26,7 +26,7 @@ function compare([left, right]) {
             }
         } else {
             let result = compare([isNumber(leftItem) ? [leftItem] : leftItem, 
-                                       isNumber(rightItem) ? [rightItem] : rightItem]);
+                                  isNumber(rightItem) ? [rightItem] : rightItem]);
             if (result != 0) {
                 return result;
             }
