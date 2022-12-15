@@ -17,16 +17,14 @@ function dropSand(grid) {
     let sandCount = 0;
     let x = 500; let y = 0;
     while (true) {
-        if (y === grid.length - 1) {
+        if (y === grid.length - 1 || !isFree(grid, x, y)) {
             return sandCount;
-        } else if (!isBlocked(grid, x, y + 1)) {
+        } else if (isFree(grid, x, y + 1)) {
             y++;
-        } else if (!isBlocked(grid, x - 1, y + 1)) {
+        } else if (isFree(grid, x - 1, y + 1)) {
             y++; x--;
-        } else if (!isBlocked(grid, x + 1, y + 1)) {
+        } else if (isFree(grid, x + 1, y + 1)) {
             y++; x++;
-        } else if (isBlocked(grid, x, y)) {
-            return sandCount;
         } else {
             grid[y][x] = 1;
             sandCount++;
@@ -36,7 +34,7 @@ function dropSand(grid) {
 }
 
 function fillGrid(rockPositions, addBottom = false) {
-    const maxX = Math.max(...rockPositions.map(p => p.x)) + 1000;
+    const maxX = Math.max(...rockPositions.map(p => p.x)) + 300;
     const maxY = Math.max(...rockPositions.map(p => p.y));
 
     const grid = new Array(maxY + 1);
@@ -47,17 +45,14 @@ function fillGrid(rockPositions, addBottom = false) {
         grid[rock.y][rock.x] = 1;
     });
     if (addBottom) {
-        grid.push(new Array(maxX + 1).fill(0));
-        grid.push(new Array(maxX + 1).fill(0));
-        for (let x = 0; x <= maxX; x++) {
-            grid[grid.length - 1][x] = 1
-        }
+        grid.push(new Array(maxX + 1).fill(false));
+        grid.push(new Array(maxX + 1).fill(true));
     }
     return grid;
 }
 
-function isBlocked(grid, x, y) {
-    return grid[y][x] == 1;
+function isFree(grid, x, y) {
+    return !grid[y][x];
 }
 
 function parseLineParts(lineParts) {
