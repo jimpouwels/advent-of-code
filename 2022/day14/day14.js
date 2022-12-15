@@ -39,7 +39,7 @@ function fillGrid(rockPositions, addBottom = false) {
 
     const grid = new Array(maxY + 1);
     for (let y = 0; y < grid.length; y++) {
-        grid[y] = new Array(maxX + 1).fill(0);
+        grid[y] = new Array(maxX + 1).fill(false);
     }
     if (addBottom) {
         grid.push(new Array(maxX + 1).fill(false));
