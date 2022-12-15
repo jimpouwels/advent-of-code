@@ -2,38 +2,47 @@ export default function run(lines, rowToCheck) {
     const sensors = parseSensorsAndBeacons(lines);
     const minX = Math.min(...sensors.flatMap(s => [s.position.x - s.distanceToBeacon]));
     const maxX = Math.max(...sensors.flatMap(s => [s.position.x + s.distanceToBeacon]));
+    const maxY = Math.max(...sensors.map(s => s.position.y));
 
     const intervals = [];
-    for (let y = 0; y < 20; y++) {
-        for (let i = 0; i < sensors.length; i++) {
-            if (Math.abs(sensors[i].position.y - y) > sensors[i].distanceToBeacon) continue;
-            intervals.push({ y: y, left: sensors[i].position.x - (sensors[i].distanceToBeacon - Math.abs(sensors[i].position.y - y))
-                            ,right:sensors[i].position.x + (sensors[i].distanceToBeacon - Math.abs(sensors[i].position.y - y))
-                            });
+
+    for (let i = 0; i < sensors.length; i++) {
+        for (let y = sensors[i].position.y - sensors[i].distanceToBeacon; y < sensors[i].position.y + sensors[i].distanceToBeacon; y++) {
+            let diff = y - (sensors[i].position.y - sensors[i].distanceToBeacon);
+            if (y == sensors[i].position.y) {
+                diff = sensors[i].distanceToBeacon;
+            }
+            if (y >= sensors[i].position.y) {
+                diff = sensors[i].distanceToBeacon - (y - sensors[i].position.y);
+            }
+            intervals.push({ y: y, left: sensors[i].position.x - diff, right: sensors[i].position.x + diff });
         }
     }
-
-    let part1 = 0;
+    let part1 = [];
     for (let x = minX; x <= maxX; x++) {
-        part1 += intervals.find(i => x >= i.left && x <= i.right && i.y == rowToCheck) && !sensors.find(s => s.closestBeacon.x == x && s.closestBeacon.y == rowToCheck) ? 1 : 0;
+        if (intervals.find(i => i.y == rowToCheck && x >= i.left && x <= i.right)) {
+            if (sensors.find(s => s.closestBeacon.y == rowToCheck && s.closestBeacon.x == x)) continue;
+            part1.push({ x: x, y: rowToCheck });
+        }
     }
 
     let part2;
-    const searchAreaMaxX = Math.max(...sensors.map(s => [s.position.x]));
-    const searchAreaMaxY = Math.max(...sensors.map(s => [s.position.y]));
+    // const searchAreaMaxX = Math.max(...sensors.map(s => [s.position.x]));
+    // const searchAreaMaxY = Math.max(...sensors.map(s => [s.position.y]));
 
-    top: for (let x = 0; x < searchAreaMaxX; x++) {
-        for (let y = 0; y < searchAreaMaxY; y++) {
-            if (!intervals.find(i => x >= i.left && x <= i.right && i.y == y)) {
-                part2 = { x: x, y: y };
-                break top;
-            }
-        }
-    }
+    // for (let y = 0; y < searchAreaMaxX; y++) {
+    //     const bla = new Set();
+    //     intervals.forEach(interval => {
+    //         if (interval.y != y) return;
+    //         for (let i = interval.left; i <= interval.right; i++) {
+    //             bla.add(i);
+    //         }
+    //     });
+    // }
 
     return {
-        part1: part1,
-        part2: (part2.x * 4000000) + part2.y
+        part1: part1.length,
+        // part2: (part2.x * 4000000) + part2.y
     };
 }
 
