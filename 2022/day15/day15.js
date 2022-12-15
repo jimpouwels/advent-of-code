@@ -1,23 +1,31 @@
 export default function run(lines, rowToCheck) {
     const sensors = parseSensorsAndBeacons(lines);
-    const minX = Math.min(...sensors.flatMap(s => [s.position.x, s.closestBeacon.x, s.position.x - s.distanceToBeacon]));
-    const maxX = Math.max(...sensors.flatMap(s => [s.position.x, s.closestBeacon.x, s.position.x + s.distanceToBeacon]));
+    const minX = Math.min(...sensors.flatMap(s => [s.position.x - s.distanceToBeacon]));
+    const maxX = Math.max(...sensors.flatMap(s => [s.position.x + s.distanceToBeacon]));
+
+    const intervals = [];
+    for (let y = 0; y < 20; y++) {
+        for (let i = 0; i < sensors.length; i++) {
+            if (Math.abs(sensors[i].position.y - y) > sensors[i].distanceToBeacon) continue;
+            intervals.push({ y: y, left: sensors[i].position.x - (sensors[i].distanceToBeacon - Math.abs(sensors[i].position.y - y))
+                            ,right:sensors[i].position.x + (sensors[i].distanceToBeacon - Math.abs(sensors[i].position.y - y))
+                            });
+        }
+    }
 
     let part1 = 0;
     for (let x = minX; x <= maxX; x++) {
-        part1 += sensors.find(sensor => sensor.distanceToClosestBeaconFor({ x: x, y: rowToCheck }) != 0 &&
-                                        sensor.distanceToPositionFor({ x: x, y: rowToCheck }) <= sensor.distanceToBeacon) ? 1 : 0;
+        part1 += intervals.find(i => x >= i.left && x <= i.right && i.y == rowToCheck) && !sensors.find(s => s.closestBeacon.x == x && s.closestBeacon.y == rowToCheck) ? 1 : 0;
     }
 
+    let part2;
     const searchAreaMaxX = Math.max(...sensors.map(s => [s.position.x]));
     const searchAreaMaxY = Math.max(...sensors.map(s => [s.position.y]));
 
-    let part2;
-    top: for (let x = 0; x <= searchAreaMaxX; x++) {
-        for (let y = 0; y <= searchAreaMaxY; y++) {
-            if (sensors.filter(sensor => sensor.distanceToClosestBeaconFor({ x: x, y: y }) != 0 &&
-                                         sensor.distanceToPositionFor({ x: x, y: y }) > sensor.distanceToBeacon).length == sensors.length) {
-                part2 = (4000000 * x) + y;
+    top: for (let x = 0; x < searchAreaMaxX; x++) {
+        for (let y = 0; y < searchAreaMaxY; y++) {
+            if (!intervals.find(i => x >= i.left && x <= i.right && i.y == y)) {
+                part2 = { x: x, y: y };
                 break top;
             }
         }
@@ -25,7 +33,7 @@ export default function run(lines, rowToCheck) {
 
     return {
         part1: part1,
-        part2: part2
+        part2: (part2.x * 4000000) + part2.y
     };
 }
 
