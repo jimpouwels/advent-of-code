@@ -32,7 +32,7 @@ function dropSand(grid) {
 }
 
 function fillGrid(rockPositions, addBottom = false) {
-    const maxX = Math.max(...rockPositions.map(p => p.x)) + 300;
+    const maxX = Math.max(...rockPositions.map(p => p.x)) * 2;
     const maxY = Math.max(...rockPositions.map(p => p.y));
 
     const grid = new Array(maxY + 1);
