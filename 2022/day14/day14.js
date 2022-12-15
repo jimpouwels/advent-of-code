@@ -51,19 +51,20 @@ function parseLineParts(lineParts) {
                                 if (!parts[index + 1]) {
                                     return null;
                                 };
-                                const begin = parsePoint(part);
-                                const end = parsePoint(parts[index + 1]);
-                                
-                                const allPoints = allPointsFrom(begin, end)
-                                return allPoints;
+                                return allPointsFrom(parsePoint(part), 
+                                                                parsePoint(parts[index + 1]));
                             })
                             .filter(part => part);
+}
+
+function parseLine(part1, part2) {
+    
 }
 
 function allPointsFrom(begin, end) {
     const allPoints = [];
     const line = [begin, end].sort((a, b) => (a.x - b.x) + (a.y - b.y));
-        
+
     for (let x = line[0].x; x <= line[1].x; x++) {
         for (let y = line[0].y; y <= line[1].y; y++) {
             allPoints.push({ x: x, y: y });
