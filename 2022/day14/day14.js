@@ -28,7 +28,7 @@ function dropSand(grid) {
         } else if (isBlocked(grid, x, y)) {
             return sandCount;
         } else {
-            grid[y][x].isBlocked = true;
+            grid[y][x] = 1;
             sandCount++;
             x = 500; y = 0;
         }
@@ -43,11 +43,11 @@ function fillGrid(rockPositions, addBottom = false) {
     for (let y = 0; y < grid.length; y++) {
         grid[y] = new Array(maxX + 1);
         for (let x = 0; x <= maxX; x++) {
-            grid[y][x] = {};
+            grid[y][x] = 0;
         }
     }
     rockPositions.forEach(rock => {
-        grid[rock.y][rock.x].isBlocked = true;
+        grid[rock.y][rock.x] = 1;
     });
     if (addBottom) {
         grid.push(new Array(maxX + 1));
@@ -58,17 +58,14 @@ function fillGrid(rockPositions, addBottom = false) {
             }
         }
         for (let x = 0; x <= maxX; x++) {
-            grid[grid.length - 1][x].isBlocked = true
+            grid[grid.length - 1][x] = 1
         }
     }
     return grid;
 }
 
 function isBlocked(grid, x, y) {
-    if (!grid[y][x]) {
-        console.log(grid[0].length, x, y);
-    }
-    return grid[y][x].isBlocked;
+    return grid[y][x] == 1;
 }
 
 function parseLineParts(lineParts) {
