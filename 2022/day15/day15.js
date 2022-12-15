@@ -5,17 +5,8 @@ export default function run(lines, rowToCheck) {
 
     let part1 = 0;
     for (let x = minX; x <= maxX; x++) {
-        let canHaveBeacon = true;
-        for (const sensor of sensors) {
-            if (sensor.distanceToClosestBeaconFor({ x: x, y: rowToCheck }) != 0 &&
-                sensor.distanceToPositionFor({ x: x, y: rowToCheck }) <= sensor.distanceToBeacon) {
-                canHaveBeacon = false;
-                break;
-            }
-        }
-        if (!canHaveBeacon) {
-            part1++;
-        }    
+        part1 += sensors.find(sensor => sensor.distanceToClosestBeaconFor({ x: x, y: rowToCheck }) != 0 &&
+                                        sensor.distanceToPositionFor({ x: x, y: rowToCheck }) <= sensor.distanceToBeacon) ? 1 : 0;
     }
 
     return {
