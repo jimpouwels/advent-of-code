@@ -1,7 +1,35 @@
 export default function run(input) {
-    const rockPositions = input.flatMap(lineParts => {
+    const rocks = input.flatMap(lineParts => {
         return parseLineParts(lineParts);
     });
+    const grid = fillGrid(rocks);
+
+    return {
+        part1: dropSand(grid)
+    };
+}
+
+function dropSand(grid) {
+    let sandCount = 0;
+    let x = 500; let y = 0;
+    while (true) {
+        if (y === grid.length - 1) {
+            return sandCount;
+        } else if (!isBlocked(grid, x, y + 1)) {
+            y++;
+        } else if (!isBlocked(grid, x - 1, y + 1)) {
+            y++; x--;
+        } else if (!isBlocked(grid, x + 1, y + 1)) {
+            y++; x++;
+        } else {
+            grid[y][x].isBlocked = true;
+            sandCount++;
+            x = 500; y = 0;
+        }
+    }
+}
+
+function fillGrid(rockPositions) {
     const maxX = Math.max(...rockPositions.map(p => p.x));
     const maxY = Math.max(...rockPositions.map(p => p.y));
 
@@ -15,34 +43,11 @@ export default function run(input) {
     rockPositions.forEach(rock => {
         grid[rock.y][rock.x].isBlocked = true;
     });
+    return grid;
+}
 
-    let sandCount = 0;
-    top: while (true) {
-        const sand = { x: 500, y: 0 };
-        while (true) {
-            if (sand.y === grid.length - 1) {
-                break top;
-            }
-            if (!grid[sand.y + 1][sand.x].isBlocked) {
-                sand.y++;
-                continue;
-            }
-            if (!grid[sand.y + 1][sand.x - 1].isBlocked) {
-                sand.y++;
-                sand.x--;
-                continue;
-            }
-            if (!grid[sand.y + 1][sand.x + 1].isBlocked) {
-                sand.y++;
-                sand.x++;
-                continue;
-            }
-            grid[sand.y][sand.x].isBlocked = true;
-            sandCount++;
-            break;
-        }
-    }
-    return {part1: sandCount};
+function isBlocked(grid, x, y) {
+    return grid[y][x].isBlocked;
 }
 
 function parseLineParts(lineParts) {
@@ -55,10 +60,6 @@ function parseLineParts(lineParts) {
                                                                 parsePoint(parts[index + 1]));
                             })
                             .filter(part => part);
-}
-
-function parseLine(part1, part2) {
-    
 }
 
 function allPointsFrom(begin, end) {
