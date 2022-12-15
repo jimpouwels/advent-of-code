@@ -38,10 +38,5 @@ function isNumber(item) {
 }
 
 function parseLines(lines) {
-    return lines.split('\n\n').map(pair => { 
-        const splittedPair = pair.split('\n');
-        const left = JSON.parse(splittedPair[0]);
-        const right = JSON.parse(splittedPair[1]);
-        return [left, right];
-    });
+    return lines.split('\n\n').map(pair => pair.split('\n').map(p => JSON.parse(p)));
 }
