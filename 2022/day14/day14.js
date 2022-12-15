@@ -41,13 +41,13 @@ function fillGrid(rockPositions, addBottom = false) {
     for (let y = 0; y < grid.length; y++) {
         grid[y] = new Array(maxX + 1).fill(0);
     }
-    rockPositions.forEach(rock => {
-        grid[rock.y][rock.x] = 1;
-    });
     if (addBottom) {
         grid.push(new Array(maxX + 1).fill(false));
         grid.push(new Array(maxX + 1).fill(true));
     }
+    rockPositions.forEach(rock => {
+        grid[rock.y][rock.x] = 1;
+    });
     return grid;
 }
 
@@ -57,19 +57,13 @@ function isFree(grid, x, y) {
 
 function parseLineParts(lineParts) {
     return lineParts.split(' -> ')
-                            .flatMap((part, index, parts) => {
-                                if (!parts[index + 1]) {
-                                    return null;
-                                };
-                                return toPoints(parsePoint(part), 
-                                                                parsePoint(parts[index + 1]));
-                            })
-                            .filter(part => part);
+                    .flatMap((p, i, elements) => !elements[i + 1] ? null : toPoints(parsePoint(p, elements[i+1]), parsePoint(elements[i + 1])))
+                    .filter(part => part);
 }
 
-function toPoints(begin, end) {
+function toPoints(...line) {
     const allPoints = [];
-    const line = [begin, end].sort((a, b) => (a.x - b.x) + (a.y - b.y));
+    line = line.sort((a, b) => (a.x - b.x) + (a.y - b.y));
 
     for (let x = line[0].x; x <= line[1].x; x++) {
         for (let y = line[0].y; y <= line[1].y; y++) {
@@ -81,5 +75,5 @@ function toPoints(begin, end) {
 
 function parsePoint(pointString) {
     const parts = pointString.split(',')
-    return  { x: parseInt(parts[0]), y: parseInt(parts[1])};
+    return { x: parseInt(parts[0]), y: parseInt(parts[1])};
 }
