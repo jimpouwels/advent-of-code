@@ -41,22 +41,14 @@ function fillGrid(rockPositions, addBottom = false) {
 
     const grid = new Array(maxY + 1);
     for (let y = 0; y < grid.length; y++) {
-        grid[y] = new Array(maxX + 1);
-        for (let x = 0; x <= maxX; x++) {
-            grid[y][x] = 0;
-        }
+        grid[y] = new Array(maxX + 1).fill(0);
     }
     rockPositions.forEach(rock => {
         grid[rock.y][rock.x] = 1;
     });
     if (addBottom) {
-        grid.push(new Array(maxX + 1));
-        grid.push(new Array(maxX + 1));
-        for (let y = grid.length - 2; y < grid.length; y++) {
-            for (let x = 0; x <= maxX; x++) {
-                grid[y][x] = {};
-            }
-        }
+        grid.push(new Array(maxX + 1).fill(0));
+        grid.push(new Array(maxX + 1).fill(0));
         for (let x = 0; x <= maxX; x++) {
             grid[grid.length - 1][x] = 1
         }
