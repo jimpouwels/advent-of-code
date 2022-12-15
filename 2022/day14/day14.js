@@ -45,12 +45,6 @@ export default function run(input) {
     return {part1: sandCount};
 }
 
-function sleep(seconds = 1) 
-{
-  var e = new Date().getTime() + (seconds * 1000);
-  while (new Date().getTime() <= e) {}
-}
-
 function parseLineParts(lineParts) {
     return lineParts.split(' -> ')
                             .flatMap((part, index, parts) => {
