@@ -37,7 +37,7 @@ function fillGrid(rockPositions) {
     for (let y = 0; y < grid.length; y++) {
         grid[y] = new Array(maxX + 1);
         for (let x = 0; x <= maxX; x++) {
-            grid[y][x] = new Cell();
+            grid[y][x] = {};
         }
     }
     rockPositions.forEach(rock => {
@@ -77,8 +77,4 @@ function toPoints(begin, end) {
 function parsePoint(pointString) {
     const parts = pointString.split(',')
     return  { x: parseInt(parts[0]), y: parseInt(parts[1])};
-}
-
-class Cell {
-    isBlocked = false;
 }
