@@ -62,21 +62,11 @@ function parseLineParts(lineParts) {
 
 function allPointsFrom(begin, end) {
     const allPoints = [];
-    if (begin.x > end.x) {
-        for (let x = begin.x; x >= end.x; x--) {
-            allPoints.push({ x: x, y: begin.y });
-        }
-    } else if (begin.x < end.x) {
-        for (let x = begin.x; x <= end.x; x++) {
-            allPoints.push({ x: x, y: begin.y });
-        }
-    } else if (begin.y > end.y) {
-        for (let y = begin.y; y >= end.y; y--) {
-            allPoints.push({ x: begin.x, y: y });
-        }
-    } else if (begin.y < end.y) {
-        for (let y = begin.y; y <= end.y; y++) {
-            allPoints.push({ x: begin.x, y: y });
+    const line = [begin, end].sort((a, b) => (a.x - b.x) + (a.y - b.y));
+        
+    for (let x = line[0].x; x <= line[1].x; x++) {
+        for (let y = line[0].y; y <= line[1].y; y++) {
+            allPoints.push({ x: x, y: y });
         }
     }
     return allPoints;
