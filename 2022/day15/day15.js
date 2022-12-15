@@ -1,16 +1,14 @@
 export default function run(lines, rowToCheck) {
     const sensors = parseSensorsAndBeacons(lines);
-    const minX = Math.min(...sensors.flatMap(s => [s.position.x, s.closestBeacon.x]));
-    const maxX = Math.max(...sensors.flatMap(s => [s.position.x, s.closestBeacon.x]));
+    const minX = Math.min(...sensors.flatMap(s => [s.position.x, s.closestBeacon.x, s.position.x - s.distanceToBeacon]));
+    const maxX = Math.max(...sensors.flatMap(s => [s.position.x, s.closestBeacon.x, s.position.x + s.distanceToBeacon]));
 
     let part1 = 0;
     for (let x = minX; x <= maxX; x++) {
         let canHaveBeacon = true;
         for (const sensor of sensors) {
-            if (!distanceBetween({ x: x, y: rowToCheck }, sensor.closestBeacon) == 0 &&
-                !distanceBetween({ x: x, y: rowToCheck }, sensor.position) == 0 &&
-                distanceBetween({ x: x, y: rowToCheck }, sensor.position) <= 
-                distanceBetween(sensor.position, sensor.closestBeacon)) {
+            if (sensor.distanceToClosestBeaconFor({ x: x, y: rowToCheck }) != 0 &&
+                sensor.distanceToPositionFor({ x: x, y: rowToCheck }) <= sensor.distanceToBeacon) {
                 canHaveBeacon = false;
                 break;
             }
@@ -24,10 +22,6 @@ export default function run(lines, rowToCheck) {
         part1: part1,
         part2: 0
     };
-}
-
-function distanceBetween(point1, point2) {
-    return Math.abs(point1.x - point2.x) + Math.abs(point1.y - point2.y);
 }
 
 function parseSensorsAndBeacons(lines) {
@@ -44,9 +38,24 @@ function parseSensorsAndBeacons(lines) {
 class Sensor {
     position;
     closestBeacon;
+    distanceToBeacon;
 
     constructor(position, closestBeacon) {
         this.position = position;
         this.closestBeacon = closestBeacon;
+        this.distanceToBeacon = this.getDistance(position, closestBeacon);
     }
+
+    distanceToPositionFor(point) {
+        return this.getDistance(point, this.position);
+    }
+
+    distanceToClosestBeaconFor(point) {
+        return this.getDistance(point, this.closestBeacon);
+    }
+
+    getDistance(point1, point2) {
+        return Math.abs(point1.x - point2.x) + Math.abs(point1.y - point2.y)
+    }
+
 }
