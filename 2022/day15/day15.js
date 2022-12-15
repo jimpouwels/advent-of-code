@@ -6,7 +6,7 @@ export default function run(lines, rowToCheck) {
     let part1 = 0;
     for (let x = minX; x <= maxX; x++) {
         part1 += sensors.find(sensor => sensor.distanceToClosestBeaconFor({ x: x, y: rowToCheck }) != 0 &&
-                                        sensor.distanceToPositionFor({ x: x, y: rowToCheck }) <= sensor.distanceToBeacon) ? 1 : 0;
+                                        sensor.coversPoint({x: x, y: rowToCheck})) ? 1 : 0;
     }
 
     const searchAreaMaxX = Math.max(...sensors.map(s => [s.position.x]));
@@ -45,11 +45,24 @@ class Sensor {
     position;
     closestBeacon;
     distanceToBeacon;
+    coverage = [];
 
     constructor(position, closestBeacon) {
         this.position = position;
         this.closestBeacon = closestBeacon;
         this.distanceToBeacon = this.getDistance(position, closestBeacon);
+
+        for (let x = position.x - this.distanceToBeacon; x <= position.x + this.distanceToBeacon; x++) {
+            for (let y = position.y - this.distanceToBeacon; y <= position.y + this.distanceToBeacon; y++) {
+                if (this.distanceToPositionFor({x: x, y: y}) <= this.distanceToBeacon) {
+                    this.coverage.push({x:x, y:y});
+                }
+            }   
+        }
+    }
+
+    coversPoint(point) {
+        return this.coverage.find(c => c.x == point.x && c.y == point.y);
     }
 
     distanceToPositionFor(point) {
