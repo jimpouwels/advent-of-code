@@ -1,7 +1,5 @@
 export default function run(input) {
-    const rocks = input.flatMap(lineParts => {
-        return parseLineParts(lineParts);
-    });
+    const rocks = input.flatMap(lineParts => parseLineParts(lineParts));
     const grid1 = fillGrid(rocks);
     const part1 = dropSand(grid1);
 
@@ -57,7 +55,7 @@ function isFree(grid, x, y) {
 
 function parseLineParts(lineParts) {
     return lineParts.split(' -> ')
-                    .flatMap((p, i, elements) => !elements[i + 1] ? null : toPoints(parsePoint(p, elements[i+1]), parsePoint(elements[i + 1])))
+                    .flatMap((part, i, parts) => !parts[i + 1] ? null : toPoints(parsePoint(part), parsePoint(parts[i + 1])))
                     .filter(part => part);
 }
 
