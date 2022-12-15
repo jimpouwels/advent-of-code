@@ -56,13 +56,13 @@ function parseLineParts(lineParts) {
                                 if (!parts[index + 1]) {
                                     return null;
                                 };
-                                return allPointsFrom(parsePoint(part), 
+                                return toPoints(parsePoint(part), 
                                                                 parsePoint(parts[index + 1]));
                             })
                             .filter(part => part);
 }
 
-function allPointsFrom(begin, end) {
+function toPoints(begin, end) {
     const allPoints = [];
     const line = [begin, end].sort((a, b) => (a.x - b.x) + (a.y - b.y));
 
