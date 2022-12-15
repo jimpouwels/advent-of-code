@@ -17,7 +17,6 @@ export default function run(lines, rowToCheck) {
         for (let y = 0; y <= searchAreaMaxY; y++) {
             if (sensors.filter(sensor => sensor.distanceToClosestBeaconFor({ x: x, y: y }) != 0 &&
                                          sensor.distanceToPositionFor({ x: x, y: y }) > sensor.distanceToBeacon).length == sensors.length) {
-                console.log('tatata');
                 part2 = (4000000 * x) + y;
                 break top;
             }
