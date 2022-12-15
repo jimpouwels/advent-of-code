@@ -9,9 +9,24 @@ export default function run(lines, rowToCheck) {
                                         sensor.distanceToPositionFor({ x: x, y: rowToCheck }) <= sensor.distanceToBeacon) ? 1 : 0;
     }
 
+    const searchAreaMaxX = Math.max(...sensors.map(s => [s.position.x]));
+    const searchAreaMaxY = Math.max(...sensors.map(s => [s.position.y]));
+
+    let part2;
+    top: for (let x = 0; x <= searchAreaMaxX; x++) {
+        for (let y = 0; y <= searchAreaMaxY; y++) {
+            if (sensors.filter(sensor => sensor.distanceToClosestBeaconFor({ x: x, y: y }) != 0 &&
+                                         sensor.distanceToPositionFor({ x: x, y: y }) > sensor.distanceToBeacon).length == sensors.length) {
+                console.log('tatata');
+                part2 = (4000000 * x) + y;
+                break top;
+            }
+        }
+    }
+
     return {
         part1: part1,
-        part2: 0
+        part2: part2
     };
 }
 
