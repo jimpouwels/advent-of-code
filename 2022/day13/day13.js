@@ -1,7 +1,7 @@
 const distressMarkers = [[[2]], [[6]]];
 
-export default function run(input) {
-    const pairs = parseLines(input);
+export default function run(lines) {
+    const pairs = lines.split('\n\n').map(pair => pair.split('\n').map(p => JSON.parse(p)));;
     const part1 = pairs.reduce((sum, pair, index) => compare(pair) === 1 ? sum += index + 1 : sum, 0);
     const sorted = [...pairs.flat(), ...distressMarkers].sort((line1, line2) => -compare([line1, line2]));                         
 
@@ -35,8 +35,4 @@ function compare([left, right]) {
 
 function isNumber(item) {
     return typeof item === "number";
-}
-
-function parseLines(lines) {
-    return lines.split('\n\n').map(pair => pair.split('\n').map(p => JSON.parse(p)));
 }
