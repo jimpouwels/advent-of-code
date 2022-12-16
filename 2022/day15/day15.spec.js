@@ -9,6 +9,7 @@ describe('day15', () => {
         expect(r.part2).toEqual(56000011);
     });
 
+    /* TAKES 20 seconds to run, uncomment to execute test with big data set */
     // it('run1-big', () => {
     //     const r = run(readLines('2022/day15/testdata-big.txt'), 2000000);
     //     expect(r.part1).toEqual(5127797);
