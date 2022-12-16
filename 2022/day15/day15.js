@@ -4,7 +4,7 @@ export default function run(lines, rowToCheck) {
     const maxX = Math.max(...sensors.flatMap(s => [s.position.x + s.distanceToBeacon]));
     const maxY = Math.max(...sensors.map(s => s.position.y));
 
-    const intervals = [];
+    const intervals = new Array(maxY);
 
     for (let i = 0; i < sensors.length; i++) {
         for (let y = sensors[i].position.y - sensors[i].distanceToBeacon; y < sensors[i].position.y + sensors[i].distanceToBeacon; y++) {
@@ -15,34 +15,46 @@ export default function run(lines, rowToCheck) {
             if (y >= sensors[i].position.y) {
                 diff = sensors[i].distanceToBeacon - (y - sensors[i].position.y);
             }
-            intervals.push({ y: y, left: sensors[i].position.x - diff, right: sensors[i].position.x + diff });
+            if (!intervals[y]) intervals[y] = [];
+            intervals[y].push({ left: sensors[i].position.x - diff, right: sensors[i].position.x + diff });
         }
     }
-    let part1 = [];
-    for (let x = minX; x <= maxX; x++) {
-        if (intervals.find(i => i.y == rowToCheck && x >= i.left && x <= i.right)) {
-            if (sensors.find(s => s.closestBeacon.y == rowToCheck && s.closestBeacon.x == x)) continue;
-            part1.push({ x: x, y: rowToCheck });
-        }
-    }
-
-    let part2;
-    // const searchAreaMaxX = Math.max(...sensors.map(s => [s.position.x]));
-    // const searchAreaMaxY = Math.max(...sensors.map(s => [s.position.y]));
-
-    // for (let y = 0; y < searchAreaMaxX; y++) {
-    //     const bla = new Set();
-    //     intervals.forEach(interval => {
-    //         if (interval.y != y) return;
-    //         for (let i = interval.left; i <= interval.right; i++) {
-    //             bla.add(i);
-    //         }
-    //     });
+    console.log(`intervals; ${intervals.filter(i => Array.isArray(i)).length}`);
+    // let part1 = [];
+    // for (let x = minX; x <= maxX; x++) {
+    //     if (intervals[].find(i => x >= i.left && x <= i.right)) {
+    //         if (sensors.find(s => s.closestBeacon.y == rowToCheck && s.closestBeacon.x == x)) continue;
+    //         part1.push({ x: x, y: rowToCheck });
+    //     }
+    //     console.log(x);
     // }
 
+    let part2 = null;
+    top: for (let y = 0; y <= 20; y++) {
+        const currentInterval = intervals[y];
+        currentInterval.sort((a, b) => a.left - b.left);
+        let prev = null;
+        let maxRight = 0;
+        for (let i = 0; i < currentInterval.length; i++) {
+            const c = currentInterval[i];
+            
+            if (i > 0) {
+                if (c.left > maxRight) {
+                    part2 = { x: c.left - 1, y: y };
+                    break top;
+                }
+            }
+            prev = c;
+            if (c.right > maxRight) {
+                maxRight = prev.right;
+            }
+        }
+    }
+    console.log(part2);
+
     return {
-        part1: part1.length,
-        // part2: (part2.x * 4000000) + part2.y
+        part1: 0,
+        part2: (part2.x * 4000000) + part2.y
     };
 }
 
