@@ -27,8 +27,8 @@ function findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors) {
 function findPositionThatCanHaveABeacon(intervalsPerRow, maxY) {
     for (let y = 0; y <= maxY; y++) {
         const row = intervalsPerRow[y];
-        let maxRight = 0;
-        for (let i = 0; i < row.length; i++) {
+        let maxRight = row[0].right;
+        for (let i = 1; i < row.length; i++) {
             const interval = row[i];
             if (interval.left > maxRight) {
                 return { x: interval.left - 1, y: y };
@@ -41,20 +41,20 @@ function findPositionThatCanHaveABeacon(intervalsPerRow, maxY) {
 function initializeIntervals(maxY, sensors) {
     const intervals = new Array(maxY);
 
-    for (let i = 0; i < sensors.length; i++) {
-        for (let y = sensors[i].position.y - sensors[i].distanceToBeacon; y < sensors[i].position.y + sensors[i].distanceToBeacon; y++) {
-            let diff = y - (sensors[i].position.y - sensors[i].distanceToBeacon);
-            if (y == sensors[i].position.y) {
-                diff = sensors[i].distanceToBeacon;
+    sensors.forEach(sensor => {
+        for (let y = sensor.position.y - sensor.distanceToBeacon; y < sensor.position.y + sensor.distanceToBeacon; y++) {
+            let diff = y - (sensor.position.y - sensor.distanceToBeacon);
+            if (y == sensor.position.y) {
+                diff = sensor.distanceToBeacon;
+            } else if (y >= sensor.position.y) {
+                diff = sensor.distanceToBeacon - (y - sensor.position.y);
             }
-            if (y >= sensors[i].position.y) {
-                diff = sensors[i].distanceToBeacon - (y - sensors[i].position.y);
-            }
-            if (!intervals[y])
+            if (!intervals[y]) {
                 intervals[y] = [];
-            intervals[y].push({ left: sensors[i].position.x - diff, right: sensors[i].position.x + diff });
+            }
+            intervals[y].push({ left: sensor.position.x - diff, right: sensor.position.x + diff });
         }
-    }
+    });
     intervals.forEach(i => i.sort((a, b) => a.left - b.left));
     return intervals;
 }
