@@ -29,13 +29,11 @@ function findPositionThatCanHaveABeacon(intervalsPerRow, maxY) {
         const row = intervalsPerRow[y];
         let maxRight = 0;
         for (let i = 0; i < row.length; i++) {
-            const c = row[i];
-            if (i > 0) {
-                if (c.left > maxRight) {
-                    return { x: c.left - 1, y: y };
-                }
+            const interval = row[i];
+            if (interval.left > maxRight) {
+                return { x: interval.left - 1, y: y };
             }
-            maxRight = Math.max(c.right, maxRight);
+            maxRight = Math.max(interval.right, maxRight);
         }
     }
 }
