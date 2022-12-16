@@ -29,13 +29,13 @@ function findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors) {
 function findPositionThatCanHaveABeacon(intervalsPerRow, maxY) {
     for (let y = 0; y <= maxY; y++) {
         const row = intervalsPerRow[y];
-        let maxRight = row[0].to;
+        let maxTo = row[0].to;
         for (let i = 1; i < row.length; i++) {
             const interval = row[i];
-            if (interval.from > maxRight) {
+            if (interval.from > maxTo) {
                 return { x: interval.from - 1, y: y };
             }
-            maxRight = Math.max(interval.to, maxRight);
+            maxTo = Math.max(interval.to, maxTo);
         }
     }
 }
