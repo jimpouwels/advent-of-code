@@ -61,9 +61,9 @@ function initializeIntervals(maxY, sensors) {
 
 function parseSensorsAndBeacons(lines) {
     return lines.map(line => {
-        const [x1, y1, x2, y2] = line.match(/Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)/).slice(1);
-        return new Sensor({ x: parseInt(x1), y: parseInt(y1) },
-                          { x: parseInt(x2), y: parseInt(y2) })
+        const { x1, y1, x2, y2 } = line.match(/Sensor at x=(?<x1>(-?\d+)), y=(?<y1>(-?\d+)): closest beacon is at x=(?<x2>(-?\d+)), y=(?<y2>(-?\d+))/).groups;
+        return new Sensor({ x: +x1, y: +y1 },
+                          { x: +x2, y: +y2 })
     });
 }
 
