@@ -74,5 +74,5 @@ function getTreesBelow(forest, rowIndex, treeIndex) {
 
 function parseForest(input) {
     return input.map(line => line.split('')
-                .flatMap(tree => parseInt(tree)));
+                .flatMap(tree => +tree));
 }

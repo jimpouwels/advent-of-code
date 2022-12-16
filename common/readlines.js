@@ -6,7 +6,7 @@ export function readLines(filePath) {
 }
 
 export function readLinesAsInts(filePath) {
-    return readLines(filePath).map(l => parseInt(l));
+    return readLines(filePath).map(l => +l);
 }
 
 export function readFile(filePath) {

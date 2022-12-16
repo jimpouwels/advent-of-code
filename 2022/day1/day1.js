@@ -1,7 +1,7 @@
 export default function run(input) {
     const elves = input.split('\n\n')
                   .map(elf => elf.split('\n')
-                  .map(val => parseInt(val))
+                  .map(val => +val)
                   .reduce((sum, val) => sum + val))
                   .sort((a, b) => b - a);
 

@@ -53,12 +53,6 @@ function isFree(grid, x, y) {
     return !grid[y][x];
 }
 
-function parseLineParts(lineParts) {
-    return lineParts.split(' -> ')
-                    .flatMap((part, i, parts) => !parts[i + 1] ? null : toPoints(parsePoint(part), parsePoint(parts[i + 1])))
-                    .filter(part => part);
-}
-
 function toPoints(...line) {
     const allPoints = [];
     line = line.sort((a, b) => (a.x - b.x) + (a.y - b.y));
@@ -71,7 +65,13 @@ function toPoints(...line) {
     return allPoints;
 }
 
+function parseLineParts(lineParts) {
+    return lineParts.split(' -> ')
+                    .flatMap((part, i, parts) => !parts[i + 1] ? null : toPoints(parsePoint(part), parsePoint(parts[i + 1])))
+                    .filter(part => part);
+}
+
 function parsePoint(pointString) {
     const parts = pointString.split(',')
-    return { x: parseInt(parts[0]), y: parseInt(parts[1])};
+    return { x: +parts[0], y: +parts[1]};
 }

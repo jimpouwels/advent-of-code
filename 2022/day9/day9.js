@@ -17,7 +17,7 @@ export default function run(lines, numberOfKnots) {
 function parseMoves(lines) {
     return lines.flatMap(line => {
         const split = line.split(' ');
-        const value = parseInt(split[1]);
+        const value = +split[1];
         switch (split[0]) {
             case 'R':
                 return createDeltas({ x: 1, y: 0 }, value);

@@ -37,5 +37,5 @@ class AdvancedSubmarine extends Submarine {
 
 function parseMove(line) {
     const split = line.split(' ');
-    return { direction: split[0], value: parseInt(split[1]) };
+    return { direction: split[0], value: +split[1] };
 }

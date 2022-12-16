@@ -56,7 +56,7 @@ function createFile(context, name, size) {
 function createFileCommand(commandComponents) {
     return {
         name: commandComponents[1],
-        size: parseInt(commandComponents[0]),
+        size: +commandComponents[0],
         execute: function (context) { createFile(context, this.name, this.size); }
     };
 }

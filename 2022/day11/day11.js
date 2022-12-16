@@ -32,23 +32,23 @@ function parseMonkeys(lines, divideBy3) {
 }
 
 function parseStartingItems(line) {
-    return line.split(': ')[1].split(', ').map(worryLevel => parseInt(worryLevel));
+    return line.split(': ')[1].split(', ').map(worryLevel => +worryLevel);
 }
 
 function parseOperation(line) {
     const formulaAsString = line.split(' = ')[1];
     return (old) => {
         const formulaParts = formulaAsString.replaceAll('old', old).split(' ');
-        const left = parseInt(formulaParts[0]);
-        const right = parseInt(formulaParts[2]);
+        const left = +formulaParts[0];
+        const right = +formulaParts[2];
         return formulaParts[1] === '+' ? left + right : left * right;
     }
 }
 
 function parseTestDivision(line) {
-    return parseInt(line.split(' by ')[1]);
+    return +line.split(' by ')[1];
 }
 
 function parseAction(line) {
-    return parseInt(line.split('monkey ')[1]);
+    return +line.split('monkey ')[1];
 }

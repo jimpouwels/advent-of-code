@@ -36,7 +36,7 @@ function parseRanges(line) {
 function parseRange(stringValue) {
     const parts = stringValue.split('-');
     let range = [];
-    for (let i = parseInt(parts[0]); i < parseInt(parts[1]) + 1; i++) {
+    for (let i = +parts[0]; i < +parts[1] + 1; i++) {
         range.push(i);
     }
     return range;

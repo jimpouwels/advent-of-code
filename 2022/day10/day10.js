@@ -35,7 +35,7 @@ function parseInstructions(lines, xRegister) {
             case 'noop':
                 return new NoopInstruction();
             case 'addx':
-                return new AddXInstruction(parseInt(split[1]), xRegister);
+                return new AddXInstruction(+split[1], xRegister);
         }
     });
 }
