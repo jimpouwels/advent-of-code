@@ -19,7 +19,7 @@ export default function run(lines, rowToCheck) {
             intervals[y].push({ left: sensors[i].position.x - diff, right: sensors[i].position.x + diff });
         }
     }
-    console.log(`intervals; ${intervals.filter(i => Array.isArray(i)).length}`);
+    console.log(`intervals;`);
     // let part1 = [];
     // for (let x = minX; x <= maxX; x++) {
     //     if (intervals[].find(i => x >= i.left && x <= i.right)) {
@@ -30,7 +30,7 @@ export default function run(lines, rowToCheck) {
     // }
 
     let part2 = null;
-    top: for (let y = 0; y <= 20; y++) {
+    top: for (let y = 0; y <= maxY; y++) {
         const currentInterval = intervals[y];
         currentInterval.sort((a, b) => a.left - b.left);
         let prev = null;
