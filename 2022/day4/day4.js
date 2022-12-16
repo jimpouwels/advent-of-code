@@ -27,16 +27,15 @@ function fullyIncludes(array1, array2) {
 }
 
 function parseRanges(line) {
-    const ranges = line.split(',');
-    const range1 = parseRange(ranges[0]);
-    const range2 = parseRange(ranges[1]);
+    const { r1From, r1To, r2From, r2To } = line.match(/(?<r1From>(\d+))-(?<r1To>(\d+)),(?<r2From>(\d+))-(?<r2To>(\d+))/).groups;
+    const range1 = parseRange(+r1From, +r1To);
+    const range2 = parseRange(+r2From, +r2To);
     return { range1: range1, range2: range2 };
 }
 
-function parseRange(stringValue) {
-    const parts = stringValue.split('-');
+function parseRange(from, to) {
     let range = [];
-    for (let i = +parts[0]; i < +parts[1] + 1; i++) {
+    for (let i = from; i < to + 1; i++) {
         range.push(i);
     }
     return range;
