@@ -16,17 +16,16 @@ export default function run(lines, numberOfKnots) {
 
 function parseMoves(lines) {
     return lines.flatMap(line => {
-        const split = line.split(' ');
-        const value = +split[1];
-        switch (split[0]) {
+        const { direction, value } = line.match(/(?<direction>([R,L,U,D])) (?<value>(\d+))/).groups;
+        switch (direction) {
             case 'R':
-                return createDeltas({ x: 1, y: 0 }, value);
+                return createDeltas({ x: 1, y: 0 }, +value);
             case 'L':
-                return createDeltas({ x: -1, y: 0 }, value);
+                return createDeltas({ x: -1, y: 0 }, +value);
             case 'U':
-                return createDeltas({ x: 0, y: 1 }, value);
+                return createDeltas({ x: 0, y: 1 }, +value);
             case 'D':
-                return createDeltas({ x: 0, y: -1 }, value);
+                return createDeltas({ x: 0, y: -1 }, +value);
         }
     });
 }
