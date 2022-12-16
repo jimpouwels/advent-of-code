@@ -17,7 +17,7 @@ function findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors) {
     const positions = new Set()
     const intervalsToCheck = intervalsPerRow[rowToCheck];
     for (let i = 0; i < intervalsToCheck.length; i++) {
-        for (let x = intervalsToCheck[i].left; x <= intervalsToCheck[i].right; x++) {
+        for (let x = intervalsToCheck[i].from; x <= intervalsToCheck[i].to; x++) {
             if (!sensors.find(s => s.closestBeacon.x == x && s.closestBeacon.y == rowToCheck)) {
                 positions.add(x);
             }
@@ -29,13 +29,13 @@ function findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors) {
 function findPositionThatCanHaveABeacon(intervalsPerRow, maxY) {
     for (let y = 0; y <= maxY; y++) {
         const row = intervalsPerRow[y];
-        let maxRight = row[0].right;
+        let maxRight = row[0].to;
         for (let i = 1; i < row.length; i++) {
             const interval = row[i];
-            if (interval.left > maxRight) {
-                return { x: interval.left - 1, y: y };
+            if (interval.from > maxRight) {
+                return { x: interval.from - 1, y: y };
             }
-            maxRight = Math.max(interval.right, maxRight);
+            maxRight = Math.max(interval.to, maxRight);
         }
     }
 }
@@ -53,10 +53,10 @@ function initializeIntervals(maxY, sensors) {
             if (!intervals[y]) {
                 intervals[y] = [];
             }
-            intervals[y].push({ left: sensor.position.x - remainingX, right: sensor.position.x + remainingX });
+            intervals[y].push({ from: sensor.position.x - remainingX, to: sensor.position.x + remainingX });
         }
     });
-    intervals.forEach(i => i.sort((a, b) => a.left - b.left));
+    intervals.forEach(i => i.sort((a, b) => a.from - b.from));
     return intervals;
 }
 
