@@ -16,13 +16,13 @@ export default function run(lines, rowToCheck) {
 function findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors) {
     const positions = new Set()
     const intervalsToCheck = intervalsPerRow[rowToCheck];
-    for (let i = 0; i < intervalsToCheck.length; i++) {
-        for (let x = intervalsToCheck[i].from; x <= intervalsToCheck[i].to; x++) {
+    intervalsToCheck.forEach(intervalToCheck => {
+        for (let x = intervalToCheck.from; x <= intervalToCheck.to; x++) {
             if (!sensors.find(s => s.closestBeacon.x == x && s.closestBeacon.y == rowToCheck)) {
                 positions.add(x);
             }
         }
-    }
+    });
     return  positions;
 }
 
