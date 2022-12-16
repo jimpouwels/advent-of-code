@@ -60,14 +60,11 @@ function initializeIntervals(maxY, sensors) {
 }
 
 function parseSensorsAndBeacons(lines) {
-    return lines.map(sensor => sensor.replace('Sensor at ', ''))
-                .map(sensor => sensor.split(': closest beacon is at '))
-                .map(sensor => {
-                    const sensorSplit = sensor[0].split(', ');
-                    const beaconSplit = sensor[1].split(', ');
-                    return new Sensor({ x: parseInt(sensorSplit[0].split('=')[1]), y: parseInt(sensorSplit[1].split('=')[1]) },
-                                      { x: parseInt(beaconSplit[0].split('=')[1]), y: parseInt(beaconSplit[1].split('=')[1]) })
-                });
+    return lines.map(line => {
+        const [x1, y1, x2, y2] = line.match(/Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)/).slice(1);
+        return new Sensor({ x: parseInt(x1), y: parseInt(y1) },
+                          { x: parseInt(x2), y: parseInt(y2) })
+    });
 }
 
 class Sensor {
