@@ -44,8 +44,8 @@ function parseCrateRow(line) {
 
 function parseMoves(lines) {
     return lines.filter(line => line.startsWith('move')).map(move => {
-        const parts = move.split(' ');
-        return { count: parts[1], from: parts[3] - 1, to: parts[5] - 1 };
+        const { count, from, to } = move.match(/move (?<count>(\d+)) from (?<from>(\d+)) to (?<to>(\d+))/).groups;
+        return { count: +count, from: +from - 1, to: +to - 1 };
     });
 }
 
