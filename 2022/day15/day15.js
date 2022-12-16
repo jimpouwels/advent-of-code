@@ -1,5 +1,3 @@
-import Sensor from './sensor.js';
-
 export default function run(lines, rowToCheck) {
     const sensors = parseSensorsAndBeacons(lines);
     const maxY = Math.max(...sensors.map(s => s.position.y));
@@ -63,7 +61,11 @@ function initializeIntervals(maxY, sensors) {
 function parseSensorsAndBeacons(lines) {
     return lines.map(line => {
         const { x1, y1, x2, y2 } = line.match(/Sensor at x=(?<x1>(-?\d+)), y=(?<y1>(-?\d+)): closest beacon is at x=(?<x2>(-?\d+)), y=(?<y2>(-?\d+))/).groups;
-        return new Sensor({ x: +x1, y: +y1 },
-                          { x: +x2, y: +y2 })
+        const distanceToBeacon = Math.abs(+x1 - +x2) + Math.abs(+y1 - +y2);
+        return {
+            position: { x: +x1, y: +y1 },
+            closestBeacon: { x: +x2, y: +y2 },
+            distanceToBeacon: distanceToBeacon
+        };
     });
 }
