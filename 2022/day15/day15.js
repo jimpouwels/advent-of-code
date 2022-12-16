@@ -1,19 +1,19 @@
 export default function run(lines, rowToCheck) {
     const sensors = parseSensorsAndBeacons(lines);
     const maxY = Math.max(...sensors.map(s => s.position.y));
-    const intervals = initializeIntervals(maxY, sensors);
+    const intervalsPerRow = initializeIntervals(maxY, sensors);
     
-    let part2 = findPositionThatCanHaveABeacon(intervals, maxY);
+    let part2 = findPositionThatCanHaveABeacon(intervalsPerRow, maxY);
 
     return {
-        part1: findPositionsThatCantHaveBeacon(intervals, rowToCheck, sensors).size,
+        part1: findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors).size,
         part2: (part2.x * 4000000) + part2.y
     };
 }
 
-function findPositionsThatCantHaveBeacon(intervals, rowToCheck, sensors) {
+function findPositionsThatCantHaveBeacon(intervalsPerRow, rowToCheck, sensors) {
     const positions = new Set()
-    const intervalsToCheck = intervals[rowToCheck];
+    const intervalsToCheck = intervalsPerRow[rowToCheck];
     for (let i = 0; i < intervalsToCheck.length; i++) {
         for (let x = intervalsToCheck[i].left; x <= intervalsToCheck[i].right; x++) {
             if (!sensors.find(s => s.closestBeacon.x == x && s.closestBeacon.y == rowToCheck)) {
@@ -24,23 +24,18 @@ function findPositionsThatCantHaveBeacon(intervals, rowToCheck, sensors) {
     return  positions;
 }
 
-function findPositionThatCanHaveABeacon(intervals, maxY) {
+function findPositionThatCanHaveABeacon(intervalsPerRow, maxY) {
     for (let y = 0; y <= maxY; y++) {
-        const currentInterval = intervals[y];
-        let prev = null;
+        const row = intervalsPerRow[y];
         let maxRight = 0;
-        for (let i = 0; i < currentInterval.length; i++) {
-            const c = currentInterval[i];
-            
+        for (let i = 0; i < row.length; i++) {
+            const c = row[i];
             if (i > 0) {
                 if (c.left > maxRight) {
                     return { x: c.left - 1, y: y };
                 }
             }
-            prev = c;
-            if (c.right > maxRight) {
-                maxRight = prev.right;
-            }
+            maxRight = Math.max(c.right, maxRight);
         }
     }
 }
