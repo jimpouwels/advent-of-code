@@ -19,15 +19,16 @@ export default function run(lines, rowToCheck) {
             intervals[y].push({ left: sensors[i].position.x - diff, right: sensors[i].position.x + diff });
         }
     }
-    console.log(`intervals;`);
-    // let part1 = [];
-    // for (let x = minX; x <= maxX; x++) {
-    //     if (intervals[].find(i => x >= i.left && x <= i.right)) {
-    //         if (sensors.find(s => s.closestBeacon.y == rowToCheck && s.closestBeacon.x == x)) continue;
-    //         part1.push({ x: x, y: rowToCheck });
-    //     }
-    //     console.log(x);
-    // }
+    let part1 = new Set();
+    const intervalsToCheck = intervals[rowToCheck];
+    intervalsToCheck.sort((a, b) => a.left - b.left);
+    for (let i = 0; i < intervalsToCheck.length; i++) {
+        for (let x = intervalsToCheck[i].left; x <= intervalsToCheck[i].right; x++) {
+            if (!sensors.find(s => s.closestBeacon.x == x && s.closestBeacon.y == rowToCheck)) {
+                part1.add(x);
+            }
+        }
+    }
 
     let part2 = null;
     top: for (let y = 0; y <= maxY; y++) {
@@ -50,10 +51,9 @@ export default function run(lines, rowToCheck) {
             }
         }
     }
-    console.log(part2);
 
     return {
-        part1: 0,
+        part1: part1.size,
         part2: (part2.x * 4000000) + part2.y
     };
 }
