@@ -68,28 +68,14 @@ class Valve {
 
     findPathTo(otherValve, visited = []) {
         visited.push(this.name);
-        console.log('find path to ' + otherValve.name + ' within ' + this.name);
-        if (otherValve.name === this.name) {
-            return [ this.name ];
-        } else {
-            const eligableTargets = this.targets.filter(t => !visited.includes(t.name));
-            console.log(`eligable targets: ${eligableTargets.length}`);
-            if (eligableTargets.length == 0) {
-                console.log(`reached a point we already visited`);
-                return [ this.name ];
-            }
-            console.log(`eligable targets (after) ${eligableTargets.length}`);
-            const shortestPath = eligableTargets.map(t => {
-                                                    console.log('found target ' + t.name + ' within ' + this.name);
-                                                    return t.findPathTo(otherValve, visited)
-                                                })
-                                                .filter(p => p[p.length - 1] == otherValve.name);
-            if (!shortestPath || shortestPath.length == 0) {
-                return [ this.name ];
-            } else {
-                return [ this.name, ...shortestPath.sort((a, b) => a.length - b.length)[0] ];
-            }
+        if (otherValve.name !== this.name) {
+            const shortestPath = this.targets.filter(t => !visited.includes(t.name))
+                                                .map(t => t.findPathTo(otherValve, visited))
+                                                .filter(p => p[p.length - 1] == otherValve.name)
+                                                .sort((a, b) => a.length - b.length)[0];
+            return shortestPath ? [ this.name, ...shortestPath ] : [ this.name ];
         }
+        return [ this.name ];
     }
 
 }
