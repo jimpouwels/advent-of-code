@@ -4,14 +4,8 @@ export default function run(lines) {
         pressure: 0
     }
     valves = parseValves(lines, pressureAccumulator);
-    // const paths = createPathsFrom(valves);
-
-    const valveAa = valves[0];
-    const valveGg = valves[6];
-
-    console.log(`>>> path from ${valveAa.name} to ${valveGg.name}`);
-
-    console.log(valveAa.findPathTo(valveGg));
+    const allShortestPathsBetweenValves = createPathsFrom(valves);
+    console.log(allShortestPathsBetweenValves);
 
     return {
         part1: pressureAccumulator.pressure
