@@ -1,18 +1,17 @@
+let valves;
 export default function run(lines) {
     const pressureAccumulator = {
         pressure: 0
     }
-    const valves = parseValves(lines, pressureAccumulator);
-    let currentValve = valves[0];
-    for (let i = 0; i < 30; i++) {
-        console.log(currentValve);
-        valves.forEach(valve => valve.onMinutePassed());
-        if (currentValve.rate > 0 && !currentValve.isOpen) {
-            currentValve.open();
-        } else {
-            currentValve = currentValve.moveToHighestValuedValve();
-        }
-    }
+    valves = parseValves(lines, pressureAccumulator);
+    // const paths = createPathsFrom(valves);
+
+    const valveAa = valves[0];
+    const valveGg = valves[6];
+
+    console.log(`>>> path from ${valveAa.name} to ${valveGg.name}`);
+
+    console.log(valveAa.findPathTo(valveGg));
 
     return {
         part1: pressureAccumulator.pressure
@@ -34,6 +33,16 @@ function parseValves(lines, pressureAccumulator) {
     return valves;
 }
 
+function createPathsFrom(valves) {
+    const paths = [];
+    for (let i = 0; i < valves.length - 1; i++) {
+        for (let j = 1; j < valves.length; j++) {
+            paths.push(valves[i].findPathTo(valves[j]));
+        }
+    }
+    return paths;
+}
+
 class Valve {
     name;
     rate;
@@ -46,7 +55,7 @@ class Valve {
         this.rate = rate;
         this.pressureAccumulator = pressureAccumulator;
     }
-
+    
     onMinutePassed() {
         if (this.isOpen) {
             this.pressureAccumulator.pressure += this.rate;
@@ -57,9 +66,30 @@ class Valve {
         this.isOpen = true;
     }
 
-    moveToHighestValuedValve() {
-        return this.targets
-            .filter(t => !t.isOpen)
-            .sort((a, b) => b.rate - a.rate)[0];
+    findPathTo(otherValve, visited = []) {
+        visited.push(this.name);
+        console.log('find path to ' + otherValve.name + ' within ' + this.name);
+        if (otherValve.name === this.name) {
+            return [ this.name ];
+        } else {
+            const eligableTargets = this.targets.filter(t => !visited.includes(t.name));
+            console.log(`eligable targets: ${eligableTargets.length}`);
+            if (eligableTargets.length == 0) {
+                console.log(`reached a point we already visited`);
+                return [ this.name ];
+            }
+            console.log(`eligable targets (after) ${eligableTargets.length}`);
+            const shortestPath = eligableTargets.map(t => {
+                                                    console.log('found target ' + t.name + ' within ' + this.name);
+                                                    return t.findPathTo(otherValve, visited)
+                                                })
+                                                .filter(p => p[p.length - 1] == otherValve.name);
+            if (!shortestPath || shortestPath.length == 0) {
+                return [ this.name ];
+            } else {
+                return [ this.name, ...shortestPath.sort((a, b) => a.length - b.length)[0] ];
+            }
+        }
     }
+
 }
