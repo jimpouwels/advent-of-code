@@ -64,9 +64,9 @@ class Valve {
         visited.push(this.name);
         if (otherValve.name !== this.name) {
             const shortestPath = this.targets.filter(t => !visited.includes(t.name))
-                                                .map(t => t.findPathTo(otherValve, visited))
-                                                .filter(p => p[p.length - 1] == otherValve.name)
-                                                .sort((a, b) => a.length - b.length)[0];
+                                             .map(t => t.findPathTo(otherValve, visited))
+                                             .filter(p => p[p.length - 1] == otherValve.name)
+                                             .sort((a, b) => a.length - b.length)[0];
             return shortestPath ? [ this.name, ...shortestPath ] : [ this.name ];
         }
         return [ this.name ];
