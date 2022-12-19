@@ -5,27 +5,23 @@ export default function run(input) {
                                     .flatMap((row, rowIndex) => row.trim().replaceAll('  ', ' ').split(' ')
                                     .map((column, columnIndex) => ({ value: +column, row: rowIndex, column: columnIndex, checked: false }))));
 
-    let winningBoard = null;
-    let winningNumber = -1;
-    top: for (const drawNumber of drawNumbers) {
-        for (const board of boards) {
-            board.forEach(box => {
-                if (box.value == drawNumber) {
-                    box.checked = true;
-                }
-                if (hasBingo(board)) {
-                    winningBoard = board;
-                    winningNumber = drawNumber;
-                }
-            });
-            if (winningBoard) {
-                break top;
-            }
-        };
+    let part1 = 0;
+    for (const number of drawNumbers) {
+        drawNumber(number, boards);
+        const winningBoard = boards.find(b => hasBingo(b));
+        if (winningBoard) {
+            part1 = winningBoard.reduce((sum, val) => sum + (!val.checked ? val.value : 0), 0) * number;
+            break;
+        }
     }
     return {
-        part1: winningBoard.reduce((sum, val) => sum + (!val.checked ? val.value : 0), 0) * winningNumber
+        part1: part1
     }
+}
+
+function drawNumber(number, boards) {
+    boards.forEach(board => board.filter(box => box.value == number)
+                                 .forEach(box => box.checked = true));
 }
 
 function hasBingo(board) {
