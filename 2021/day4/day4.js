@@ -6,14 +6,14 @@ export default function run(input) {
     const boards = parseBoards(inputComponents.slice(1));
 
     const winningBoards = [];
-    drawNumbers.forEach(number => {
-        return boards.filter(board => !board.score).forEach(board => {
+    drawNumbers.forEach(number => 
+        boards.filter(board => !board.score).forEach(board => {
             board.check(number)
             if (board.hasBingo()) {
                 winningBoards.push( { board: board, score: board.score });
             }
-        });
-    });
+    }));
+    
     return {
         part1: winningBoards[0].score,
         part2: winningBoards[winningBoards.length - 1].score
