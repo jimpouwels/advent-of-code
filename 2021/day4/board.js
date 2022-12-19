@@ -1,6 +1,6 @@
 export default class Board {
     boxes = [];
-    score = 0;
+    score = -1;
     lastNumber = -1;
 
     constructor(boxes) {
@@ -22,6 +22,10 @@ export default class Board {
                 }
         }
         return false;
+    }
+
+    isDone() {
+        return this.score > -1;
     }
 
     calculateScore() {

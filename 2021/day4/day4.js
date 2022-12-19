@@ -7,7 +7,7 @@ export default function run(input) {
 
     const winningBoards = [];
     drawNumbers.forEach(number => 
-        boards.filter(board => !board.score).forEach(board => {
+        boards.filter(board => !board.isDone()).forEach(board => {
             board.check(number)
             if (board.hasBingo()) {
                 winningBoards.push( { board: board, score: board.score });
