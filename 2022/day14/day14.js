@@ -1,3 +1,5 @@
+import { toPointsList } from '../../common/geo.js';
+
 export default function run(input) {
     const rocks = input.flatMap(lineParts => parseLineParts(lineParts));
     const grid1 = fillGrid(rocks);
@@ -53,21 +55,9 @@ function isFree(grid, x, y) {
     return !grid[y][x];
 }
 
-function toPoints(...line) {
-    const allPoints = [];
-    line = line.sort((a, b) => (a.x - b.x) + (a.y - b.y));
-
-    for (let x = line[0].x; x <= line[1].x; x++) {
-        for (let y = line[0].y; y <= line[1].y; y++) {
-            allPoints.push({ x: x, y: y });
-        }
-    }
-    return allPoints;
-}
-
 function parseLineParts(lineParts) {
     return lineParts.split(' -> ')
-                    .flatMap((part, i, parts) => !parts[i + 1] ? null : toPoints(parsePoint(part), parsePoint(parts[i + 1])))
+                    .flatMap((part, i, parts) => !parts[i + 1] ? null : toPointsList(parsePoint(part), parsePoint(parts[i + 1])))
                     .filter(part => part);
 }
 
