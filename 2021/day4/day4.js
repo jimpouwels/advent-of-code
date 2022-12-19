@@ -10,7 +10,7 @@ export default function run(input) {
         boards.filter(board => !board.isDone()).forEach(board => {
             board.check(number)
             if (board.hasBingo()) {
-                winningBoards.push( { board: board, score: board.score });
+                winningBoards.push({ board: board, score: board.score });
             }
     }));
 
