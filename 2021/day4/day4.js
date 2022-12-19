@@ -16,7 +16,7 @@ export default function run(input) {
 
     return {
         part1: winningBoards[0].score,
-        part2: winningBoards.slice(2)[0].score
+        part2: winningBoards.reverse()[0].score
     }
 }
 
