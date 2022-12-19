@@ -7,7 +7,7 @@ export default class Board {
 
     check(number) {
         this.boxes.filter(box => box.value == number)
-                                 .forEach(box => box.checked = true);
+                  .forEach(box => box.checked = true);
     }
     
     hasBingo() {
