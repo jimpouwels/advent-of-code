@@ -5,18 +5,18 @@ export default function run(input) {
     const drawNumbers = parseDrawnNumbers(inputComponents[0]);
     const boards = parseBoards(inputComponents.slice(1));
 
-    let part1 = 0;
-    drawNumbers.every(number => {
-        return boards.every(board => {
+    const winningBoards = [];
+    drawNumbers.forEach(number => {
+        return boards.filter(board => !board.score).forEach(board => {
             board.check(number)
             if (board.hasBingo()) {
-                part1 = board.boxes.reduce((sum, val) => sum + (!val.checked ? val.value : 0), 0) * number;
+                winningBoards.push( { board: board, score: board.score });
             }
-            return !part1;
         });
     });
     return {
-        part1: part1
+        part1: winningBoards[0].score,
+        part2: winningBoards[winningBoards.length - 1].score
     }
 }
 
