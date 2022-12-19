@@ -4,12 +4,17 @@ export default function run(lines) {
         pressure: 0
     }
     valves = parseValves(lines, pressureAccumulator);
-    const allShortestPathsBetweenValves = createPathsFrom(valves);
-    console.log(allShortestPathsBetweenValves);
+    const routes = createRoutes(valves);
+    const allPaths = createPathsFrom(valves[0], valves, routes);
 
+    console.log(allPaths.length);
     return {
         part1: pressureAccumulator.pressure
     }
+}
+
+function createPathsFrom(currentValve, valves, routes, path = []) {
+    
 }
 
 function parseValves(lines, pressureAccumulator) {
@@ -27,11 +32,11 @@ function parseValves(lines, pressureAccumulator) {
     return valves;
 }
 
-function createPathsFrom(valves) {
+function createRoutes(valves) {
     const paths = [];
     for (let i = 0; i < valves.length - 1; i++) {
         for (let j = 1; j < valves.length; j++) {
-            paths.push(valves[i].findPathTo(valves[j]));
+            paths.push( { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j]).slice(1) });
         }
     }
     return paths;
@@ -61,15 +66,15 @@ class Valve {
     }
 
     findPathTo(otherValve, visited = []) {
-        visited.push(this.name);
-        if (otherValve.name !== this.name) {
-            const shortestPath = this.targets.filter(t => !visited.includes(t.name))
+        visited.push(this);
+        if (otherValve !== this) {
+            const shortestPath = this.targets.filter(t => !visited.includes(t))
                                              .map(t => t.findPathTo(otherValve, visited))
-                                             .filter(p => p[p.length - 1] == otherValve.name)
+                                             .filter(p => p[p.length - 1] == otherValve)
                                              .sort((a, b) => a.length - b.length)[0];
-            return shortestPath ? [ this.name, ...shortestPath ] : [ this.name ];
+            return shortestPath ? [ this, ...shortestPath ] : [ this ];
         }
-        return [ this.name ];
+        return [ this ];
     }
 
 }
