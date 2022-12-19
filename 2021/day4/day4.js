@@ -13,7 +13,7 @@ export default function run(input) {
                 winningBoards.push( { board: board, score: board.score });
             }
     }));
-    
+
     return {
         part1: winningBoards[0].score,
         part2: winningBoards[winningBoards.length - 1].score
@@ -22,8 +22,8 @@ export default function run(input) {
 
 function parseBoards(boardsStrings) {
     return boardsStrings.map(b => new Board(b.split('\n')
-        .flatMap((row, rowIndex) => row.trim().replaceAll('  ', ' ').split(' ')
-            .map((column, columnIndex) => ({ value: +column, row: rowIndex, column: columnIndex, checked: false }))))
+                        .flatMap((row, rowIndex) => row.trim().replaceAll('  ', ' ').split(' ')
+                        .map((column, columnIndex) => ({ value: +column, row: rowIndex, column: columnIndex, checked: false }))))
     );
 }
 
