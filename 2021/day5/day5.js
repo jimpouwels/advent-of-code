@@ -1,33 +1,22 @@
 import { toPointsList } from "../../common/geo.js";
+import { max } from "../../common/math.js";
 
 export default function run(lines) {
-    let points = parsePoints(lines);
-    let grid = createGrid(points);
-    points.forEach(point => grid[point.x][point.y] += 1);
-    
-    const part1 = grid.reduce((sum, val) => sum + val.reduce((sum, val) => sum + (val >= 2 ? 1 : 0), 0), 0);
-
-    points = parsePoints(lines, true);
-    grid = createGrid(points);
-
-    points.forEach(point => grid[point.x][point.y] += 1);
-
-    const part2 = grid.reduce((sum, val) => sum + val.reduce((sum, val) => sum + (val >= 2 ? 1 : 0), 0), 0);
-
     return {
-        part1: part1,
-        part2: part2,
+        part1: safeSpotsFor(parsePoints(lines)),
+        part2: safeSpotsFor(parsePoints(lines, true)),
     }
 }
 
-function createGrid(points) {
-    const maxX = getMax(points.map(p => p.x));
-    const maxY = getMax(points.map(p => p.y));
+function safeSpotsFor(points) {
+    const maxX = max(points.map(p => p.x));
+    const maxY = max(points.map(p => p.y));
     const grid = new Array(maxX + 1).fill();
     for (let x = 0; x < grid.length; x++) {
         grid[x] = new Array(maxY + 1).fill(0);
     }
-    return grid;
+    points.forEach(point => grid[point.x][point.y] += 1);
+    return grid.reduce((sum, val) => sum + val.reduce((sum, val) => sum + (val >= 2 ? 1 : 0), 0), 0);
 }
 
 function parsePoints(lines, includeDiagonal = false) {
@@ -38,13 +27,4 @@ function parsePoints(lines, includeDiagonal = false) {
         }
         return toPointsList({ x: +x1, y: +y1 }, { x: +x2, y: +y2 });
     });
-}
-
-function getMax(arr) {
-    let len = arr.length;
-    let max = -Infinity;
-    while (len--) {
-        max = arr[len] > max ? arr[len] : max;
-    }
-    return max;
 }
