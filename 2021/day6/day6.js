@@ -3,8 +3,7 @@ export default function run(lines, days) {
     JSON.parse(`[${lines}]`).forEach(f => fishCounts[f]++);
 
     for (let i = 0; i < days; i++) {
-        fishCounts.push(fishCounts.shift());
-        fishCounts[6] += fishCounts[8];
+        fishCounts[fishCounts.push(fishCounts.shift()) - 3] += fishCounts[8];
     }
     return fishCounts.reduce((sum, val) => sum + val);
 }
