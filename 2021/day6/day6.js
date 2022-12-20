@@ -4,7 +4,9 @@ export default function run(lines, days) {
 
     for (let i = 0; i < days; i++) {
         const temp = fishCounts[0];
-        fishCounts.forEach((_f, i) => fishCounts[i] = i == 8 ? temp : i == 6 ? fishCounts[i + 1] + temp : fishCounts[i + 1]);
+        fishCounts.shift();
+        fishCounts.push(temp);
+        fishCounts[6] += temp;
     }
     return fishCounts.reduce((sum, val) => sum + val);
 }
