@@ -3,7 +3,6 @@ import { toPointsList } from "../../common/geo.js";
 export default function run(lines) {
     let points = parsePoints(lines);
     let grid = createGrid(points);
-
     points.forEach(point => grid[point.x][point.y] += 1);
     
     const part1 = grid.reduce((sum, val) => sum + val.reduce((sum, val) => sum + (val >= 2 ? 1 : 0), 0), 0);
@@ -22,8 +21,8 @@ export default function run(lines) {
 }
 
 function createGrid(points) {
-    const maxX = Math.max(...points.map(p => p.x));
-    const maxY = Math.max(...points.map(p => p.y));
+    const maxX = getMax(points.map(p => p.x));
+    const maxY = getMax(points.map(p => p.y));
     const grid = new Array(maxX + 1).fill();
     for (let x = 0; x < grid.length; x++) {
         grid[x] = new Array(maxY + 1).fill(0);
@@ -39,4 +38,13 @@ function parsePoints(lines, includeDiagonal = false) {
         }
         return toPointsList({ x: +x1, y: +y1 }, { x: +x2, y: +y2 });
     });
+}
+
+function getMax(arr) {
+    let len = arr.length;
+    let max = -Infinity;
+    while (len--) {
+        max = arr[len] > max ? arr[len] : max;
+    }
+    return max;
 }
