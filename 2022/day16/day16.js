@@ -108,14 +108,12 @@ function parseValves(lines, pressureAccumulator) {
 }
 
 function createRoutes(valves, routes) {
-    const paths = [];
     for (let i = 0; i < valves.length - 1; i++) {
         for (let j = 1; j < valves.length; j++) {
-            paths.push( { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) });
-            paths.push( { from: valves[j], to: valves[i], path: valves[i].findPathTo(valves[j], routes).reverse().slice(1) });
+            routes.push( { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) });
+            routes.push( { from: valves[j], to: valves[i], path: valves[i].findPathTo(valves[j], routes).reverse().slice(1) });
         }
     }
-    routes.push(...paths);
 }
 
 class Valve {
@@ -149,7 +147,7 @@ class Valve {
         if (otherValve !== this) {
             const existing = routes.find(r => r.from == this && r.to == otherValve);
             if (existing) {
-                return existing.path;
+                return [ this, ...existing.path ];
             }
             const shortestPath = this.targets.filter(t => !visited.includes(t.name))
                                              .map(t => t.findPathTo(otherValve, routes, JSON.parse(JSON.stringify(visited))))
