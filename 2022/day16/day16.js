@@ -7,7 +7,7 @@ export default function run(lines) {
     const routes = [];
     createRoutes(valves, routes);
     console.log(`routes done: ${routes.length}`);
-    const highestScore = createPaths(true, valves[0], valves.filter(v => v.rate > 0), routes, 30).highestScore;
+    const highestScore = createPaths(true, valves.find(x => x.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30).highestScore;
 
     return {
         part1: highestScore
@@ -23,17 +23,16 @@ function tryPath(path) {
         }
         path[0].do();
         if (path[0].routeMinutes <= 0) {
+            path[0].routeMinutes = path[0].originalMinutes;
             thePath.push(path.shift());
         }
     }
     const score = valves.reduce((a, b) => a + b.pressure, 0);
+    
     valves.forEach(v => {
         v.isOpen = false;
         v.pressure = 0;
     });
-    if (score == 2568) {
-        console.log(thePath.map(x => `open ${x.valve.name}, then move to ${x.route.map(x => x.name).join(',')}`));
-    }
     return score;
 }
 
@@ -54,7 +53,8 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
         const r = routes.find(r => r.from === currentValve && r.to === targetValve);
         const route = r.path;
         let remainingMinutesForTargetToScore = remainingMinutes - route.length - 1;
-        if (r.scoreForRemaining(remainingMinutesForTargetToScore) <= 0) {
+        // if (r.scoreForRemaining(remainingMinutesForTargetToScore) <= 0) {
+        if (remainingMinutes <= 1) {
             targetsWithMaxReached++;
         } else {
             for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutesForTargetToScore, [...openValves, currentValve.name]).paths) {
@@ -78,12 +78,14 @@ class Open {
     routeMinutes;
     route;
     remainingMinutes;
+    originalMinutes;
 
     constructor(valve, remainingMinutes, route) {
         this.remainingMinutes = remainingMinutes;
         this.valve = valve;
         this.route = route;
         this.routeMinutes = route.length;
+        this.originalMinutes = this.routeMinutes;
     }
 
     do() {
