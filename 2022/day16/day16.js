@@ -5,16 +5,13 @@ export default function run(lines) {
     }
     valves = parseValves(lines, pressureAccumulator);
     const routes = createRoutes(valves);
-    const allPaths = createPathsFrom(valves[0], valves, routes);
+
+    
 
     console.log(allPaths.length);
     return {
         part1: pressureAccumulator.pressure
     }
-}
-
-function createPathsFrom(currentValve, valves, routes, path = []) {
-    
 }
 
 function parseValves(lines, pressureAccumulator) {
