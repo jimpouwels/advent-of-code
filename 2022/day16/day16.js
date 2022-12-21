@@ -7,42 +7,54 @@ export default function run(lines) {
     const routes = [];
     createRoutes(valves, routes);
     console.log(`routes done: ${routes.length} routes`);
-    const paths = createPaths(valves[0], valves.filter(v => v.rate > 0), routes);
+    const highestScore = createPaths(true, valves[0], valves.filter(v => v.rate > 0), routes).highestScore;
     console.log('paths done');
-    const results = [];
-    paths.forEach(p => {
-        const thePath = [];
-        for (let i = 0; i < 30; i++) {
-            valves.forEach(v => v.tick());
-            if (p.length == 0) {
-                continue;
-            }
-            p[0].do();
-            thePath.push(p.shift());
-        }
-        results.push({ pathTaken: thePath.map(p => p.stringify()), result: valves.reduce((a, b) => a + b.pressure, 0) });
-        valves.forEach(v => {
-            v.isOpen = false;
-            v.pressure = 0;
-        })
-    })
     console.log('test done');
-    const best = results.sort((a, b) => b.result - a.result)[0];
 
     return {
-        part1: best.result
+        part1: highestScore
     }
 }
 
-function createPaths(currentValve, allNonZeroValves, routes, openValves = []) {
+function tryPath(path) {
+    for (let i = 0; i < 30; i++) {
+        valves.forEach(v => v.tick());
+        if (path.length == 0) {
+            continue;
+        }
+        path[0].do();
+        path.shift();
+    }
+    const score = valves.reduce((a, b) => a + b.pressure, 0);
+    valves.forEach(v => {
+        v.isOpen = false;
+        v.pressure = 0;
+    });
+    return score;
+}
+
+function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves = []) {
+    let highestScore = 0;
     const paths = [];
     if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name != currentValve.name)) {
-        paths.push([ new Open(currentValve )]);
-        return paths;
+        if (isRoot) {
+            highestScore = Math.max(highestScore, tryPath([ new Open(currentValve )]));
+        } else {
+            paths.push([ new Open(currentValve )]);
+        }
+        return { paths: paths, highestScore: highestScore };
     }
-    const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name) && v.name != currentValve.name);
+    const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
 
     for (const targetValve of possibleTargets) {
+        if (targetValve == currentValve) {
+            if (isRoot) {
+                highestScore = Math.max(highestScore, tryPath([ new Open(currentValve )]));
+            } else {
+                paths.push([ new Open(currentValve )]);
+            }
+            continue;
+        }
         const route = routes.find(r => r.from == currentValve && r.to == targetValve).path;
         const routePath = [];
         if (currentValve.name != 'AA') {
@@ -51,11 +63,15 @@ function createPaths(currentValve, allNonZeroValves, routes, openValves = []) {
         for (const routePart of route) {
             routePath.push(new TunnelTo(routePart));
         }
-        for (const subPath of createPaths(targetValve, allNonZeroValves, routes, [...openValves, currentValve.name])) {
-            paths.push([ ...routePath, ...subPath ]);
+        for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, [...openValves, currentValve.name]).paths) {
+            if (isRoot) {
+                highestScore = Math.max(highestScore, tryPath([ ...routePath, ...subPath ]));
+            } else {
+                paths.push([ ...routePath, ...subPath ]);
+            }
         }
     }
-    return paths;
+    return { paths: paths, highestScore: highestScore };
 }
 
 class Open {
