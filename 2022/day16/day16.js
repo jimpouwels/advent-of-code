@@ -6,10 +6,7 @@ export default function run(lines) {
     valves = parseValves(lines, pressureAccumulator);
     const routes = [];
     createRoutes(valves, routes);
-    console.log(`routes done: ${routes.length} routes`);
     const highestScore = createPaths(true, valves[0], valves.filter(v => v.rate > 0), routes).highestScore;
-    console.log('paths done');
-    console.log('test done');
 
     return {
         part1: highestScore
@@ -47,17 +44,12 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves 
     const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
 
     for (const targetValve of possibleTargets) {
-        if (targetValve == currentValve) {
-            if (isRoot) {
-                highestScore = Math.max(highestScore, tryPath([ new Open(currentValve )]));
-            } else {
-                paths.push([ new Open(currentValve )]);
-            }
+        if (targetValve === currentValve) {
             continue;
         }
-        const route = routes.find(r => r.from == currentValve && r.to == targetValve).path;
+        const route = routes.find(r => r.from === currentValve && r.to === targetValve).path;
         const routePath = [];
-        if (currentValve.name != 'AA') {
+        if (currentValve.name !== 'AA') {
             routePath.push(new Open(currentValve));
         }
         for (const routePart of route) {
