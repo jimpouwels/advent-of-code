@@ -47,9 +47,8 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
         }
         const r = routes.find(r => r.from === currentValve && r.to === targetValve);
         const route = r.path;
-        let remainingMinutesForTargetToScore = remainingMinutes - r.length - 1;
-        if (r.scoreForRemaining(remainingMinutesForTargetToScore)) {
-            console.log('this path isnt any good');
+        let remainingMinutesForTargetToScore = remainingMinutes - route.length - 1;
+        if (r.scoreForRemaining(remainingMinutesForTargetToScore) <= 0) {
             continue;
         }
         for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutesForTargetToScore, [...openValves, currentValve.name]).paths) {
