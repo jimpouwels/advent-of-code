@@ -6,6 +6,7 @@ export default function run(lines) {
     valves = parseValves(lines, pressureAccumulator);
     const routes = [];
     createRoutes(valves, routes);
+    console.log(`routes done: ${routes.length}`);
     const highestScore = createPaths(true, valves[0], valves.filter(v => v.rate > 0), routes).highestScore;
 
     return {
@@ -51,12 +52,10 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves 
         }
         const route = routes.find(r => r.from === currentValve && r.to === targetValve).path;
         for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, [...openValves, currentValve.name]).paths) {
-            const routePath = [];
-            routePath.push(new Open(currentValve, route.length));
             if (isRoot) {
-                highestScore = Math.max(highestScore, tryPath([ ...routePath, ...subPath ]));
+                highestScore = Math.max(highestScore, tryPath([ new Open(currentValve, route.length), ...subPath ]));
             } else {
-                paths.push([ ...routePath, ...subPath ]);
+                paths.push([ new Open(currentValve, route.length), ...subPath ]);
             }
         }
     }
@@ -85,12 +84,12 @@ class Open {
     }
 }
 
-function parseValves(lines, pressureAccumulator) {
+function parseValves(lines) {
     const valveMap = [];
     const valves = lines.map(line => {
         const { valve, rate, targets } = line.match(/Valve (?<valve>([A-Z]+)) has flow rate=(?<rate>(\d+)); tunnel[s]? lead[s]? to valve[s]? (?<targets>[A-Z, ]+)/).groups;
         valveMap[valve] = targets.split(', ');
-        return new Valve(valve, +rate, pressureAccumulator);
+        return new Valve(valve, +rate);
     });
     valves.forEach(valve => {
         valveMap[valve.name].forEach(t => {
