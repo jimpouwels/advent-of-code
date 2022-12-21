@@ -4,29 +4,13 @@ export default function run(lines) {
         pressure: 0
     }
     valves = parseValves(lines, pressureAccumulator);
-    const routes = createRoutes(valves);
-
-    console.log(routes.find(r => r.from.name == 'BB' && r.to.name == 'JJ'));
+    const routes = [];
+    createRoutes(valves, routes);
+    console.log(`routes done: ${routes.length} routes`);
     const paths = createPaths(valves[0], valves.filter(v => v.rate > 0), routes);
-    const iWantTo = paths.filter(p => p[0].valve.name === 'DD');
-    let count = 0;
-    for (const path of paths) {
-        if (path[0] instanceof TunnelTo && path[0].valve.name == 'DD') {
-            if (path[1] instanceof Open && path[1].valve.name == 'DD') {
-                if (path[2] instanceof TunnelTo && path[2].valve.name == 'CC') {
-                    if (path[3] instanceof TunnelTo && path[3].valve.name == 'BB') {
-                        if (path[4] instanceof Open && path[4].valve.name == 'BB') {
-                            if (path[5] instanceof TunnelTo && path[5].valve.name == 'AA') {
-                                count++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    console.log('paths done');
     const results = [];
-    iWantTo.forEach(p => {
+    paths.forEach(p => {
         const thePath = [];
         for (let i = 0; i < 30; i++) {
             valves.forEach(v => v.tick());
@@ -42,7 +26,7 @@ export default function run(lines) {
             v.pressure = 0;
         })
     })
-
+    console.log('test done');
     const best = results.sort((a, b) => b.result - a.result)[0];
 
     return {
@@ -123,15 +107,15 @@ function parseValves(lines, pressureAccumulator) {
     return valves;
 }
 
-function createRoutes(valves) {
+function createRoutes(valves, routes) {
     const paths = [];
     for (let i = 0; i < valves.length - 1; i++) {
         for (let j = 1; j < valves.length; j++) {
-            paths.push( { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j]).slice(1) });
-            paths.push( { from: valves[j], to: valves[i], path: valves[i].findPathTo(valves[j]).reverse().slice(1) });
+            paths.push( { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) });
+            paths.push( { from: valves[j], to: valves[i], path: valves[i].findPathTo(valves[j], routes).reverse().slice(1) });
         }
     }
-    return paths;
+    routes.push(...paths);
 }
 
 class Valve {
@@ -160,11 +144,15 @@ class Valve {
         this.isOpen = true;
     }
 
-    findPathTo(otherValve, visited = []) {
+    findPathTo(otherValve, routes, visited = []) {
         visited.push(this.name);
         if (otherValve !== this) {
+            const existing = routes.find(r => r.from == this && r.to == otherValve);
+            if (existing) {
+                return existing.path;
+            }
             const shortestPath = this.targets.filter(t => !visited.includes(t.name))
-                                             .map(t => t.findPathTo(otherValve, JSON.parse(JSON.stringify(visited))))
+                                             .map(t => t.findPathTo(otherValve, routes, JSON.parse(JSON.stringify(visited))))
                                              .filter(p => p[p.length - 1] == otherValve)
                                              .sort((a, b) => a.length - b.length)[0];
             return shortestPath ? [ this, ...shortestPath ] : [ this ];
