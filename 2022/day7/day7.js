@@ -35,36 +35,22 @@ function createCommand(commandComponents) {
     }
 }
 
-function changeDirectory(context, dirName) {
-    if (dirName === '/') {
-        context.currentDir = context.currentDir.getRoot();
-    } else if (dirName === '..') {
-        context.currentDir = context.currentDir.parentDir;
-    } else {
-        context.currentDir = context.currentDir.dirs.find(d => d.name === dirName);
-    }
-}
-
-function createDirectory(context, dirName) {
-    context.currentDir.dirs.push(new Dir(dirName, context.currentDir));
-}
-
-function createFile(context, name, size) {
-    context.currentDir.files.push(new File(name, size));
-}
-
 function createFileCommand(commandComponents) {
     return {
         name: commandComponents[1],
         size: +commandComponents[0],
-        execute: function (context) { createFile(context, this.name, this.size); }
+        execute: function (context) { 
+            context.currentDir.files.push(new File(this.name, this.size));
+         }
     };
 }
 
 function createDirCommand(commandComponents) {
     return {
         dirName: commandComponents[1],
-        execute: function (context) { createDirectory(context, this.dirName); }
+        execute: function (context) { 
+            context.currentDir.dirs.push(new Dir(this.dirName, context.currentDir));
+         }
     };
 }
 
@@ -77,6 +63,14 @@ function createDummyCommand() {
 function createCdCommand(commandComponents) {
     return {
         dirName: commandComponents[2],
-        execute: function (context) { changeDirectory(context, this.dirName); }
+        execute: function (context) { 
+            if (this.dirName === '/') {
+                context.currentDir = context.currentDir.getRoot();
+            } else if (this.dirName === '..') {
+                context.currentDir = context.currentDir.parentDir;
+            } else {
+                context.currentDir = context.currentDir.dirs.find(d => d.name === this.dirName);
+            }
+        }
     };
 }
