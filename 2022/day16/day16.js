@@ -45,7 +45,6 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves 
         return { paths: paths, highestScore: highestScore };
     }
     const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
-
     for (const targetValve of possibleTargets) {
         if (targetValve === currentValve) {
             continue;
@@ -102,10 +101,26 @@ function parseValves(lines) {
 function createRoutes(valves, routes) {
     for (let i = 0; i < valves.length - 1; i++) {
         for (let j = 1; j < valves.length; j++) {
-            routes.push( { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) });
-            routes.push( { from: valves[j], to: valves[i], path: valves[i].findPathTo(valves[j], routes).reverse().slice(1) });
+            if (valves[i] == valves[j]) {
+                continue;
+            }
+            const route1 = { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) };
+            const route2 = { from: valves[j], to: valves[i], path: valves[j].findPathTo(valves[i], routes).slice(1) }
+            route1.scoreForRemaining = function(remainingMinutes) {
+                return scoreForRemainingMins(remainingMinutes, this);
+            }
+            route2.scoreForRemaining = function(remainingMinutes) {
+                return scoreForRemainingMins(remainingMinutes, this);
+            }
+            routes.push(route1);
+            routes.push(route2);
         }
     }
+}
+
+function scoreForRemainingMins(remainingMinutes, route) {
+    console.log('sjep: ' + (remainingMinutes - route.path.length - 1) * route.to.rate);
+    return (remainingMinutes - route.path.length - 1) * route.to.rate;
 }
 
 class Valve {
