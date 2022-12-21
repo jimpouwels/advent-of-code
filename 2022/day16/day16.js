@@ -16,11 +16,13 @@ export default function run(lines) {
 function tryPath(path) {
     for (let i = 0; i < 30; i++) {
         valves.forEach(v => v.tick());
-        if (path.length == 0) {
+        if (path.length === 0) {
             continue;
         }
         path[0].do();
-        path.shift();
+        if (path[0].routeMinutes <= 0) {
+            path.shift();
+        }
     }
     const score = valves.reduce((a, b) => a + b.pressure, 0);
     valves.forEach(v => {
@@ -37,7 +39,7 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves 
         if (isRoot) {
             highestScore = Math.max(highestScore, tryPath([ new Open(currentValve )]));
         } else {
-            paths.push([ new Open(currentValve )]);
+            paths.push([ new Open(currentValve)]);
         }
         return { paths: paths, highestScore: highestScore };
     }
@@ -48,14 +50,9 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves 
             continue;
         }
         const route = routes.find(r => r.from === currentValve && r.to === targetValve).path;
-        const routePath = [];
-        if (currentValve.name !== 'AA') {
-            routePath.push(new Open(currentValve));
-        }
-        for (const routePart of route) {
-            routePath.push(new TunnelTo(routePart));
-        }
         for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, [...openValves, currentValve.name]).paths) {
+            const routePath = [];
+            routePath.push(new Open(currentValve, route.length));
             if (isRoot) {
                 highestScore = Math.max(highestScore, tryPath([ ...routePath, ...subPath ]));
             } else {
@@ -68,36 +65,24 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, openValves 
 
 class Open {
     valve;
+    routeMinutes;
 
-    constructor(valve) {
+    constructor(valve, routeMinutes = 0) {
         this.valve = valve;
+        this.routeMinutes = routeMinutes;
     }
 
     do() {
-        this.valve.open();
+        if (!this.valve.isOpen && this.valve.name !== 'AA') {
+            this.valve.open();
+        } else {
+            this.routeMinutes--;
+        }
     }
 
     stringify() {
         return `Open: ${this.valve.name}`;
     }
-
-}
-
-class TunnelTo {
-    valve;
-
-    constructor(valve) {
-        this.valve = valve;
-    }
-
-    do() {
-        
-    }
-
-    stringify() {
-        return `Tunnel to: ${this.valve.name}`;
-    }
-
 }
 
 function parseValves(lines, pressureAccumulator) {
@@ -144,10 +129,6 @@ class Valve {
         if (this.isOpen) {
             this.pressure += this.rate;
         }
-    }
-
-    open() {
-        this.isOpen = true;
     }
 
     findPathTo(otherValve, routes, visited = []) {
