@@ -119,7 +119,6 @@ function createRoutes(valves, routes) {
 }
 
 function scoreForRemainingMins(remainingMinutes, route) {
-    console.log('sjep: ' + (remainingMinutes - route.path.length - 1) * route.to.rate);
     return (remainingMinutes - route.path.length - 1) * route.to.rate;
 }
 
