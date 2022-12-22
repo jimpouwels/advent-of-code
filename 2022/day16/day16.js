@@ -54,7 +54,7 @@ function createPaths(currentValve, allNonZeroValves, routes, remainingMinutes, o
             if ((route.length + MINUTES_TO_OPEN + 1) > remainingMinutes) {
                 paths.push([ new Step(currentValve, []) ]);
             } else {
-                for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name])) {
+                for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - MINUTES_TO_OPEN, [...openValves, currentValve.name])) {
                     paths.push([ new Step(currentValve, route), ...subPath ]);
                 }
             }
