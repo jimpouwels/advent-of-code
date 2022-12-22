@@ -159,9 +159,9 @@ class Valve {
     findPathTo(otherValve, routes, visited = []) {
         visited.push(this.name);
         if (otherValve !== this) {
-            const existing = routes.find(r => r.from == this && r.to == otherValve);
-            if (existing) {
-                return [ this, ...existing.path ];
+            const existingPath = routes.find(r => r.from == this && r.to == otherValve);
+            if (existingPath) {
+                return [ this, ...existingPath.path ];
             }
             const shortestPath = this.targets.filter(t => !visited.includes(t.name))
                                              .map(t => t.findPathTo(otherValve, routes, JSON.parse(JSON.stringify(visited))))
