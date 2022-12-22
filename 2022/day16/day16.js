@@ -13,8 +13,8 @@ export default function run(lines) {
 
 function calculateHighestPressure(currentValve, valvesWithPressure, routes, remainingMinutes, openValves = []) {
     let highest = 0;
-    const possibleTargets = valvesWithPressure.filter(v => !openValves.includes(v.name));
     let highestTargetScore = 0;
+    const possibleTargets = valvesWithPressure.filter(v => !openValves.includes(v.name));
     for (const targetValve of possibleTargets) {
         if (targetValve === currentValve) {
             highest = remainingMinutes * currentValve.rate;
