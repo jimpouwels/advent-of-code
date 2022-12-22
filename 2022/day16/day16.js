@@ -1,3 +1,6 @@
+import Step from "./step";
+import Valve from "./valve";
+
 const MINUTES_TO_OPEN = 1;
 
 export default function run(lines) {
@@ -39,45 +42,25 @@ function tryPath(path, valves) {
 function createPaths(currentValve, allNonZeroValves, routes, remainingMinutes, openValves = []) {
     const paths = [];
     if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name !== currentValve.name)) {
-        paths.push([ new Open(currentValve, [])]);
+        paths.push([ new Step(currentValve, [])]);
     } else {
         const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
         for (const targetValve of possibleTargets) {
             if (targetValve === currentValve) {
-                paths.push([ new Open(currentValve, []) ]);
+                paths.push([ new Step(currentValve, []) ]);
                 continue;
             }
             const route = findRoute(routes, currentValve, targetValve);
             if ((route.length + MINUTES_TO_OPEN + 1) > remainingMinutes) {
-                paths.push([ new Open(currentValve, []) ]);
+                paths.push([ new Step(currentValve, []) ]);
             } else {
                 for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name])) {
-                    paths.push([ new Open(currentValve, route), ...subPath ]);
+                    paths.push([ new Step(currentValve, route), ...subPath ]);
                 }
             }
         }
     }
     return paths;
-}
-
-class Open {
-    valve;
-    travelTime;
-    route;
-
-    constructor(valve, route) {
-        this.valve = valve;
-        this.route = route;
-        this.travelTime = route.length;
-    }
-
-    do() {
-        if (!this.valve.isOpen && this.valve.rate !== 0) {
-            this.valve.open();
-        } else {
-            this.travelTime--;
-        }
-    }
 }
 
 function parseValves(lines) {
@@ -113,48 +96,4 @@ function findRoute(routes, from, to) {
         return routes.find(r => (r.from === to && r.to === from)).path.reverse();
     }
     return foundRoute.path;
-}
-
-class Valve {
-    name;
-    rate = 0;
-    targets = [];
-    isOpen = false;
-
-    constructor(name, rate) {
-        this.name = name;
-        this.rate = rate;
-    }
-
-    open() {
-        this.isOpen = true;
-    }
-
-    releasePressure() {
-        if (this.isOpen) {
-            return this.rate;
-        }
-        return 0;
-    }
-
-    reset() {
-        this.isOpen = false;
-    }
-
-    findPathTo(otherValve, routes, visited = []) {
-        visited.push(this.name);
-        if (otherValve !== this) {
-            const existingPath = routes.find(r => r.from == this && r.to == otherValve);
-            if (existingPath) {
-                return [ this, ...existingPath.path ];
-            }
-            const shortestPath = this.targets.filter(t => !visited.includes(t.name))
-                                             .map(t => t.findPathTo(otherValve, routes, [ ...visited ]))
-                                             .filter(p => p[p.length - 1] == otherValve)
-                                             .sort((a, b) => a.length - b.length)[0];
-            return shortestPath ? [ this, ...shortestPath ] : [ this ];
-        }
-        return [ this ];
-    }
-
 }
