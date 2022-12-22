@@ -36,24 +36,20 @@ function tryPath(path) {
     return score;
 }
 
-function createPaths(currentValve, allNonZeroValves, routes, remainingMinutes, openValves = []) {
+function createPaths(currentValve, valvesWithPressure, routes, remainingMinutes, openValves = []) {
     const paths = [];
-    if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name !== currentValve.name)) {
-        paths.push([ new Step(currentValve.rate)]);
-    } else {
-        const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
-        for (const targetValve of possibleTargets) {
-            if (targetValve === currentValve) {
-                paths.push([ new Step(currentValve.rate) ]);
-                continue;
-            }
-            const route = findRoute(routes, currentValve, targetValve);
-            if ((route.length + MINUTES_TO_OPEN + 1) > remainingMinutes) {
-                paths.push([ new Step(currentValve.rate) ]);
-            } else {
-                for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - MINUTES_TO_OPEN, [...openValves, currentValve.name])) {
-                    paths.push([ new Step(currentValve.rate, route.length), ...subPath ]);
-                }
+    const possibleTargets = valvesWithPressure.filter(v => !openValves.includes(v.name));
+    for (const targetValve of possibleTargets) {
+        if (targetValve === currentValve || openValves.includes(targetValve.name)) {
+            paths.push([ new Step(currentValve.rate) ]);
+            continue;
+        }
+        const route = findRoute(routes, currentValve, targetValve);
+        if ((route.length + MINUTES_TO_OPEN + 1) > remainingMinutes) {
+            paths.push([ new Step(currentValve.rate) ]);
+        } else {
+            for (const subPath of createPaths(targetValve, valvesWithPressure, routes, remainingMinutes - route.length - MINUTES_TO_OPEN, [ ...openValves, currentValve.name])) {
+                paths.push([ new Step(currentValve.rate, route.length), ...subPath ]);
             }
         }
     }
