@@ -43,8 +43,7 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
             paths.push([ new Open(currentValve, remainingMinutes, []) ]);
             continue;
         }
-        const r = findRoute(routes, currentValve, targetValve);
-        const route = r.path;
+        const route = findRoute(routes, currentValve, targetValve);
         if (route.length > remainingMinutes) {
             paths.push([ new Open(currentValve, remainingMinutes, []) ]);
         } else {
@@ -122,10 +121,9 @@ function createRoutes(valves, routes) {
 function findRoute(routes, from, to) {
     let foundRoute = routes.find(r => (r.from === from && r.to === to));
     if (!foundRoute) {
-        foundRoute = routes.find(r => (r.from === to && r.to === from));
-        foundRoute.path.reverse();
+        return routes.find(r => (r.from === to && r.to === from)).path.reverse();
     }
-    return foundRoute;
+    return foundRoute.path;
 }
 
 function scoreForRemainingMins(remainingMinutes, route) {
