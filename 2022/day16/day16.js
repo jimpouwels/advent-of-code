@@ -102,9 +102,6 @@ function createRoutes(valves, routes) {
                 continue;
             }
             const route = { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) };
-            route.scoreForRemaining = function(remainingMinutes) {
-                return scoreForRemainingMins(remainingMinutes, this);
-            }
             routes.push(route);
         }
     }
@@ -116,10 +113,6 @@ function findRoute(routes, from, to) {
         return routes.find(r => (r.from === to && r.to === from)).path.reverse();
     }
     return foundRoute.path;
-}
-
-function scoreForRemainingMins(remainingMinutes, route) {
-    return (remainingMinutes - route.path.length - 1) * route.to.rate;
 }
 
 class Valve {
