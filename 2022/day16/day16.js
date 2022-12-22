@@ -44,18 +44,16 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
         return { paths: paths, highestScore: highestScore };
     }
     const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
-    let targetsWithMaxReached = 0;
     for (const targetValve of possibleTargets) {
         if (targetValve === currentValve) {
-            targetsWithMaxReached++;
+            paths.push([ new Open(currentValve, remainingMinutes, []) ]);
             continue;
         }
         const r = routes.find(r => r.from === currentValve && r.to === targetValve);
         const route = r.path;
         let remainingMinutesForTargetToScore = remainingMinutes - route.length - 1;
-        // if (r.scoreForRemaining(remainingMinutesForTargetToScore) <= 0) {
         if (remainingMinutes <= 1) {
-            targetsWithMaxReached++;
+            paths.push([ new Open(currentValve, remainingMinutes, []) ]);
         } else {
             for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutesForTargetToScore, [...openValves, currentValve.name]).paths) {
                 if (isRoot) {
@@ -66,9 +64,6 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
                 }
             }
         }
-    }
-    if (targetsWithMaxReached === possibleTargets.length) {
-        paths.push([ new Open(currentValve, remainingMinutes, []) ]);
     }
     return { paths: paths, highestScore: highestScore };
 }
