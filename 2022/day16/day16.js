@@ -25,13 +25,12 @@ export default function run(lines) {
 function tryPath(path) {
     let score = 0;
 
+    let remainingMinutes = 30;
     for (const step of path) {
-        let remainingMinutes = 30;
-        for (let i = 0; i <= path.indexOf(step); i++) {
-            if (path[i] == step) {
-                score += remainingMinutes * path[i].rate;
-            }
-            remainingMinutes -= (path[i].travelTime + MINUTES_TO_OPEN);
+        score += remainingMinutes * step.rate;
+        remainingMinutes -= (step.travelTime + MINUTES_TO_OPEN);
+        if (remainingMinutes <= 0) {
+            break;
         }
     }
     return score;
