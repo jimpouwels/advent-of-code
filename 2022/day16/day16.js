@@ -1,9 +1,6 @@
 let valves;
 export default function run(lines) {
-    const pressureAccumulator = {
-        pressure: 0
-    }
-    valves = parseValves(lines, pressureAccumulator);
+    valves = parseValves(lines);
     const routes = [];
     createRoutes(valves, routes);
     console.log(`routes done: ${routes.length}`);
