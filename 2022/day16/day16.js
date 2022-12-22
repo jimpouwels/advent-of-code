@@ -26,10 +26,7 @@ function tryPath(path) {
     }
     const score = valves.reduce((a, b) => a + b.pressure, 0);
     
-    valves.forEach(v => {
-        v.isOpen = false;
-        v.pressure = 0;
-    });
+    valves.forEach(v => v.reset());
     return score;
 }
 
@@ -152,6 +149,11 @@ class Valve {
         if (this.isOpen) {
             this.pressure += this.rate;
         }
+    }
+
+    reset() {
+        this.isOpen = false;
+        this.pressure = 0;
     }
 
     findPathTo(otherValve, routes, visited = []) {
