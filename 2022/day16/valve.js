@@ -27,7 +27,7 @@ export default class Valve {
     findPathTo(otherValve, routes, visited = []) {
         visited.push(this.name);
         if (otherValve !== this) {
-            const existingPath = routes.find(r => r.from == this && r.to == otherValve);
+            const existingPath = routes.find(r => (r.from === this && r.to === otherValve) || (r.from === otherValve && r.to === this));
             if (existingPath) {
                 return [ this, ...existingPath.path ];
             }
