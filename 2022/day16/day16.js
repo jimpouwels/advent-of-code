@@ -40,7 +40,7 @@ function createPaths(currentValve, valvesWithPressure, routes, remainingMinutes,
     const paths = [];
     const possibleTargets = valvesWithPressure.filter(v => !openValves.includes(v.name));
     for (const targetValve of possibleTargets) {
-        if (targetValve === currentValve || openValves.includes(targetValve.name)) {
+        if (targetValve === currentValve) {
             paths.push([ new Step(currentValve.rate) ]);
             continue;
         }
@@ -49,7 +49,8 @@ function createPaths(currentValve, valvesWithPressure, routes, remainingMinutes,
             paths.push([ new Step(currentValve.rate) ]);
         } else {
             for (const subPath of createPaths(targetValve, valvesWithPressure, routes, remainingMinutes - route.length - MINUTES_TO_OPEN, [ ...openValves, currentValve.name])) {
-                paths.push([ new Step(currentValve.rate, route.length), ...subPath ]);
+                subPath.unshift(new Step(currentValve.rate, route.length));
+                paths.push(subPath);
             }
         }
     }
