@@ -74,16 +74,18 @@ function parseValves(lines) {
 
 function createRoutes(valves, routes) {
     for (let i = 0; i < valves.length - 1; i++) {
+        const valveFrom = valves[i];
         for (let j = 1; j < valves.length; j++) {
-            if (valves[i] === valves[j]) {
+            const valveTo = valves[j];
+            if (valveFrom === valveTo) {
                 continue;
             }
-            const route = { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) };
+            const route = { from: valveFrom, to: valveTo, path: valveFrom.findPathTo(valveTo, routes).slice(1) };
             routes.push(route);
         }
     }
 }
 
 function findRoute(routes, from, to) {
-    return routes.find(r => (r.from === from || r.to === from) && (r.from === to || r.to === to)).path;
+    return routes.find(r => (r.from === from && r.to === to) || (r.from === to && r.to === from)).path;
 }
