@@ -12,20 +12,17 @@ export default function run(lines) {
 }
 
 function tryPath(path) {
-    const thePath = [];
+    let score = 0;
     for (let i = 0; i < 30; i++) {
-        valves.forEach(v => v.tick());
+        valves.forEach(v => score += v.releasePressure());
         if (path.length === 0) {
             continue;
         }
         path[0].do();
         if (path[0].routeMinutes <= 0) {
-            path[0].routeMinutes = path[0].originalMinutes;
-            thePath.push(path.shift());
+            path.shift();
         }
     }
-    const score = valves.reduce((a, b) => a + b.pressure, 0);
-    
     valves.forEach(v => v.reset());
     return score;
 }
@@ -65,14 +62,12 @@ class Open {
     routeMinutes;
     route;
     remainingMinutes;
-    originalMinutes;
 
     constructor(valve, remainingMinutes, route) {
         this.remainingMinutes = remainingMinutes;
         this.valve = valve;
         this.route = route;
         this.routeMinutes = route.length;
-        this.originalMinutes = this.routeMinutes;
     }
 
     do() {
@@ -132,10 +127,9 @@ function scoreForRemainingMins(remainingMinutes, route) {
 
 class Valve {
     name;
-    rate;
+    rate = 0;
     targets = [];
     isOpen = false;
-    pressure = 0;
 
     constructor(name, rate) {
         this.name = name;
@@ -146,15 +140,15 @@ class Valve {
         this.isOpen = true;
     }
 
-    tick() {
+    releasePressure() {
         if (this.isOpen) {
-            this.pressure += this.rate;
+            return this.rate;
         }
+        return 0;
     }
 
     reset() {
         this.isOpen = false;
-        this.pressure = 0;
     }
 
     findPathTo(otherValve, routes, visited = []) {
