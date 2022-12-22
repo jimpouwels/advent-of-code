@@ -29,7 +29,7 @@ function tryPath(path) {
         let remainingMinutes = 30;
         for (let i = 0; i <= path.indexOf(step); i++) {
             if (path[i] == step) {
-                score += remainingMinutes * path[i].valve.rate;
+                score += remainingMinutes * path[i].rate;
             }
             remainingMinutes -= (path[i].travelTime + MINUTES_TO_OPEN);
         }
@@ -40,20 +40,20 @@ function tryPath(path) {
 function createPaths(currentValve, allNonZeroValves, routes, remainingMinutes, openValves = []) {
     const paths = [];
     if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name !== currentValve.name)) {
-        paths.push([ new Step(currentValve, [])]);
+        paths.push([ new Step(currentValve.rate)]);
     } else {
         const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
         for (const targetValve of possibleTargets) {
             if (targetValve === currentValve) {
-                paths.push([ new Step(currentValve, []) ]);
+                paths.push([ new Step(currentValve.rate) ]);
                 continue;
             }
             const route = findRoute(routes, currentValve, targetValve);
             if ((route.length + MINUTES_TO_OPEN + 1) > remainingMinutes) {
-                paths.push([ new Step(currentValve, []) ]);
+                paths.push([ new Step(currentValve.rate) ]);
             } else {
                 for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - MINUTES_TO_OPEN, [...openValves, currentValve.name])) {
-                    paths.push([ new Step(currentValve, route), ...subPath ]);
+                    paths.push([ new Step(currentValve.rate, route.length), ...subPath ]);
                 }
             }
         }
