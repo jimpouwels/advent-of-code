@@ -20,7 +20,7 @@ function calculateHighestPressure(currentValve, valvesWithPressure, routes, rema
             highest = remainingMinutes * currentValve.rate;
             continue;
         }
-        const route = routes.find(r => (r.from === currentValve && r.to === targetValve) || (r.from === targetValve && r.to === currentValve)).path;
+        const route = routes.find(r => (r.from === currentValve && r.to === targetValve) || (r.from === targetValve && r.to === currentValve));
         if ((route.length + TIME_TO_OPEN + 1) <= remainingMinutes) {
             const newRemainingMinutes = remainingMinutes - route.length - TIME_TO_OPEN;
             const targetScore = calculateHighestPressure(targetValve, valvesWithPressure, routes, newRemainingMinutes, [ ...openValves, currentValve.name]);
@@ -38,7 +38,7 @@ function findShortestRoutes(valves, routes) {
             if (valveFrom === valveTo) {
                 continue;
             }
-            const route = { from: valveFrom, to: valveTo, path: valveFrom.findPathTo(valveTo, routes).slice(1) };
+            const route = { from: valveFrom, to: valveTo, length: valveFrom.distanceTo(valveTo, routes) };
             routes.push(route);
         }
     }

@@ -24,20 +24,22 @@ export default class Valve {
         this.isOpen = false;
     }
 
-    findPathTo(otherValve, routes, visited = []) {
-        visited.push(this.name);
+    distanceTo(otherValve, routes, visited = []) {
+        let shortestPath = 0;
         if (otherValve !== this) {
-            const existingPath = routes.find(r => (r.from === this && r.to === otherValve) || (r.from === otherValve && r.to === this));
-            if (existingPath) {
-                return [ this, ...existingPath.path ];
+            const knownDistance = routes.find(r => (r.from === this && r.to === otherValve) || (r.from === otherValve && r.to === this));
+            if (knownDistance) {
+                return knownDistance.length;
+            } else {
+                const possibleTargets = this.targets.filter(t => !visited.includes(t.name));
+                if (possibleTargets.length === 0) {
+                    return Infinity;
+                }
+                return possibleTargets.map(t => t.distanceTo(otherValve, routes, [ ...visited, this.name ]))
+                                      .sort((a, b) => a - b)[0] + 1;
             }
-            const shortestPath = this.targets.filter(t => !visited.includes(t.name))
-                                             .map(t => t.findPathTo(otherValve, routes, [ ...visited ]))
-                                             .filter(p => p[p.length - 1] == otherValve)
-                                             .sort((a, b) => a.length - b.length)[0];
-            return shortestPath ? [ this, ...shortestPath ] : [ this ];
         }
-        return [ this ];
+        return shortestPath;
     }
 
 }
