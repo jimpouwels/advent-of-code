@@ -43,7 +43,7 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
             paths.push([ new Open(currentValve, remainingMinutes, []) ]);
             continue;
         }
-        const r = routes.find(r => r.from === currentValve && r.to === targetValve);
+        const r = findRoute(routes, currentValve, targetValve);
         const route = r.path;
         let remainingMinutesForTargetToScore = remainingMinutes - route.length - 1;
         if (remainingMinutes <= 1) {
@@ -111,18 +111,22 @@ function createRoutes(valves, routes) {
             if (valves[i] == valves[j]) {
                 continue;
             }
-            const route1 = { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) };
-            const route2 = { from: valves[j], to: valves[i], path: valves[j].findPathTo(valves[i], routes).slice(1) }
-            route1.scoreForRemaining = function(remainingMinutes) {
+            const route = { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) };
+            route.scoreForRemaining = function(remainingMinutes) {
                 return scoreForRemainingMins(remainingMinutes, this);
             }
-            route2.scoreForRemaining = function(remainingMinutes) {
-                return scoreForRemainingMins(remainingMinutes, this);
-            }
-            routes.push(route1);
-            routes.push(route2);
+            routes.push(route);
         }
     }
+}
+
+function findRoute(routes, from, to) {
+    let foundRoute = routes.find(r => (r.from === from && r.to === to));
+    if (!foundRoute) {
+        foundRoute = routes.find(r => (r.from === to && r.to === from));
+        foundRoute.path.reverse();
+    }
+    return foundRoute;
 }
 
 function scoreForRemainingMins(remainingMinutes, route) {
