@@ -1,8 +1,7 @@
 const MINUTES_TO_OPEN = 1;
 
-let valves;
 export default function run(lines) {
-    valves = parseValves(lines);
+    const valves = parseValves(lines);
     const routes = [];
     createRoutes(valves, routes);
     console.log(`ROUTES COMPLETED: found ${routes.length} routes`);
@@ -10,7 +9,7 @@ export default function run(lines) {
     console.log(`PATHS COMPLETED: found ${paths.length} paths`);
     let highestScore = 0;
     paths.forEach(path => {
-        const score = tryPath(path);
+        const score = tryPath(path, valves);
         highestScore = Math.max(highestScore, score);
     });
     console.log(`PATHS COMPLETED: ${paths.length} paths tested`);
@@ -20,7 +19,7 @@ export default function run(lines) {
     }
 }
 
-function tryPath(path) {
+function tryPath(path, valves) {
     let score = 0;
     let current = path.shift();
     for (let i = 0; i < 30; i++) {
