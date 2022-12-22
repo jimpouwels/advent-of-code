@@ -12,7 +12,7 @@ export default function run(lines) {
     console.log(`PATHS COMPLETED: found ${paths.length} paths`);
     let highestScore = 0;
     paths.forEach(path => {
-        const score = tryPath(path, valves);
+        const score = tryPath(path);
         highestScore = Math.max(highestScore, score);
     });
     console.log(`PATHS COMPLETED: ${paths.length} paths tested`);
@@ -22,20 +22,18 @@ export default function run(lines) {
     }
 }
 
-function tryPath(path, valves) {
+function tryPath(path) {
     let score = 0;
-    let current = path.shift();
-    for (let i = 0; i < 30; i++) {
-        valves.forEach(v => score += v.releasePressure());
-        current.do();
-        if (current.travelTime <= 0) {
-            if (path.length === 0) {
-                continue;
-            } 
-            current = path.shift();
+
+    for (const step of path) {
+        let remainingMinutes = 30;
+        for (let i = 0; i <= path.indexOf(step); i++) {
+            if (path[i] == step) {
+                score += remainingMinutes * path[i].valve.rate;
+            }
+            remainingMinutes -= (path[i].travelTime + MINUTES_TO_OPEN);
         }
     }
-    valves.forEach(v => v.reset());
     return score;
 }
 
