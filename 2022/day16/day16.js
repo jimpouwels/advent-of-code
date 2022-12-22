@@ -3,8 +3,15 @@ export default function run(lines) {
     valves = parseValves(lines);
     const routes = [];
     createRoutes(valves, routes);
-    console.log(`routes done: ${routes.length}`);
-    const highestScore = createPaths(true, valves.find(x => x.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30).highestScore;
+    console.log(`ROUTES COMPLETED: found ${routes.length} routes`);
+    const paths = createPaths(valves.find(x => x.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30);
+    console.log(`PATHS COMPLETED: found ${paths.length} paths`);
+    let highestScore = 0;
+    paths.forEach(path => {
+        const score = tryPath(path);
+        highestScore = Math.max(highestScore, score);
+    });
+    console.log(`TEST COMPLETED: ${paths.length} paths tested`);
 
     return {
         part1: highestScore
@@ -28,8 +35,7 @@ function tryPath(path) {
     return score;
 }
 
-function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMinutes, openValves = []) {
-    let highestScore = 0;
+function createPaths(currentValve, allNonZeroValves, routes, remainingMinutes, openValves = []) {
     const paths = [];
     if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name !== currentValve.name)) {
         paths.push([ new Open(currentValve, [])]);
@@ -44,25 +50,19 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
             if (route.length > remainingMinutes) {
                 paths.push([ new Open(currentValve, []) ]);
             } else {
-                for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name]).paths) {
-                    if (isRoot) {
-                        const score = tryPath([ new Open(currentValve, route), ...subPath ]);
-                        highestScore = Math.max(highestScore, score);
-                    } else {
-                        paths.push([ new Open(currentValve, route), ...subPath ]);
-                    }
+                for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name])) {
+                    paths.push([ new Open(currentValve, route), ...subPath ]);
                 }
             }
         }
     }
-    return { paths: paths, highestScore: highestScore };
+    return paths;
 }
 
 class Open {
     valve;
     travelTime;
     route;
-    remainingMinutes;
 
     constructor(valve, route) {
         this.valve = valve;
@@ -76,10 +76,6 @@ class Open {
         } else {
             this.travelTime--;
         }
-    }
-
-    stringify() {
-        return `Open: ${this.valve.name}`;
     }
 }
 
