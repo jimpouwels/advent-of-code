@@ -8,7 +8,7 @@ describe('day16', () => {
         expect(r.part1).toEqual(1651);
     });
 
-    // Takes 3 minutes to run, uncomment if you want
+    // Takes around 25 seconds to run, uncomment if you want
     // it('run1-big', () => {
     //     const r = run(readLines('2022/day16/testdata-big.txt'));
     //     expect(r.part1).toEqual(2114);
