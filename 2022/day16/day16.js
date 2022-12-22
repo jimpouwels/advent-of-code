@@ -7,7 +7,7 @@ export default function run(lines) {
     const routes = [];
     findShortestRoutes(valves, routes);
     return {
-        part1: calculateHighestPressure(valves.find(x => x.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30)
+        part1: calculateHighestPressure(valves.find(v => v.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30)
     }
 }
 
