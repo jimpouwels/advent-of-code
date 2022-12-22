@@ -13,14 +13,16 @@ export default function run(lines) {
 
 function tryPath(path) {
     let score = 0;
+    let current = path.shift();
     for (let i = 0; i < 30; i++) {
         valves.forEach(v => score += v.releasePressure());
-        if (path.length === 0) {
-            continue;
-        }
-        path[0].do();
-        if (path[0].routeMinutes <= 0) {
-            path.shift();
+        current.do();
+        if (current.routeMinutes <= 0) {
+            if (path.length === 0) {
+                continue;
+            } else {
+                current = path.shift();
+            }
         }
     }
     valves.forEach(v => v.reset());
