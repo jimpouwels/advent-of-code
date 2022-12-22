@@ -45,11 +45,10 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
         }
         const r = findRoute(routes, currentValve, targetValve);
         const route = r.path;
-        let remainingMinutesForTargetToScore = remainingMinutes - route.length - 1;
-        if (remainingMinutes <= 1) {
+        if (route.length > remainingMinutes) {
             paths.push([ new Open(currentValve, remainingMinutes, []) ]);
         } else {
-            for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutesForTargetToScore, [...openValves, currentValve.name]).paths) {
+            for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name]).paths) {
                 if (isRoot) {
                     const score = tryPath([ new Open(currentValve, remainingMinutes, route), ...subPath ]);
                     highestScore = Math.max(highestScore, score);
