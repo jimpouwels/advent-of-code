@@ -1,5 +1,3 @@
-import { max } from "../../common/math";
-import Step from "./step";
 import Valve from "./valve";
 
 const MINUTES_TO_OPEN = 1;
@@ -7,7 +5,7 @@ const MINUTES_TO_OPEN = 1;
 export default function run(lines) {
     const valves = parseValves(lines);
     const routes = [];
-    createRoutes(valves, routes);
+    findShortestRoutes(valves, routes);
     return {
         part1: calculateHighestPressure(valves.find(x => x.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30)
     }
@@ -32,6 +30,20 @@ function calculateHighestPressure(currentValve, valvesWithPressure, routes, rema
     return highest + highestTargetScore;
 }
 
+function findShortestRoutes(valves, routes) {
+    for (let i = 0; i < valves.length - 1; i++) {
+        const valveFrom = valves[i];
+        for (let j = 1; j < valves.length; j++) {
+            const valveTo = valves[j];
+            if (valveFrom === valveTo) {
+                continue;
+            }
+            const route = { from: valveFrom, to: valveTo, path: valveFrom.findPathTo(valveTo, routes).slice(1) };
+            routes.push(route);
+        }
+    }
+}
+
 function parseValves(lines) {
     const valveMap = [];
     const valves = lines.map(line => {
@@ -45,20 +57,6 @@ function parseValves(lines) {
         });
     });
     return valves;
-}
-
-function createRoutes(valves, routes) {
-    for (let i = 0; i < valves.length - 1; i++) {
-        const valveFrom = valves[i];
-        for (let j = 1; j < valves.length; j++) {
-            const valveTo = valves[j];
-            if (valveFrom === valveTo) {
-                continue;
-            }
-            const route = { from: valveFrom, to: valveTo, path: valveFrom.findPathTo(valveTo, routes).slice(1) };
-            routes.push(route);
-        }
-    }
 }
 
 function findRoute(routes, from, to) {
