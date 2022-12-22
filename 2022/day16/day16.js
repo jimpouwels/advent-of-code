@@ -33,24 +33,24 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
     const paths = [];
     if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name !== currentValve.name)) {
         paths.push([ new Open(currentValve, [])]);
-        return { paths: paths, highestScore: highestScore };
-    }
-    const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
-    for (const targetValve of possibleTargets) {
-        if (targetValve === currentValve) {
-            paths.push([ new Open(currentValve, []) ]);
-            continue;
-        }
-        const route = findRoute(routes, currentValve, targetValve);
-        if (route.length > remainingMinutes) {
-            paths.push([ new Open(currentValve, []) ]);
-        } else {
-            for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name]).paths) {
-                if (isRoot) {
-                    const score = tryPath([ new Open(currentValve, route), ...subPath ]);
-                    highestScore = Math.max(highestScore, score);
-                } else {
-                    paths.push([ new Open(currentValve, route), ...subPath ]);
+    } else {
+        const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
+        for (const targetValve of possibleTargets) {
+            if (targetValve === currentValve) {
+                paths.push([ new Open(currentValve, []) ]);
+                continue;
+            }
+            const route = findRoute(routes, currentValve, targetValve);
+            if (route.length > remainingMinutes) {
+                paths.push([ new Open(currentValve, []) ]);
+            } else {
+                for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name]).paths) {
+                    if (isRoot) {
+                        const score = tryPath([ new Open(currentValve, route), ...subPath ]);
+                        highestScore = Math.max(highestScore, score);
+                    } else {
+                        paths.push([ new Open(currentValve, route), ...subPath ]);
+                    }
                 }
             }
         }
