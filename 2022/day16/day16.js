@@ -1,3 +1,5 @@
+const MINUTES_TO_OPEN = 1;
+
 let valves;
 export default function run(lines) {
     valves = parseValves(lines);
@@ -11,7 +13,7 @@ export default function run(lines) {
         const score = tryPath(path);
         highestScore = Math.max(highestScore, score);
     });
-    console.log(`TEST COMPLETED: ${paths.length} paths tested`);
+    console.log(`PATHS COMPLETED: ${paths.length} paths tested`);
 
     return {
         part1: highestScore
@@ -47,7 +49,7 @@ function createPaths(currentValve, allNonZeroValves, routes, remainingMinutes, o
                 continue;
             }
             const route = findRoute(routes, currentValve, targetValve);
-            if (route.length > remainingMinutes) {
+            if ((route.length + MINUTES_TO_OPEN + 1) > remainingMinutes) {
                 paths.push([ new Open(currentValve, []) ]);
             } else {
                 for (const subPath of createPaths(targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name])) {
@@ -155,7 +157,7 @@ class Valve {
                 return [ this, ...existingPath.path ];
             }
             const shortestPath = this.targets.filter(t => !visited.includes(t.name))
-                                             .map(t => t.findPathTo(otherValve, routes, JSON.parse(JSON.stringify(visited))))
+                                             .map(t => t.findPathTo(otherValve, routes, [ ...visited ]))
                                              .filter(p => p[p.length - 1] == otherValve)
                                              .sort((a, b) => a.length - b.length)[0];
             return shortestPath ? [ this, ...shortestPath ] : [ this ];
