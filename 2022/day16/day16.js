@@ -66,7 +66,7 @@ function parseValves(lines) {
     });
     valves.forEach(valve => {
         valveMap[valve.name].forEach(t => {
-            valve.targets.push(valves.find(v => v.name == t));
+            valve.targets.push(valves.find(v => v.name === t));
         });
     });
     return valves;
@@ -75,7 +75,7 @@ function parseValves(lines) {
 function createRoutes(valves, routes) {
     for (let i = 0; i < valves.length - 1; i++) {
         for (let j = 1; j < valves.length; j++) {
-            if (valves[i] == valves[j]) {
+            if (valves[i] === valves[j]) {
                 continue;
             }
             const route = { from: valves[i], to: valves[j], path: valves[i].findPathTo(valves[j], routes).slice(1) };
@@ -85,9 +85,5 @@ function createRoutes(valves, routes) {
 }
 
 function findRoute(routes, from, to) {
-    let foundRoute = routes.find(r => (r.from === from && r.to === to));
-    if (!foundRoute) {
-        return routes.find(r => (r.from === to && r.to === from)).path.reverse();
-    }
-    return foundRoute.path;
+    return routes.find(r => (r.from === from || r.to === from) && (r.from === to || r.to === to)).path;
 }
