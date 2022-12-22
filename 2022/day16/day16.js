@@ -17,12 +17,11 @@ function tryPath(path) {
     for (let i = 0; i < 30; i++) {
         valves.forEach(v => score += v.releasePressure());
         current.do();
-        if (current.routeMinutes <= 0) {
+        if (current.travelTime <= 0) {
             if (path.length === 0) {
                 continue;
-            } else {
-                current = path.shift();
-            }
+            } 
+            current = path.shift();
         }
     }
     valves.forEach(v => v.reset());
@@ -33,25 +32,25 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
     let highestScore = 0;
     const paths = [];
     if (!allNonZeroValves.find(v => !openValves.includes(v.name) && v.name !== currentValve.name)) {
-        paths.push([ new Open(currentValve, 0, [])]);
+        paths.push([ new Open(currentValve, [])]);
         return { paths: paths, highestScore: highestScore };
     }
     const possibleTargets = allNonZeroValves.filter(v => !openValves.includes(v.name));
     for (const targetValve of possibleTargets) {
         if (targetValve === currentValve) {
-            paths.push([ new Open(currentValve, remainingMinutes, []) ]);
+            paths.push([ new Open(currentValve, []) ]);
             continue;
         }
         const route = findRoute(routes, currentValve, targetValve);
         if (route.length > remainingMinutes) {
-            paths.push([ new Open(currentValve, remainingMinutes, []) ]);
+            paths.push([ new Open(currentValve, []) ]);
         } else {
             for (const subPath of createPaths(false, targetValve, allNonZeroValves, routes, remainingMinutes - route.length - 1, [...openValves, currentValve.name]).paths) {
                 if (isRoot) {
-                    const score = tryPath([ new Open(currentValve, remainingMinutes, route), ...subPath ]);
+                    const score = tryPath([ new Open(currentValve, route), ...subPath ]);
                     highestScore = Math.max(highestScore, score);
                 } else {
-                    paths.push([ new Open(currentValve, remainingMinutes, route), ...subPath ]);
+                    paths.push([ new Open(currentValve, route), ...subPath ]);
                 }
             }
         }
@@ -61,22 +60,21 @@ function createPaths(isRoot, currentValve, allNonZeroValves, routes, remainingMi
 
 class Open {
     valve;
-    routeMinutes;
+    travelTime;
     route;
     remainingMinutes;
 
-    constructor(valve, remainingMinutes, route) {
-        this.remainingMinutes = remainingMinutes;
+    constructor(valve, route) {
         this.valve = valve;
         this.route = route;
-        this.routeMinutes = route.length;
+        this.travelTime = route.length;
     }
 
     do() {
         if (!this.valve.isOpen && this.valve.rate !== 0) {
             this.valve.open();
         } else {
-            this.routeMinutes--;
+            this.travelTime--;
         }
     }
 
