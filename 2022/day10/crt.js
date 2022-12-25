@@ -10,11 +10,10 @@ export default class Crt {
 
     tick() {
         this.output += this.isXWithinSprite() ? "#" : ".";
-        if (this.x == Crt.SCREEN_WIDTH - 1) {
+        if (this.x++ == Crt.SCREEN_WIDTH - 1) {
             this.output += "\n";
-            this.x = -1;
+            this.x = 0;
         }
-        this.x++;
     }
 
 
