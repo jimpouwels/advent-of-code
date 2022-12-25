@@ -3,8 +3,7 @@ export default function run(input, distinctCharCount) {
     for (cursor = 0; cursor < input.length; cursor++) {
         let charsTillNow = input.slice(cursor, cursor + distinctCharCount);
         if ([...new Set(charsTillNow)].length == distinctCharCount) {
-            break;
+            return cursor + distinctCharCount;
         }
     }
-    return cursor + distinctCharCount;
 }
