@@ -1,10 +1,10 @@
 export default function run(input, distinctCharCount) {
     let cursor;
-    for (cursor = distinctCharCount - 1; cursor < input.length; cursor++) {
-        let charsTillNow = input.slice(cursor - distinctCharCount + 1, cursor + 1);
+    for (cursor = 0; cursor < input.length; cursor++) {
+        let charsTillNow = input.slice(cursor, cursor + distinctCharCount);
         if ([...new Set(charsTillNow)].length == distinctCharCount) {
             break;
         }
     }
-    return cursor + 1;
+    return cursor + distinctCharCount;
 }
