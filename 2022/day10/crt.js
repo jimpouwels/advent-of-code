@@ -1,4 +1,5 @@
 export default class Crt {
+    static SCREEN_WIDTH = 40;
     output = '';
     x = 0;
     xRegister;
@@ -9,7 +10,7 @@ export default class Crt {
 
     tick() {
         this.output += this.isXWithinSprite() ? "#" : ".";
-        if (this.x == 39) {
+        if (this.x == Crt.SCREEN_WIDTH - 1) {
             this.output += "\n";
             this.x = -1;
         }
