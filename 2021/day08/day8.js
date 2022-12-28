@@ -1,15 +1,13 @@
 export default function run(lines) {
-    const outputDigits = lines.map(line => {
+    const digits = lines.map(line => {
         const splitted = line.split('|');
-        return { input: splitted[0].split(' '), output: splitted[1].split(' ') };
+        return { input: splitted[0].trim().split(' '), output: splitted[1].trim().split(' ') };
     });
 
     const lengths = [ 2, 3, 4, 7 ];
 
-   
-
     return {
-        part1: outputDigits.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
+        part1: digits.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
         part2: 0
     }
 }
