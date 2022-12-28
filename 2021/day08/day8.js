@@ -7,9 +7,9 @@ export default function run(lines) {
     const lengths = [ 2, 3, 4, 7 ];
 
     while (digits.find(d => d.mapping.length < 10)) {
-        for (const digit of digits) {
+        digits.forEach(digit => {
             const convertedDigits = digit.mapping;
-            [...digit.input, ...digit.output].forEach(input => {
+            digit.input.forEach(input => {
                 if (convertedDigits.find(c => c.matches(input))) {
                     return;
                 }
@@ -23,7 +23,7 @@ export default function run(lines) {
                     convertedDigits.push(new Digit(input, 8));
                 } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
                     convertedDigits.push(new Digit(input, 3));
-                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 4 && !c.isContainedBy(input)) && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
+                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 3 && !c.isContainedBy(input)) && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
                     convertedDigits.push(new Digit(input, 0));
                 } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 3 && c.isContainedBy(input))) {
                     convertedDigits.push(new Digit(input, 9));
@@ -36,14 +36,12 @@ export default function run(lines) {
                 }
             });
             digit.mapping = convertedDigits;
-        }
+        });
     }
 
     return {
         part1: digits.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
-        part2: digits.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => { 
-            return sum + digit.mapping.find(c => c.matches(val)).decimal }
-        , ''), 0),
+        part2: digits.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => sum + digit.mapping.find(c => c.matches(val)).decimal, ''), 0),
     }
 }
 
