@@ -1,14 +1,49 @@
 export default function run(lines) {
     const digits = lines.map(line => {
         const splitted = line.split('|');
-        return { input: splitted[0].trim().split(' '), output: splitted[1].trim().split(' ') };
+        return { mapping: [], input: splitted[0].trim().split(' '), output: splitted[1].trim().split(' ') };
     });
 
     const lengths = [ 2, 3, 4, 7 ];
 
+    while (digits.find(d => d.mapping.length < 10)) {
+        for (const digit of digits) {
+            const convertedDigits = digit.mapping;
+            [...digit.input, ...digit.output].forEach(input => {
+                if (convertedDigits.find(c => c.matches(input))) {
+                    return;
+                }
+                if (input.length === 2) {
+                    convertedDigits.push(new Digit(input, 1));
+                } else if (input.length === 4) {
+                    convertedDigits.push(new Digit(input, 4));
+                } else if (input.length === 3) {
+                    convertedDigits.push(new Digit(input, 7));
+                } else if (input.length === 7) {
+                    convertedDigits.push(new Digit(input, 8));
+                } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
+                    convertedDigits.push(new Digit(input, 3));
+                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 4 && !c.isContainedBy(input)) && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
+                    convertedDigits.push(new Digit(input, 0));
+                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 3 && c.isContainedBy(input))) {
+                    convertedDigits.push(new Digit(input, 9));
+                } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 6 && c.contains(input))) {
+                    convertedDigits.push(new Digit(input, 5));
+                } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 5 && !c.matches(input))) {
+                    convertedDigits.push(new Digit(input, 2));
+                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 7 && !c.isContainedBy(input))) {
+                    convertedDigits.push(new Digit(input, 6));
+                }
+            });
+            digit.mapping = convertedDigits;
+        }
+    }
+
     return {
         part1: digits.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
-        part2: 0
+        part2: digits.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => { 
+            return sum + digit.mapping.find(c => c.matches(val)).decimal }
+        , ''), 0),
     }
 }
 
@@ -21,7 +56,15 @@ class Digit {
         this.decimal = decimal;
     }
 
+    matches(chars) {
+        return this.contains(chars) && chars.length === this.requiredChars.length;
+    }
+
     contains(chars) {
         return [...chars].filter(c => this.requiredChars.includes(c)).length === chars.length;
+    }
+
+    isContainedBy(chars) {
+        return [...this.requiredChars].filter(c => chars.includes(c)).length === this.requiredChars.length;
     }
 }
