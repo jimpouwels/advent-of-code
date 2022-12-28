@@ -1,7 +1,7 @@
 export default function run(lines) {
     const digits = lines.map(line => {
         const splitted = line.split('|');
-        return { mapping: [], input: splitted[0].trim().split(' '), output: splitted[1].trim().split(' ') };
+        return new Line(splitted[0].trim().split(' '), splitted[1].trim().split(' '));
     });
 
     const lengths = [ 2, 3, 4, 7 ];
@@ -21,11 +21,11 @@ export default function run(lines) {
                     convertedDigits.push(new Digit(input, 7));
                 } else if (input.length === 7) {
                     convertedDigits.push(new Digit(input, 8));
-                } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
+                } else if (input.length === 5 && digit.contains(7, input)) {
                     convertedDigits.push(new Digit(input, 3));
                 } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 3 && !c.isContainedBy(input)) && convertedDigits.find(c => c.decimal === 7 && c.isContainedBy(input))) {
                     convertedDigits.push(new Digit(input, 0));
-                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 3 && c.isContainedBy(input))) {
+                } else if (input.length === 6 && digit.contains(3, input)) {
                     convertedDigits.push(new Digit(input, 9));
                 } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 6 && c.contains(input))) {
                     convertedDigits.push(new Digit(input, 5));
@@ -42,6 +42,21 @@ export default function run(lines) {
     return {
         part1: digits.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
         part2: digits.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => sum + digit.mapping.find(c => c.matches(val)).decimal, ''), 0),
+    }
+}
+
+class Line {
+    mapping = [];
+    input = [];
+    output = [];
+
+    constructor(input, output) {
+        this.input = input;
+        this.output = output;
+    }
+
+    contains(decimal, otherInput) {
+        return this.mapping.find(c => decimal === c.decimal && c.isContainedBy(otherInput));
     }
 }
 
