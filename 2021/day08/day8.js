@@ -23,7 +23,7 @@ export default function run(lines) {
                     convertedDigits.push(new Digit(input, 8));
                 } else if (input.length === 5 && digit.contains(7, input)) {
                     convertedDigits.push(new Digit(input, 3));
-                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 3 && !c.isContainedBy(input)) && digit.contains(7, input)) {
+                } else if (input.length === 6 && digit.doesNotContain(3, input) && digit.contains(7, input)) {
                     convertedDigits.push(new Digit(input, 0));
                 } else if (input.length === 6 && digit.contains(3, input)) {
                     convertedDigits.push(new Digit(input, 9));
@@ -31,7 +31,7 @@ export default function run(lines) {
                     convertedDigits.push(new Digit(input, 5));
                 } else if (input.length === 5 && convertedDigits.find(c => c.decimal === 5 && !c.matches(input))) {
                     convertedDigits.push(new Digit(input, 2));
-                } else if (input.length === 6 && convertedDigits.find(c => c.decimal === 7 && !c.isContainedBy(input))) {
+                } else if (input.length === 6 && digit.doesNotContain(7, input)) {
                     convertedDigits.push(new Digit(input, 6));
                 }
             });
@@ -57,6 +57,10 @@ class Line {
 
     contains(decimal, otherInput) {
         return this.mapping.find(c => decimal === c.decimal && c.isContainedBy(otherInput));
+    }
+
+    doesNotContain(decimal, otherInput) {
+        return this.mapping.find(c => decimal === c.decimal && !c.isContainedBy(otherInput));
     }
 }
 
