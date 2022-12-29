@@ -1,3 +1,6 @@
+import Digit from "./digit.js";
+import Display from "./display.js";
+
 export default function run(lines) {
     const displays = lines.map(line => {
         const splitted = line.split('|');
@@ -42,54 +45,5 @@ export default function run(lines) {
     return {
         part1: displays.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
         part2: displays.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => sum + digit.mapping.find(c => c.matches(val)).decimal, ''), 0),
-    }
-}
-
-class Display {
-    mapping = [];
-    input = [];
-    output = [];
-
-    constructor(input, output) {
-        this.input = input;
-        this.output = output;
-    }
-
-    isContainedBy(decimal, otherInput) {
-        return this.mapping.find(c => decimal === c.decimal && c.isContainedBy(otherInput));
-    }
-
-    isNotContainedBy(decimal, otherInput) {
-        return this.mapping.find(c => decimal === c.decimal && !c.isContainedBy(otherInput));
-    }
-
-    contains(decimal, otherInput) {
-        return this.mapping.find(c => decimal === c.decimal && c.contains(otherInput));
-    }
-
-    doesNotMatch(decimal, otherInput) {
-        return this.mapping.find(c => decimal === c.decimal && !c.matches(otherInput));
-    }
-}
-
-class Digit {
-    requiredChars;
-    decimal;
-
-    constructor(requiredChars, decimal) {
-        this.requiredChars = requiredChars;
-        this.decimal = decimal;
-    }
-
-    matches(chars) {
-        return this.contains(chars) && chars.length === this.requiredChars.length;
-    }
-
-    contains(chars) {
-        return [...chars].filter(c => this.requiredChars.includes(c)).length === chars.length;
-    }
-
-    isContainedBy(chars) {
-        return [...this.requiredChars].filter(c => chars.includes(c)).length === this.requiredChars.length;
     }
 }
