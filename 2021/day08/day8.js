@@ -7,8 +7,6 @@ export default function run(lines) {
         return new Display(splitted[0].trim().split(' '), splitted[1].trim().split(' '));
     });
 
-    const lengths = [ 2, 3, 4, 7 ];
-
     while (displays.find(d => d.mapping.length < 10)) {
         displays.forEach(display => {
             const convertedDigits = display.mapping;
@@ -43,7 +41,7 @@ export default function run(lines) {
     }
 
     return {
-        part1: displays.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + (lengths.includes(val.length) ? 1 : 0), 0), 0),
+        part1: displays.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + ([ 2, 3, 4, 7 ].includes(val.length) ? 1 : 0), 0), 0),
         part2: displays.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => sum + digit.mapping.find(c => c.matches(val)).decimal, ''), 0),
     }
 }
