@@ -2,11 +2,16 @@ import Digit from "./digit.js";
 import Display from "./display.js";
 
 export default function run(lines) {
-    const displays = lines.map(line => {
-        const splitted = line.split('|');
-        return new Display(splitted[0].trim().split(' '), splitted[1].trim().split(' '));
-    });
+    const displays = parseDisplays(lines);
+    convertToDecimalDigits(displays);
 
+    return {
+        part1: displays.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + ([ 2, 3, 4, 7 ].includes(val.length) ? 1 : 0), 0), 0),
+        part2: displays.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => sum + digit.mapping.find(c => c.matches(val)).decimal, ''), 0),
+    }
+}
+
+function convertToDecimalDigits(displays) {
     while (displays.find(d => d.mapping.length < 10)) {
         displays.forEach(display => {
             const convertedDigits = display.mapping;
@@ -39,9 +44,11 @@ export default function run(lines) {
             display.mapping = convertedDigits;
         });
     }
+}
 
-    return {
-        part1: displays.reduce((sum, val) => sum + val.output.reduce((sum, val) => sum + ([ 2, 3, 4, 7 ].includes(val.length) ? 1 : 0), 0), 0),
-        part2: displays.reduce((sum, digit) => sum + +digit.output.reduce((sum, val) => sum + digit.mapping.find(c => c.matches(val)).decimal, ''), 0),
-    }
+function parseDisplays(lines) {
+    return lines.map(line => {
+        const splitted = line.split('|');
+        return new Display(splitted[0].trim().split(' '), splitted[1].trim().split(' '));
+    });
 }
