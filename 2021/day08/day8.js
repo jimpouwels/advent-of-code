@@ -26,13 +26,13 @@ function convertToDecimalDigits(displays) {
                 display.mapping.push(new Digit(input, 8));
             } else if (input.length === 5 && display.isContainedBy(7, input)) {
                 display.mapping.push(new Digit(input, 3));
-            } else if (input.length === 5 && display.contains(6, input)) {
+            } else if (display.contains(6, input)) {
                 display.mapping.push(new Digit(input, 5));
             } else if (input.length === 5 && display.doesNotMatch(5, input)) {
                 display.mapping.push(new Digit(input, 2));
-            } else if (input.length === 6 && display.isNotContainedBy(3, input) && display.isContainedBy(7, input)) {
+            } else if (display.isNotContainedBy(3, input) && display.isContainedBy(7, input)) {
                 display.mapping.push(new Digit(input, 0));
-            } else if (input.length === 6 && display.isContainedBy(3, input)) {
+            } else if (display.isContainedBy(3, input)) {
                 display.mapping.push(new Digit(input, 9));
             } else if (input.length === 6 && display.isNotContainedBy(7, input)) {
                 display.mapping.push(new Digit(input, 6));
