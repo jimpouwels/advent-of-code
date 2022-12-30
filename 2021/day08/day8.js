@@ -13,36 +13,31 @@ export default function run(lines) {
 
 function convertToDecimalDigits(displays) {
     while (displays.find(d => d.mapping.length < 10)) {
-        displays.forEach(display => {
-            const convertedDigits = display.mapping;
-            display.input.forEach(input => {
-                if (convertedDigits.find(c => c.matches(input))) {
-                    return;
-                }
-                if (input.length === 2) {
-                    convertedDigits.push(new Digit(input, 1));
-                } else if (input.length === 4) {
-                    convertedDigits.push(new Digit(input, 4));
-                } else if (input.length === 3) {
-                    convertedDigits.push(new Digit(input, 7));
-                } else if (input.length === 7) {
-                    convertedDigits.push(new Digit(input, 8));
-                } else if (input.length === 5 && display.isContainedBy(7, input)) {
-                    convertedDigits.push(new Digit(input, 3));
-                } else if (input.length === 5 && display.contains(6, input)) {
-                    convertedDigits.push(new Digit(input, 5));
-                } else if (input.length === 5 && display.doesNotMatch(5, input)) {
-                    convertedDigits.push(new Digit(input, 2));
-                } else if (input.length === 6 && display.isNotContainedBy(3, input) && display.isContainedBy(7, input)) {
-                    convertedDigits.push(new Digit(input, 0));
-                } else if (input.length === 6 && display.isContainedBy(3, input)) {
-                    convertedDigits.push(new Digit(input, 9));
-                } else if (input.length === 6 && display.isNotContainedBy(7, input)) {
-                    convertedDigits.push(new Digit(input, 6));
-                }
-            });
-            display.mapping = convertedDigits;
-        });
+        displays.forEach(display => display.input.forEach(input => {
+            if (display.mapping.find(c => c.matches(input))) {
+                return;
+            } else if (input.length === 2) {
+                display.mapping.push(new Digit(input, 1));
+            } else if (input.length === 4) {
+                display.mapping.push(new Digit(input, 4));
+            } else if (input.length === 3) {
+                display.mapping.push(new Digit(input, 7));
+            } else if (input.length === 7) {
+                display.mapping.push(new Digit(input, 8));
+            } else if (input.length === 5 && display.isContainedBy(7, input)) {
+                display.mapping.push(new Digit(input, 3));
+            } else if (input.length === 5 && display.contains(6, input)) {
+                display.mapping.push(new Digit(input, 5));
+            } else if (input.length === 5 && display.doesNotMatch(5, input)) {
+                display.mapping.push(new Digit(input, 2));
+            } else if (input.length === 6 && display.isNotContainedBy(3, input) && display.isContainedBy(7, input)) {
+                display.mapping.push(new Digit(input, 0));
+            } else if (input.length === 6 && display.isContainedBy(3, input)) {
+                display.mapping.push(new Digit(input, 9));
+            } else if (input.length === 6 && display.isNotContainedBy(7, input)) {
+                display.mapping.push(new Digit(input, 6));
+            }
+        }));
     }
 }
 
