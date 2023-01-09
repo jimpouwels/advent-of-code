@@ -10,6 +10,7 @@ import Valve from "./valve";
          part1: calculateHighestPressure(valves.find(v => v.name === 'AA'), valves.filter(v => v.rate > 0), routes, 30)
      }
  }
+ 
 function calculateHighestPressure(currentValve, valvesWithPressure, routes, remainingMinutes, openValves = []) {
     let highest = 0;
     let highestTargetScore = 0;
