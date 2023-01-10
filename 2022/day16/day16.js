@@ -1,8 +1,8 @@
 import Valve from "./valve";
 
- const TIME_TO_OPEN = 1;
+const TIME_TO_OPEN = 1;
 
- export default function run(lines) {
+export default function run(lines) {
      const valves = parseValves(lines);
      const routes = [];
      findShortestRoutes(valves, routes);
