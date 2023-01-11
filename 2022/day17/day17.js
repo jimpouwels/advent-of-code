@@ -15,18 +15,21 @@ export default function run(input, rockCount) {
     ]
 
     let jetIndex = 0;
+    let topOfStack = 0;
     while (shapeCounter < rockCount + 1) {
         if (!currentShape) {
             currentShape = shapes[shapeCounter % 5];
             shapeCounter++;
-            const topRockY = topY(chamber);
-            if (topRockY > currentShape.height() + 3) {
-                for (let i = 0; i < topRockY - (currentShape.height() + 3); i++) {
+            const previousTopOfStack = topOfStack;
+            if (previousTopOfStack > currentShape.height() + 3) {
+                for (let i = 0; i < previousTopOfStack - (currentShape.height() + 3); i++) {
                     chamber.shift();
+                    topOfStack--;
                 }
-            } else if (topRockY < currentShape.height() + 3) {
-                for (let i = 0; i < currentShape.height() + 3 - topRockY; i++) {
+            } else if (previousTopOfStack < currentShape.height() + 3) {
+                for (let i = 0; i < currentShape.height() + 3 - previousTopOfStack; i++) {
                     chamber.unshift(new Array(7).fill(0));
+                    topOfStack++;
                 }
             }
         }
@@ -44,6 +47,9 @@ export default function run(input, rockCount) {
         }
         if (currentShape.bottom() === chamber.length - 1 || hits(chamber, currentShape, 1)) {
             addToChamber(currentShape, chamber);
+            if (currentShape.y < topOfStack || topOfStack === 0) {
+                topOfStack = currentShape.y;
+            }
             currentShape.reset();
             currentShape = null;
         } else {
@@ -57,19 +63,8 @@ export default function run(input, rockCount) {
     }
 
     return {
-        part1: chamber.length - topY(chamber)
+        part1: chamber.length - topOfStack
     }
- }
-
- function topY(chamber) {
-    for (let y = 0; y < chamber.length; y++) {
-        for (let x = 0; x < chamber[y].length; x++) {
-            if (chamber[y][x] > 0) {
-                return y;
-            }
-        }
-    }
-    return 0;
  }
 
  function hits(chamber, currentShape, yOffset) {
