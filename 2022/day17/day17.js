@@ -22,12 +22,12 @@ export default function run(input, rockCount) {
             } 
             shapeCounter++;
             const topRockY = topY(chamber);
-            if (topRockY > currentShape.arr[0].length + 3) {
-                for (let i = 0; i < topRockY - (currentShape.arr[0].length + 3); i++) {
+            if (topRockY > currentShape.height() + 3) {
+                for (let i = 0; i < topRockY - (currentShape.height() + 3); i++) {
                     chamber.shift();
                 }
-            } else if (topRockY < currentShape.arr[0].length + 3) {
-                for (let i = 0; i < currentShape.arr[0].length + 3 - topRockY; i++) {
+            } else if (topRockY < currentShape.height() + 3) {
+                for (let i = 0; i < currentShape.height() + 3 - topRockY; i++) {
                     chamber.unshift(new Array(7).fill(0));
                 }
             }
@@ -123,6 +123,10 @@ class Shape {
 
     bottom() {
         return this.y + this.arr[0].length - 1;
+    }
+
+    height() {
+        return this.arr[0].length;
     }
 }
 
