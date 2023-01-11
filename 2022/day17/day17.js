@@ -1,4 +1,4 @@
-export default function run(input) {
+export default function run(input, rockCount) {
     const jets = input.split('');
 
     const chamber = new Array(0);
@@ -7,9 +7,8 @@ export default function run(input) {
     let shapeCounter = 0;
 
     let jetIndex = 0;
-    while (shapeCounter < 2023) {
+    while (shapeCounter < rockCount + 1) {
         if (!currentShape) {
-            // console.log('next shape');
             if (shapeCounter % 5 === 0) {
                 currentShape = new HorizontalLineShape(2, 0);
             } else if (shapeCounter % 5 === 1) {
@@ -23,7 +22,6 @@ export default function run(input) {
             } 
             shapeCounter++;
             const topRockY = topY(chamber);
-            // console.log(`remaining rows: ${topRockY}`);
             if (topRockY > currentShape.arr[0].length + 3) {
                 for (let i = 0; i < topRockY - (currentShape.arr[0].length + 3); i++) {
                     chamber.shift();
@@ -33,11 +31,7 @@ export default function run(input) {
                     chamber.unshift(new Array(7).fill(0));
                 }
             }
-            // drawChamber(chamber);
         }
-        // if (shapeCounter === 7) {
-        //     break;
-        // }
         let previousX = currentShape.x;
         if (jets[jetIndex] === '<') {
             currentShape.x -= 1;
@@ -46,15 +40,12 @@ export default function run(input) {
             }
         } else {
             currentShape.x += 1;
-            if (currentShape.x + currentShape.arr.length -1 === chamber[0].length || hits(chamber, currentShape, 0)) {
+            if (currentShape.right() === chamber[0].length || hits(chamber, currentShape, 0)) {
                 currentShape.x = previousX;
             }
         }
-        // console.log(`jet blow ${jets[jetIndex]}`);
-        if (currentShape.y + currentShape.arr[0].length -1 === chamber.length - 1 || hits(chamber, currentShape, 1)) {
-            // console.log('come to rest');
+        if (currentShape.y + currentShape.arr[0].length - 1 === chamber.length - 1 || hits(chamber, currentShape, 1)) {
             addToChamber(currentShape, chamber);
-            // drawChamber(chamber);
             currentShape = null;
         } else {
             currentShape.y += 1;
@@ -124,6 +115,10 @@ class Shape {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    right() {
+        return this.x + this.arr.length - 1;
     }
 }
 
