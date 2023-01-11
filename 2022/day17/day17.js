@@ -6,20 +6,18 @@ export default function run(input, rockCount) {
     let currentShape = null;
     let shapeCounter = 0;
 
+    const shapes = [
+        new HorizontalLineShape(),
+        new CrossShape(),
+        new ReverseLShape(),
+        new VerticalLineShape(),
+        new BoxShape()
+    ]
+
     let jetIndex = 0;
     while (shapeCounter < rockCount + 1) {
         if (!currentShape) {
-            if (shapeCounter % 5 === 0) {
-                currentShape = new HorizontalLineShape(2, 0);
-            } else if (shapeCounter % 5 === 1) {
-                currentShape = new CrossShape(2, 0);
-            } else if (shapeCounter % 5 === 2) {
-                currentShape = new ReverseLShape(2, 0);
-            } else if (shapeCounter % 5 === 3) {
-                currentShape = new VerticalLineShape(2, 0);
-            } else if (shapeCounter % 5 === 4) {
-                currentShape = new BoxShape(2, 0);
-            } 
+            currentShape = shapes[shapeCounter % 5];
             shapeCounter++;
             const topRockY = topY(chamber);
             if (topRockY > currentShape.height() + 3) {
@@ -46,6 +44,7 @@ export default function run(input, rockCount) {
         }
         if (currentShape.bottom() === chamber.length - 1 || hits(chamber, currentShape, 1)) {
             addToChamber(currentShape, chamber);
+            currentShape.reset();
             currentShape = null;
         } else {
             currentShape.y += 1;
@@ -109,13 +108,8 @@ export default function run(input, rockCount) {
  }
 
 class Shape {
-    x = 0;
+    x = 2;
     y = 0;
-
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
 
     right() {
         return this.x + this.arr.length - 1;
@@ -127,6 +121,11 @@ class Shape {
 
     height() {
         return this.arr[0].length;
+    }
+
+    reset() {
+        this.x = 2;
+        this.y = 0;
     }
 }
 
