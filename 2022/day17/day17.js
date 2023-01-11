@@ -44,7 +44,7 @@ export default function run(input, rockCount) {
                 currentShape.x = previousX;
             }
         }
-        if (currentShape.y + currentShape.arr[0].length - 1 === chamber.length - 1 || hits(chamber, currentShape, 1)) {
+        if (currentShape.bottom() === chamber.length - 1 || hits(chamber, currentShape, 1)) {
             addToChamber(currentShape, chamber);
             currentShape = null;
         } else {
@@ -119,6 +119,10 @@ class Shape {
 
     right() {
         return this.x + this.arr.length - 1;
+    }
+
+    bottom() {
+        return this.y + this.arr[0].length - 1;
     }
 }
 
