@@ -47,6 +47,9 @@ export default function run(input, rockCount) {
         }
         if (currentShape.bottom() === chamber.length - 1 || hits(chamber, currentShape, 1)) {
             addToChamber(currentShape, chamber);
+            if (shapeCounter % 1000 === 0) {
+                console.log(shapeCounter);
+            }
             if (currentShape.y < topOfStack || topOfStack === 0) {
                 topOfStack = currentShape.y;
             }
