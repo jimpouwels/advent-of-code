@@ -4,7 +4,7 @@ export default function run(input, rockCount) {
     const chamber = new Array(0);
 
     let currentShape = null;
-    let shapeCounter = 0;
+    let rockCounter = 0;
 
     const shapes = [
         new HorizontalLineShape(),
@@ -16,10 +16,10 @@ export default function run(input, rockCount) {
 
     let jetIndex = 0;
     let topOfStack = 0;
-    while (shapeCounter < rockCount + 1) {
+    while (rockCounter < rockCount + 1) {
         if (!currentShape) {
-            currentShape = shapes[shapeCounter % 5];
-            shapeCounter++;
+            currentShape = shapes[rockCounter % 5];
+            rockCounter++;
             const previousTopOfStack = topOfStack;
             if (previousTopOfStack > currentShape.height() + 3) {
                 for (let i = 0; i < previousTopOfStack - (currentShape.height() + 3); i++) {
@@ -47,8 +47,8 @@ export default function run(input, rockCount) {
         }
         if (currentShape.bottom() === chamber.length - 1 || hits(chamber, currentShape, 1)) {
             addToChamber(currentShape, chamber);
-            if (shapeCounter % 1000 === 0) {
-                console.log(shapeCounter);
+            if (rockCounter % 1000 === 0) {
+                console.log(rockCounter);
             }
             if (currentShape.y < topOfStack || topOfStack === 0) {
                 topOfStack = currentShape.y;
