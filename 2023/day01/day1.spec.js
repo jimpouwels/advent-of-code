@@ -8,6 +8,7 @@ describe('day1', () => {
     });
 
     it('part2', () => {
+        expect(run(readLines('2023/day01/testdata.txt')).part2).toEqual(54728);
     });
 
 });
