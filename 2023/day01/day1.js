@@ -12,22 +12,15 @@ export default function run(input) {
     }
 
     return {
-        part1: calibration1(input),
-        part2: calibration2(input)
+        part1: calibration(input, getFirstNumberIn),
+        part2: calibration(input, getFirstWrittenNumber)
     }
 
-    function calibration1(lines) {
+    function calibration(lines, calibrationFunc) {
         return lines
             .map(line => line.split(''))
-            .reduce((sum, val) => sum + parseInt(getFirstNumberIn(val) + 
-                                                 getFirstNumberIn(val.reverse())), 0);
-    }
-
-    function calibration2(lines) {
-        return lines
-            .map(line => line.split(''))
-            .reduce((sum, val) => sum + parseInt(getFirstWrittenNumber(val) + 
-                                                 getFirstWrittenNumber(val.reverse(), true)), 0);
+            .reduce((sum, val) => sum + parseInt(calibrationFunc(val) + 
+                                                 calibrationFunc(val.reverse(), true)), 0);
     }
 
     function getFirstNumberIn(arr) {
