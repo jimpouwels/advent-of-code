@@ -6,7 +6,8 @@ export default function run(input) {
     function part1(lines) {
         return lines
             .map(line => line.split(''))
-            .reduce((sum, val) => sum + parseInt(firstNumberIn(val) + firstNumberIn(val.reverse())), 0);
+            .reduce((sum, val) => sum + parseInt(firstNumberIn(val) + 
+                                                 firstNumberIn(val.reverse())), 0);
     }
 
     function firstNumberIn(arr) {
