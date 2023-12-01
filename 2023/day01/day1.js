@@ -1,23 +1,15 @@
 export default function run(input) {
-    const sum = input
-                  .map(line => line.split(''))
-                  .map(chars => {
-                    let firstNum = "";
-                    let secondNum = "";
-                    chars.forEach(element => {
-                        if (!isNaN(element) && !firstNum) {
-                            firstNum = element;
-                        } else if (!isNaN(element)) {
-                            secondNum = element;
-                        }
-                    });
-                    return firstNum + (secondNum ? secondNum : firstNum);
-                  })
-                  .reduce((sum, val) => {
-                    return sum + parseInt(val)
-                  }, 0);
-
     return {
-        part1: sum
+        part1: part1(input)
+    }
+
+    function part1(lines) {
+        return lines
+            .map(line => line.split(''))
+            .reduce((sum, val) => sum + parseInt(firstNumberIn(val) + firstNumberIn(val.reverse())), 0);
+    }
+
+    function firstNumberIn(arr) {
+        return arr.filter(n => !isNaN(n))[0];
     }
 }
