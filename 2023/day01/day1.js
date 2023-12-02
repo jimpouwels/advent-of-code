@@ -20,22 +20,24 @@ export default function run(input) {
         return lines
             .map(line => line.split(''))
             .reduce((sum, val) => sum + parseInt(calibrationFunc(val) + 
-                                                 calibrationFunc(val.reverse(), true)), 0);
+                                                 calibrationFunc(val, true)), 0);
     }
 
-    function getFirstNumberIn(arr) {
-        return arr.filter(x => !isNaN(x))[0];
+    function getFirstNumberIn(arr, reverse = false) {
+        let values = reverse ? arr.reverse() : arr;
+        return values.filter(x => !isNaN(x))[0];
     }
 
     function getFirstWrittenNumber(arr, reverse = false) {
+        let values = reverse ? arr.reverse() : arr;
         let number = "";
-        for (let i = 0; i < arr.length; i++) {
-            if (!isNaN(arr[i])) {
-                return arr[i];
+        for (let i = 0; i < values.length; i++) {
+            if (!isNaN(values[i])) {
+                return values[i];
             }
-            number += arr[i];
-            for (let j = i + 1; j < arr.length; j++) {
-                number += arr[j];
+            number += values[i];
+            for (let j = i + 1; j < values.length; j++) {
+                number += values[j];
                 let found = number;
                 if (reverse) {
                     found = found.split('').reverse().join('');
