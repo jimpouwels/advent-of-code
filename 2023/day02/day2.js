@@ -1,3 +1,6 @@
+import Draw from "./draw.js";
+import Game from "./game.js";
+
 export default function run(lines, cubes) {
     let maxDraw = new Draw(cubes.red, cubes.blue, cubes.green);
     let games = parseGames(lines)
@@ -30,62 +33,4 @@ function parseDraw(drawString) {
         parsedDraw.add(split[1], parseInt(split[0]));
     })
     return parsedDraw;
-}
-
-class Game {
-    gameNumber;
-    draws;
-
-    constructor(gameNumber, draws) {
-        this.gameNumber = gameNumber;
-        this.draws = draws;
-    }
-
-    lowestDraw() {
-        let red = Number.MIN_VALUE;
-        let blue = Number.MIN_VALUE;
-        let green = Number.MIN_VALUE;
-        this.draws.forEach(draw => {
-            red = draw.red() > red ? draw.red() : red;
-            blue = draw.blue() > blue ? draw.blue() : blue;
-            green = draw.green() > green ? draw.green() : green;
-        });
-        return new Draw(red, blue, green);
-    }
-}
-
-class Draw {
-    cubes = {
-        "red": 0,
-        "blue": 0,
-        "green": 0
-    };
-
-    constructor(red, blue, green) {
-        this.cubes["red"] = red;
-        this.cubes["blue"] = blue;
-        this.cubes["green"] = green;
-    }
-
-    fits(otherDraw) {
-        return this.red() <= otherDraw.red() &&
-               this.green() <= otherDraw.green() &&
-               this.blue() <= otherDraw.blue();
-    }
-
-    red() {
-        return this.cubes["red"];
-    }
-
-    blue() {
-        return this.cubes["blue"];
-    }
-
-    green() {
-        return this.cubes["green"];
-    }
-
-    add(key, val) {
-        this.cubes[key] = val;
-    }
 }
