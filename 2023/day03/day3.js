@@ -4,7 +4,7 @@ import Symbol from "./symbol.js";
 export default function run(lines) {
     let numbers = parseNumbers(lines);
     let symbols = parseSymbols(lines);
-    let gears = parseGears(lines);
+    let gears = symbols.filter(symbol => symbol.getValue() === '*');
 
     let part1 = numbers.filter(number => symbols.filter(symbol => number.isAdjacentTo(symbol)).length > 0)
                        .reduce((sum, number) => sum + number.toInt(), 0);
@@ -44,19 +44,7 @@ function parseSymbols(lines) {
     lines.forEach((line, y) => {
         Array.from(line).forEach((char, x) => {
             if (char !== "." && isNaN(char)) {
-                symbols.push(new Symbol(x, y));
-            }
-        });
-    });
-    return symbols;
-}
-
-function parseGears(lines) {
-    let symbols = [];
-    lines.forEach((line, y) => {
-        Array.from(line).forEach((char, x) => {
-            if (char === '*') {
-                symbols.push(new Symbol(x, y));
+                symbols.push(new Symbol(x, y, char));
             }
         });
     });

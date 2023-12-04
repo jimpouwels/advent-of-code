@@ -1,10 +1,12 @@
 export default class Symbol {
     x;
     y;
+    value;
 
-    constructor(x, y) {
+    constructor(x, y, value) {
         this.x = x;
         this.y = y;
+        this.value = value;
     }
 
     getX() {
@@ -13,5 +15,9 @@ export default class Symbol {
 
     getY() { 
         return this.y;
+    }
+    
+    getValue() {
+        return this.value;
     }
 }
