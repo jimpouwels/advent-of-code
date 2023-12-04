@@ -1,5 +1,5 @@
 export default function run(lines, cubes) {
-    let maxDraw = new Draw(cubes["red"], cubes["blue"], cubes["green"]);
+    let maxDraw = new Draw(cubes.red, cubes.blue, cubes.green);
     let part1 = parseGames(lines).filter(game => game.draws.filter(d => !d.fits(maxDraw)).length == 0)
                                  .reduce((sum, possibleGame) => sum + possibleGame.gameNumber, 0);
 
