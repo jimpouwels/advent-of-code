@@ -1,27 +1,28 @@
 export default function run(lines, cubes) {
     let maxDraw = new Draw(cubes["red"], cubes["blue"], cubes["green"]);
-    let total = parseGames(lines).filter(game => game.draws.filter(d => !d.fits(maxDraw)).length == 0)
+    let part1 = parseGames(lines).filter(game => game.draws.filter(d => !d.fits(maxDraw)).length == 0)
                                  .reduce((sum, possibleGame) => sum + possibleGame.gameNumber, 0);
 
-    function parseGames(lines) {
-        return lines.map(line => {
-            let match = line.match(/Game (\d+): (.*)/);
-            let draws = match[2].split('; ');
-            let parsedDraws = draws.map(draw => {
-                let parsedDraw = new Draw(0, 0, 0);
-                draw.split(', ').map(d => {
-                    let split = d.split(' ');
-                    parsedDraw.add(split[1], parseInt(split[0]));
-                })
-                return parsedDraw;
-            });
-            return new Game(parseInt(match[1]), parsedDraws);
-        });
-    }
-
     return {
-        part1: total,
+        part1: part1,
     }
+}
+
+function parseGames(lines) {
+    return lines.map(gameString => {
+        let match = gameString.match(/Game (\d+): (.*)/);
+        let parsedDraws = match[2].split('; ').map(draw => parseDraw(draw));
+        return new Game(parseInt(match[1]), parsedDraws);
+    });
+}
+
+function parseDraw(drawString) {
+    let parsedDraw = new Draw(0, 0, 0);
+    drawString.split(', ').forEach(d => {
+        let split = d.split(' ');
+        parsedDraw.add(split[1], parseInt(split[0]));
+    })
+    return parsedDraw;
 }
 
 class Game {
@@ -48,9 +49,6 @@ class Draw {
     }
 
     fits(otherDraw) {
-        // console.log(this);
-        // console.log("vs");
-        // console.log(otherDraw);
         return this.red() <= otherDraw.red() &&
                this.green() <= otherDraw.green() &&
                this.blue() <= otherDraw.blue();
