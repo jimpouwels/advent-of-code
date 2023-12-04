@@ -8,9 +8,9 @@ export default function run(lines, cubes) {
     let part1 = games.filter(game => game.draws.filter(d => !d.fits(maxDraw)).length == 0)
                                  .reduce((sum, possibleGame) => sum + possibleGame.gameNumber, 0);
 
-    let part2 = games.map(game =>  Math.max(...game.draws.map(d => d.red())) *
-                                   Math.max(...game.draws.map(d => d.green())) *
-                                   Math.max(...game.draws.map(d => d.blue())))
+    let part2 = games.map(game => Math.max(...game.draws.map(d => d.red())) *
+                                  Math.max(...game.draws.map(d => d.green())) *
+                                  Math.max(...game.draws.map(d => d.blue())))
                      .reduce((sum, val) => sum + val, 0);
 
     return {
