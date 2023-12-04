@@ -1,10 +1,17 @@
 export default function run(lines, cubes) {
     let maxDraw = new Draw(cubes.red, cubes.blue, cubes.green);
-    let part1 = parseGames(lines).filter(game => game.draws.filter(d => !d.fits(maxDraw)).length == 0)
+    let games = parseGames(lines)
+    
+    let part1 = games.filter(game => game.draws.filter(d => !d.fits(maxDraw)).length == 0)
                                  .reduce((sum, possibleGame) => sum + possibleGame.gameNumber, 0);
+
+    let part2 = games.map(game => game.lowestDraw())
+                     .map(lowestDraw => lowestDraw.red() * lowestDraw.green() * lowestDraw.blue())
+                     .reduce((sum, val) => sum + val, 0);
 
     return {
         part1: part1,
+        part2: part2
     }
 }
 
@@ -32,6 +39,18 @@ class Game {
     constructor(gameNumber, draws) {
         this.gameNumber = gameNumber;
         this.draws = draws;
+    }
+
+    lowestDraw() {
+        let red = Number.MIN_VALUE;
+        let blue = Number.MIN_VALUE;
+        let green = Number.MIN_VALUE;
+        this.draws.forEach(draw => {
+            red = draw.red() > red ? draw.red() : red;
+            blue = draw.blue() > blue ? draw.blue() : blue;
+            green = draw.green() > green ? draw.green() : green;
+        });
+        return new Draw(red, blue, green);
     }
 }
 
