@@ -21,9 +21,9 @@ export default function run(lines, cubes) {
 
 function parseGames(lines) {
     return lines.map(gameString => {
-        let match = gameString.match(/Game (\d+): (.*)/);
-        let parsedDraws = match[2].split('; ').map(draw => parseDraw(draw));
-        return new Game(parseInt(match[1]), parsedDraws);
+        const { gameNumber, draws } = gameString.match(/Game (?<gameNumber>\d+): (?<draws>.*)/).groups;
+        let parsedDraws = draws.split('; ').map(draw => parseDraw(draw));
+        return new Game(parseInt(gameNumber), parsedDraws);
     });
 }
 
