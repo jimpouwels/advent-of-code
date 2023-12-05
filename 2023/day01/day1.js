@@ -15,30 +15,27 @@ export default function run(input) {
     }
 
     function getFirstNumberIn(arr, reverse = false) {
-        let values = reverse ? arr.reverse() : arr;
-        return values.filter(x => !isNaN(x))[0];
+        arr = reverse ? arr.reverse() : arr;
+        return arr.filter(x => !isNaN(x))[0];
     }
 
     function getFirstWrittenNumber(arr, reverse = false) {
-        let values = reverse ? arr.reverse() : arr;
-        let number = "";
-        
-        for (let i = 0; i < values.length; i++) {
-            if (!isNaN(values[i])) {
-                return values[i];
-            }
-            for (let j = i; j < values.length; j++) {
-                number += values[j];
-                let found = number;
+        arr = reverse ? arr.reverse() : arr;
+        return arr.map((char1, i) => {
+            return arr.map((_, j) => {
+                if (!isNaN(char1)) {
+                    return char1;
+                }
+                let number = arr.slice(i, j).join('');
                 if (reverse) {
-                    found = found.split('').reverse().join('');
+                    number = number.split('').reverse().join('');
                 }
-                if (writtenNumbers[found]) {
-                    return writtenNumbers[found];
+                if (writtenNumbers[number]) {
+                    return writtenNumbers[number];
                 }
-            }
-            number = "";
-        }
+                return null;
+            }).filter(t => t)[0];
+        }).filter(t => t)[0];
     }
 
 }
