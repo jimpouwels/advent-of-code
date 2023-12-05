@@ -2,11 +2,24 @@ export default class Card {
     index;
     numbers = [];
     winningNumbers = [];
-    matchCount = 0;
+    matchingNumbers = [];
+    scoreValue = 0;
 
     constructor(index, numbers, winningNumbers) {
         this.index = index;
         this.numbers = numbers;
         this.winningNumbers = winningNumbers;
+    }
+
+    score() {
+        if (this.matchCount) {
+            return this.matchCount;
+        }
+        this.matchingNumbers = this.numbers.filter(n => this.winningNumbers.includes(n));
+        this.scoreValue = this.matchingNumbers.reduce((sum) => sum === 0 ? 1 : sum * 2, 0);
+    }
+
+    getScore() {
+        return this.scoreValue;
     }
 }

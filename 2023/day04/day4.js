@@ -2,9 +2,10 @@ import Card from './card.js';
 
 export default function run(lines) {
     let cards = parseCards(lines);
-    let part1 = cards.map(c => score(c))
-                     .reduce((sum, val) => sum + val, 0);
-    let part2 = cards.map(c => countCards(c, cards))
+    cards.forEach(card => card.score());
+
+    let part1 = cards.reduce((sum, card) => sum + card.getScore(), 0);
+    let part2 = cards.map(card => countCards(card, cards))
                      .reduce((sum, val) => sum + val, 0);
     return {
         part1: part1,
@@ -12,23 +13,9 @@ export default function run(lines) {
     }
 }
 
-function score(card) {
-    if (card.matchCount) {
-        return card.matchCount;
-    }
-    let numbers = card.numbers.filter(n => card.winningNumbers.includes(n));
-    card.matchCount = numbers.length;
-    return numbers.reduce((sum) => sum === 0 ? 1 : sum * 2, 0);
-}
-
 function countCards(card, cards) {
-    score(card);
-    return Array(card.matchCount).fill(null).reduce((sum, _val, i) => {
-        if (cards.length >= card.index + i) {
-            sum += countCards(cards[card.index + i + 1], cards);
-        }
-        return sum;
-    }, 1);
+    return card.matchingNumbers.filter((_x, i) => cards.length >= card.index + i)
+                               .reduce((sum, _val, i) => sum + countCards(cards[card.index + i + 1], cards), 1);
 }
 
 function parseCards(lines) {
