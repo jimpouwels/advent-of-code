@@ -15,7 +15,7 @@ export default function run(lines) {
 
 function addCopyCount(card, cards) {
     return card.matchingNumbers.filter((_x, i) => cards.length >= card.index + i)
-                               .reduce((sum, _val, i) => sum + countCards(cards[card.index + i + 1], cards), 1);
+                               .reduce((sum, _val, i) => sum + addCopyCount(cards[card.index + i + 1], cards), 1);
 }
 
 function parseCards(lines) {
