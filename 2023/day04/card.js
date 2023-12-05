@@ -19,4 +19,12 @@ export default class Card {
     getScore() {
         return this.scoreValue;
     }
+
+    getIndex() {
+        return this.index;
+    }
+
+    getMatchingNumbers() {
+        return this.matchingNumbers;
+    }
 }
