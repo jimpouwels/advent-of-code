@@ -12,9 +12,6 @@ export default class Card {
     }
 
     score() {
-        if (this.matchCount) {
-            return this.matchCount;
-        }
         this.matchingNumbers = this.numbers.filter(n => this.winningNumbers.includes(n));
         this.scoreValue = this.matchingNumbers.reduce((sum) => sum === 0 ? 1 : sum * 2, 0);
     }
