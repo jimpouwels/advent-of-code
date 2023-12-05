@@ -22,12 +22,12 @@ export default function run(input) {
     function getFirstWrittenNumber(arr, reverse = false) {
         let values = reverse ? arr.reverse() : arr;
         let number = "";
+        
         for (let i = 0; i < values.length; i++) {
             if (!isNaN(values[i])) {
                 return values[i];
             }
-            number += values[i];
-            for (let j = i + 1; j < values.length; j++) {
+            for (let j = i; j < values.length; j++) {
                 number += values[j];
                 let found = number;
                 if (reverse) {
