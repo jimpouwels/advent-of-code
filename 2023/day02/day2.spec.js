@@ -4,8 +4,9 @@ import run from './day2.js';
 describe('day2', () => {
 
     it('runs', () => {
-        expect(run(readLines('2023/day02/testdata.txt'), {red: 12, green: 13, blue: 14}).part1).toEqual(2727);
-        expect(run(readLines('2023/day02/testdata.txt'), {}).part2).toEqual(56580);
+        let result = run(readLines('2023/day02/testdata.txt'), {red: 12, green: 13, blue: 14});
+        expect(result.part1).toEqual(2727);
+        expect(result.part2).toEqual(56580);
     });
 
 });
