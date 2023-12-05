@@ -32,6 +32,6 @@ function parseDraw(drawString) {
     drawString.split(', ').forEach(d => {
         let split = d.split(' ');
         parsedDraw.add(split[1], parseInt(split[0]));
-    })
+    });
     return parsedDraw;
 }
