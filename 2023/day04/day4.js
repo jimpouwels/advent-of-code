@@ -5,7 +5,7 @@ export default function run(lines) {
     cards.forEach(card => card.score());
 
     let part1 = cards.reduce((sum, card) => sum + card.getScore(), 0);
-    let part2 = cards.map(card => countCards(card, cards))
+    let part2 = cards.map(card => addCopies(card, cards))
                      .reduce((sum, val) => sum + val, 0);
     return {
         part1: part1,
@@ -13,7 +13,7 @@ export default function run(lines) {
     }
 }
 
-function countCards(card, cards) {
+function addCopies(card, cards) {
     return card.matchingNumbers.filter((_x, i) => cards.length >= card.index + i)
                                .reduce((sum, _val, i) => sum + countCards(cards[card.index + i + 1], cards), 1);
 }
