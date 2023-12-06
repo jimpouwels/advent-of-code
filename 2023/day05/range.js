@@ -3,13 +3,9 @@ export default class Range {
     to;
     index;
 
-    constructor(from, to, index) {
+    constructor(from, to, index = -1) {
         this.from = from;
         this.to = to;
         this.index = index;
-    }
-
-    length() {
-        return this.to - this.from;
     }
 }
