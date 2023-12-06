@@ -20,7 +20,6 @@ export default function run(lines) {
     maps.forEach(m => {
         outRanges = m.navRange(outRanges ? outRanges : inRanges);
     });
-
     part2 = Math.min(...outRanges.map(r => r.from));
 
 
@@ -83,8 +82,9 @@ class Map {
         ranges.forEach(range => {
             let matchStuff = [];
             this.ins.forEach((inx, ix) => {
-                if ((range.from >= inx.from && range.from <= inx.to) ||
-                    (range.to >= inx.from && range.to <= inx.to)) {
+                if ((range.from >= inx.from && range.from < inx.to) ||
+                    (range.to > inx.from && range.to <= inx.to) ||
+                    (range.from < inx.from && range.to > inx.to)) {
                     matchStuff.push({i: ix, matches: inx});
                 }
             });
@@ -92,29 +92,35 @@ class Map {
                 outRanges.push(new Range(range.from, range.to));
             } else {
                 matchStuff.forEach(matchingIns => {
+                    let doubleCheck = [];
+
                     let matchingIn = matchingIns.matches;
                     let i = matchingIns.i;
-                    if (!matchingIn) {
-                        outRanges.push(new Range(range.from, range.to));
-                    } else {
-                        // check left side
-                        if (range.from < matchingIn.from) {
-                            outRanges.push(new Range(range.from, Math.min(matchingIn.from, range.to)));
-                        }
-                        // check right side
-                        if (range.to > matchingIn.to) {
-                            outRanges.push(new Range(Math.max(range.from, matchingIn.to), range.to));
-                        }
-                        // overlap
-                        let outFrom = this.outs[i].from;
-                        let outTo = this.outs[i].to;
-                        if (range.from >= matchingIn.from && range.from <= matchingIn.to) {
-                            outFrom = range.from + (this.outs[i].from - matchingIn.from);
-                        }
-                        if (range.to <= matchingIn.to && range.to >= matchingIn.from) {
-                            outTo = range.to + (this.outs[i].from - matchingIn.from);
-                        }
-                        outRanges.push(new Range(outFrom, outTo));
+                    
+                    // check left side
+                    if (range.from < matchingIn.from && range.to <= matchingIn.to) {
+                        let newRange = new Range(range.from, matchingIn.from - 1);
+                        doubleCheck.push(newRange);
+                    }
+                    // check right side
+                    if (range.from >= matchingIn.from && range.to > matchingIn.to) {
+                        let newRange = new Range(matchingIn.to + 1, range.to);
+                        doubleCheck.push(newRange);
+                    }
+                    // overlap
+                    let outFrom = this.outs[i].from;
+                    let outTo = this.outs[i].to;
+                    if (range.from > matchingIn.from) {
+                        outFrom = range.from + (outFrom - matchingIn.from);
+                    }
+                    if (range.to < matchingIn.to) {
+                        outTo = range.to + (outTo - matchingIn.to);
+                    }
+                    outRanges.push(new Range(outFrom, outTo));
+
+                    if (doubleCheck.length > 0) {
+                        let moreRanges = this.navRange(doubleCheck);
+                        outRanges = outRanges.concat(moreRanges);
                     }
                 });
             }
