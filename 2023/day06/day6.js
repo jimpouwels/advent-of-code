@@ -32,7 +32,7 @@ function parseRaces(lines, ignoreWhitespace = false) {
     const { distancesString } = lines[1].match(/Distance:( +)(?<distancesString>.*)/).groups;
     let times = parseValues(timesString, ignoreWhitespace);
     let distances = parseValues(distancesString, ignoreWhitespace);
-    return times.map((time, i) => new Race(time, distances[i]));
+    return times.map((time, i) => { return { time: time, distance: distances[i] };});
 }
 
 function parseValues(valuesString, ignoreWhitespace = false) {
@@ -40,14 +40,4 @@ function parseValues(valuesString, ignoreWhitespace = false) {
         valuesString = valuesString.replaceAll(' ', '');
     }
     return valuesString.split(/( +)/).filter(t => t.trim()).filter(t => t).map(t => parseInt(t))
-}
-
-class Race {
-    time;
-    distance;
-
-    constructor(time, distance) {
-        this.time = time;
-        this.distance = distance;
-    }
 }
