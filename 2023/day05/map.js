@@ -16,9 +16,8 @@ export default class Map {
     findOutletsByRanges(ranges) {
         return ranges.flatMap(range => {
             let outRanges = [];
-            let inlet = this.inlets.filter(inlet => (range.from >= inlet.from && range.from < inlet.to) ||
-                                         (range.to > inlet.from && range.to <= inlet.to) ||
-                                         (range.from < inlet.from && range.to > inlet.to))[0];
+            let inlet = this.inlets.filter(inlet => range.from >= inlet.from && range.from < inlet.to ||
+                                                    range.to > inlet.from && range.to <= inlet.to)[0];
             if (!inlet) {
                 outRanges.push(new Range(range.from, range.to));
             } else {
