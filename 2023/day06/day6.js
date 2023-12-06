@@ -4,15 +4,9 @@ export default function run(lines) {
     let racesPart1 = parseRaces(lines);
     let racesPart2 = parseRaces(lines, true);
 
-    let part1 = racesPart1.map(race => {
-        let sum = 0;
-        for (let i = 0; i < race.time; i++) {
-            if (i * (race.time - i) > race.distance) {
-                sum++;
-            }
-        }
-        return sum;
-    }).reduce((sum, val) => sum * val, 1);
+    let part1 = racesPart1.map(race => Array(race.time).fill(0)
+                                                       .filter((_, i) => i * (race.time - i) > race.distance).length)
+                          .reduce((sum, val) => sum * val, 1);
 
     let part2 = 0;
     for (let i = 0; i < racesPart2[0].time; i++) {
