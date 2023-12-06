@@ -118,6 +118,7 @@ class Map {
                     }
                     outRanges.push(new Range(outFrom, outTo));
 
+                    // check if the outlyers are part of another in-range
                     if (doubleCheck.length > 0) {
                         let moreRanges = this.navRange(doubleCheck);
                         outRanges = outRanges.concat(moreRanges);
