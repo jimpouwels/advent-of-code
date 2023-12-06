@@ -17,12 +17,12 @@ export default class Map {
             if (!inlet) {
                 outRanges.push(new Range(range.from, range.to));
             } else {
-                // check range that falls to left of inlet
+                // cut off and check range that falls to left of inlet
                 if (range.from < inlet.from) {
                     outRanges = outRanges.concat(this.findOutletsByRanges([new Range(range.from, inlet.from - 1)]));
                     range.from = inlet.from;
                 }
-                // check range that falls to right of inlet
+                // cut off and check range that falls to right of inlet
                 if (range.to > inlet.to) {
                     outRanges = outRanges.concat(this.findOutletsByRanges([new Range(inlet.to + 1, range.to)]));
                     range.to = inlet.to + 1;
