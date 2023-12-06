@@ -80,71 +80,63 @@ class Map {
         let outRanges = [];
 
         ranges.forEach(range => {
-            let matchStuff = [];
-            this.ins.forEach((inx, ix) => {
-                if ((range.from >= inx.from && range.from < inx.to) ||
-                    (range.to > inx.from && range.to <= inx.to) ||
-                    (range.from < inx.from && range.to > inx.to)) {
-                    matchStuff.push({i: ix, matches: inx});
-                }
-            });
-            if (matchStuff.length == 0) {
+            let matchingIn = this.ins.filter(inx => (range.from >= inx.from && range.from < inx.to) ||
+                                         (range.to > inx.from && range.to <= inx.to) ||
+                                         (range.from < inx.from && range.to > inx.to))[0];
+            if (!matchingIn) {
                 outRanges.push(new Range(range.from, range.to));
             } else {
-                matchStuff.forEach(matchingIns => {
-                    let doubleCheck = [];
+                let doubleCheck = [];
 
-                    let matchingIn = matchingIns.matches;
-                    let i = matchingIns.i;
-                    
-                    // check left side
-                    if (range.from < matchingIn.from && range.to <= matchingIn.to) {
-                        let newRange = new Range(range.from, matchingIn.from - 1);
-                        doubleCheck.push(newRange);
-                    }
-                    // check right side
-                    if (range.from >= matchingIn.from && range.to > matchingIn.to) {
-                        let newRange = new Range(matchingIn.to + 1, range.to);
-                        doubleCheck.push(newRange);
-                    }
-                    // overlap
-                    let outFrom = this.outs[i].from;
-                    let outTo = this.outs[i].to;
-                    if (range.from > matchingIn.from) {
-                        outFrom = range.from + (outFrom - matchingIn.from);
-                    }
-                    if (range.to < matchingIn.to) {
-                        outTo = range.to + (outTo - matchingIn.to);
-                    }
-                    outRanges.push(new Range(outFrom, outTo));
+                // check left side
+                if (range.from < matchingIn.from && range.to <= matchingIn.to) {
+                    let newRange = new Range(range.from, matchingIn.from - 1);
+                    doubleCheck.push(newRange);
+                }
+                // check right side
+                if (range.from >= matchingIn.from && range.to > matchingIn.to) {
+                    let newRange = new Range(matchingIn.to + 1, range.to);
+                    doubleCheck.push(newRange);
+                }
+                // overlap
+                let outFrom = this.outs[matchingIn.index].from;
+                let outTo = this.outs[matchingIn.index].to;
+                if (range.from > matchingIn.from) {
+                    outFrom = range.from + (outFrom - matchingIn.from);
+                }
+                if (range.to < matchingIn.to) {
+                    outTo = range.to + (outTo - matchingIn.to);
+                }
+                outRanges.push(new Range(outFrom, outTo));
 
-                    // check if the outlyers are part of another in-range
-                    if (doubleCheck.length > 0) {
-                        let moreRanges = this.navRange(doubleCheck);
-                        outRanges = outRanges.concat(moreRanges);
-                    }
-                });
+                // check if the outlyers are part of another in-range
+                if (doubleCheck.length > 0) {
+                    let moreRanges = this.navRange(doubleCheck);
+                    outRanges = outRanges.concat(moreRanges);
+                }
             }
         });
         return outRanges;
     }
 
     setIn(from, length) {
-        this.ins.push(new Range(from, from + length));
+        this.ins.push(new Range(from, from + length, this.ins.length));
     }
 
     setOut(from, length) {
-        this.outs.push(new Range(from, from + length));
+        this.outs.push(new Range(from, from + length, this.ins.length));
     }
 }
 
 class Range {
     from;
     to;
+    index;
 
-    constructor(from, to) {
+    constructor(from, to, index) {
         this.from = from;
         this.to = to;
+        this.index = index;
     }
 
     length() {
