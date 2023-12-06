@@ -6,7 +6,7 @@ export default class Map {
 
     findOutlets(value) {
         let inlet = this.inlets.filter(inlet => value >= inlet.from && value <= inlet.to)[0];
-        return inlet ? value + (this.outlets[inlet.index].from - inlet.from) : value;
+        return inlet ? this.inletToOutlet(value, inlet) : value;
     }
 
     findOutletsByRanges(ranges) {
@@ -28,9 +28,8 @@ export default class Map {
                     range.to = inlet.to + 1;
                 }
 
-                let outlet = this.outlets[inlet.index];
-                outRanges.push(new Range(range.from + (outlet.from - inlet.from), 
-                                         range.to + (outlet.to - inlet.to)));
+                outRanges.push(new Range(this.inletToOutlet(range.from, inlet), 
+                                         this.inletToOutlet(range.to, inlet)));
             }
             return outRanges;
         });
@@ -42,5 +41,9 @@ export default class Map {
 
     addOutlet(from, length) {
         this.outlets.push(new Range(from, from + length, this.inlets.length));
+    }
+
+    inletToOutlet(value, inlet) {
+        return value + (this.outlets[inlet.index].from - inlet.from);
     }
 }
