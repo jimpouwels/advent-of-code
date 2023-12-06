@@ -3,24 +3,22 @@ export default function run(lines) {
     let seeds = parseSeeds(lines[0]);
 
     let part1 = Math.min(...seeds.map(seed => {
-        let out = null;
+        let outlet = seed;
         maps.forEach(m => {
-            out = m.nav(out ? out : seed);
+            outlet = m.findOutlets(outlet);
         });
-        return out;
+        return outlet;
     }));
 
-    let part2 = Number.MAX_VALUE;
-
-    let inRanges = [];
+    let seedRanges = [];
     for (let i = 0; i < seeds.length; i += 2) {
-        inRanges.push(new Range(seeds[i], seeds[i] + seeds[i + 1]));
+        seedRanges.push(new Range(seeds[i], seeds[i] + seeds[i + 1]));
     }
-    let outRanges = null;
+    let outlets = seedRanges;
     maps.forEach(m => {
-        outRanges = m.navRange(outRanges ? outRanges : inRanges);
+        outlets = m.findOutletsByRanges(outlets);
     });
-    part2 = Math.min(...outRanges.map(r => r.from));
+    let part2 = Math.min(...outlets.map(outlet => outlet.from));
 
 
     return {
@@ -47,8 +45,8 @@ function parseMap(mapString) {
                                 return null;
                             }
                             let rangeSplit = m.split(' ').map(r => parseInt(r));
-                            map.setIn(rangeSplit[1], rangeSplit[2]);
-                            map.setOut(rangeSplit[0], rangeSplit[2]);
+                            map.addInlet(rangeSplit[1], rangeSplit[2]);
+                            map.addOutlet(rangeSplit[0], rangeSplit[2]);
                         }));
                         
                         return map;
@@ -56,75 +54,60 @@ function parseMap(mapString) {
 }
 
 class Map {
-    ins = [];
-    outs = [];
+    inlets = [];
+    outlets = [];
 
-    nav(nr) {
+    findOutlets(nr) {
         let rangeIndex = -1;
         let index = -1;
-        for (let i = 0; i < this.ins.length; i++) {
-            if (nr >= this.ins[i].from && nr <= this.ins[i].to) {
+        for (let i = 0; i < this.inlets.length; i++) {
+            if (nr >= this.inlets[i].from && nr <= this.inlets[i].to) {
                 rangeIndex = i;
-                index = nr - this.ins[i].from;
+                index = nr - this.inlets[i].from;
                 break;
             }
         }
         let result = nr;
         if (index !== -1) {
-            result = this.outs[rangeIndex].from + index;
+            result = this.outlets[rangeIndex].from + index;
         }
         return result;
     }
 
-    navRange(ranges) {
-        let outRanges = [];
-
-        ranges.forEach(range => {
-            let matchingIn = this.ins.filter(inx => (range.from >= inx.from && range.from < inx.to) ||
-                                         (range.to > inx.from && range.to <= inx.to) ||
-                                         (range.from < inx.from && range.to > inx.to))[0];
-            if (!matchingIn) {
+    findOutletsByRanges(ranges) {
+        return ranges.flatMap(range => {
+            let outRanges = [];
+            let inlet = this.inlets.filter(inlet => (range.from >= inlet.from && range.from < inlet.to) ||
+                                         (range.to > inlet.from && range.to <= inlet.to) ||
+                                         (range.from < inlet.from && range.to > inlet.to))[0];
+            if (!inlet) {
                 outRanges.push(new Range(range.from, range.to));
             } else {
-                let doubleCheck = [];
+                // check range that falls to right of inlet
+                if (range.from < inlet.from && range.to <= inlet.to) {
+                    outRanges = outRanges.concat(this.findOutletsByRanges([new Range(range.from, inlet.from - 1)]));
+                    range.from = inlet.from;
+                }
+                // check range that falls to left of inlet
+                if (range.from >= inlet.from && range.to > inlet.to) {
+                    outRanges = outRanges.concat(this.findOutletsByRanges([new Range(inlet.to + 1, range.to)]));
+                    range.to = inlet.to + 1;
+                }
 
-                // check left side
-                if (range.from < matchingIn.from && range.to <= matchingIn.to) {
-                    let newRange = new Range(range.from, matchingIn.from - 1);
-                    doubleCheck.push(newRange);
-                }
-                // check right side
-                if (range.from >= matchingIn.from && range.to > matchingIn.to) {
-                    let newRange = new Range(matchingIn.to + 1, range.to);
-                    doubleCheck.push(newRange);
-                }
-                // overlap
-                let outFrom = this.outs[matchingIn.index].from;
-                let outTo = this.outs[matchingIn.index].to;
-                if (range.from > matchingIn.from) {
-                    outFrom = range.from + (outFrom - matchingIn.from);
-                }
-                if (range.to < matchingIn.to) {
-                    outTo = range.to + (outTo - matchingIn.to);
-                }
-                outRanges.push(new Range(outFrom, outTo));
-
-                // check if the outlyers are part of another in-range
-                if (doubleCheck.length > 0) {
-                    let moreRanges = this.navRange(doubleCheck);
-                    outRanges = outRanges.concat(moreRanges);
-                }
+                let outlet = this.outlets[inlet.index];
+                outRanges.push(new Range(range.from + (outlet.from - inlet.from), 
+                                         range.to + (outlet.to - inlet.to)));
             }
+            return outRanges;
         });
-        return outRanges;
     }
 
-    setIn(from, length) {
-        this.ins.push(new Range(from, from + length, this.ins.length));
+    addInlet(from, length) {
+        this.inlets.push(new Range(from, from + length, this.inlets.length));
     }
 
-    setOut(from, length) {
-        this.outs.push(new Range(from, from + length, this.ins.length));
+    addOutlet(from, length) {
+        this.outlets.push(new Range(from, from + length, this.inlets.length));
     }
 }
 
