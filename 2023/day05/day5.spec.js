@@ -1,7 +1,7 @@
 import { readLines } from '../../common/readlines.js';
 import run from './day5.js';
 
-describe('day4', () => {
+describe('day5', () => {
 
     it('runs', () => {
         let result = run(readLines('2023/day05/testdata.txt'));
