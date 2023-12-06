@@ -2,7 +2,7 @@ export default function run(lines) {
     let maps = parseMaps(lines);
     let seeds = parseSeeds(lines[0]);
 
-    let closest = Math.min(...seeds.map(seed => {
+    let part1 = Math.min(...seeds.map(seed => {
         let out = null;
         maps.forEach(m => {
             out = m.nav(out ? out : seed);
@@ -10,9 +10,23 @@ export default function run(lines) {
         return out;
     }));
 
+    let part2 = Number.MAX_VALUE;
+
+    let inRanges = [];
+    for (let i = 0; i < seeds.length; i += 2) {
+        inRanges.push(new Range(seeds[i], seeds[i] + seeds[i + 1]));
+    }
+    let outRanges = null;
+    maps.forEach(m => {
+        outRanges = m.navRange(outRanges ? outRanges : inRanges);
+    });
+
+    part2 = Math.min(...outRanges.map(r => r.from));
+
+
     return {
-        part1: closest,
-        part2: 0
+        part1: part1,
+        part2: part2
     }
 }
 
@@ -63,6 +77,51 @@ class Map {
         return result;
     }
 
+    navRange(ranges) {
+        let outRanges = [];
+
+        ranges.forEach(range => {
+            let matchStuff = [];
+            this.ins.forEach((inx, ix) => {
+                if ((range.from >= inx.from && range.from <= inx.to) ||
+                    (range.to >= inx.from && range.to <= inx.to)) {
+                    matchStuff.push({i: ix, matches: inx});
+                }
+            });
+            if (matchStuff.length == 0) {
+                outRanges.push(new Range(range.from, range.to));
+            } else {
+                matchStuff.forEach(matchingIns => {
+                    let matchingIn = matchingIns.matches;
+                    let i = matchingIns.i;
+                    if (!matchingIn) {
+                        outRanges.push(new Range(range.from, range.to));
+                    } else {
+                        // check left side
+                        if (range.from < matchingIn.from) {
+                            outRanges.push(new Range(range.from, Math.min(matchingIn.from, range.to)));
+                        }
+                        // check right side
+                        if (range.to > matchingIn.to) {
+                            outRanges.push(new Range(Math.max(range.from, matchingIn.to), range.to));
+                        }
+                        // overlap
+                        let outFrom = this.outs[i].from;
+                        let outTo = this.outs[i].to;
+                        if (range.from >= matchingIn.from && range.from <= matchingIn.to) {
+                            outFrom = range.from + (this.outs[i].from - matchingIn.from);
+                        }
+                        if (range.to <= matchingIn.to && range.to >= matchingIn.from) {
+                            outTo = range.to + (this.outs[i].from - matchingIn.from);
+                        }
+                        outRanges.push(new Range(outFrom, outTo));
+                    }
+                });
+            }
+        });
+        return outRanges;
+    }
+
     setIn(from, length) {
         this.ins.push(new Range(from, from + length));
     }
@@ -79,5 +138,9 @@ class Range {
     constructor(from, to) {
         this.from = from;
         this.to = to;
+    }
+
+    length() {
+        return this.to - this.from;
     }
 }
