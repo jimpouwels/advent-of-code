@@ -25,7 +25,7 @@ export default class Map {
                 }
 
                 oulets.push(new Range(this.inletToOutlet(range.from, inlet), 
-                                         this.inletToOutlet(range.to, inlet)));
+                                      this.inletToOutlet(range.to, inlet)));
             }
             return oulets;
         });
