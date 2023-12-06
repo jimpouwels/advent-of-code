@@ -11,27 +11,27 @@ export default class Map {
 
     findOutletsByRanges(ranges) {
         return ranges.flatMap(range => {
-            let outRanges = [];
+            let oulets = [];
             let inlet = this.inlets.filter(inlet => range.from >= inlet.from && range.from < inlet.to ||
                                                     range.to > inlet.from && range.to <= inlet.to)[0];
             if (!inlet) {
-                outRanges.push(new Range(range.from, range.to));
+                oulets.push(new Range(range.from, range.to));
             } else {
                 // cut off and check range that falls to left of inlet
                 if (range.from < inlet.from) {
-                    outRanges = outRanges.concat(this.findOutletsByRanges([new Range(range.from, inlet.from - 1)]));
+                    oulets = oulets.concat(this.findOutletsByRanges([new Range(range.from, inlet.from - 1)]));
                     range.from = inlet.from;
                 }
                 // cut off and check range that falls to right of inlet
                 if (range.to > inlet.to) {
-                    outRanges = outRanges.concat(this.findOutletsByRanges([new Range(inlet.to + 1, range.to)]));
+                    oulets = oulets.concat(this.findOutletsByRanges([new Range(inlet.to + 1, range.to)]));
                     range.to = inlet.to + 1;
                 }
 
-                outRanges.push(new Range(this.inletToOutlet(range.from, inlet), 
+                oulets.push(new Range(this.inletToOutlet(range.from, inlet), 
                                          this.inletToOutlet(range.to, inlet)));
             }
-            return outRanges;
+            return oulets;
         });
     }
 
