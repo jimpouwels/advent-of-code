@@ -6,11 +6,7 @@ export default class Map {
 
     findOutlets(value) {
         let inlet = this.inlets.filter(inlet => value >= inlet.from && value <= inlet.to)[0];
-        if (!inlet) {
-            return value;
-        } else {
-            return value + (this.outlets[inlet.index].from - inlet.from);
-        }
+        return inlet ? value + (this.outlets[inlet.index].from - inlet.from) : value;
     }
 
     findOutletsByRanges(ranges) {
