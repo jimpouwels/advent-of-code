@@ -57,21 +57,13 @@ class Map {
     inlets = [];
     outlets = [];
 
-    findOutlets(nr) {
-        let rangeIndex = -1;
-        let index = -1;
-        for (let i = 0; i < this.inlets.length; i++) {
-            if (nr >= this.inlets[i].from && nr <= this.inlets[i].to) {
-                rangeIndex = i;
-                index = nr - this.inlets[i].from;
-                break;
-            }
+    findOutlets(value) {
+        let inlet = this.inlets.filter(inlet => value >= inlet.from && value <= inlet.to)[0];
+        if (!inlet) {
+            return value;
+        } else {
+            return value + (this.outlets[inlet.index].from - inlet.from);
         }
-        let result = nr;
-        if (index !== -1) {
-            result = this.outlets[rangeIndex].from + index;
-        }
-        return result;
     }
 
     findOutletsByRanges(ranges) {
