@@ -5,15 +5,14 @@ export default class Map {
     outlets = [];
 
     findOutlets(value) {
-        let inlet = this.inlets.filter(inlet => value >= inlet.from && value <= inlet.to)[0];
+        let inlet = this.findFirstMatchingInlet(value);
         return inlet ? this.inletToOutlet(value, inlet) : value;
     }
 
     findOutletsByRanges(ranges) {
         return ranges.flatMap(range => {
             let oulets = [];
-            let inlet = this.inlets.filter(inlet => range.from >= inlet.from && range.from < inlet.to ||
-                                                    range.to > inlet.from && range.to <= inlet.to)[0];
+            let inlet = this.findFirstMatchingInletForRange(range);
             if (!inlet) {
                 oulets.push(new Range(range.from, range.to));
             } else {
@@ -33,6 +32,15 @@ export default class Map {
             }
             return oulets;
         });
+    }
+
+    findFirstMatchingInlet(value) {
+        return this.inlets.filter(inlet => value >= inlet.from && value <= inlet.to)[0]
+    }
+
+    findFirstMatchingInletForRange(range) {
+        return this.inlets.filter(inlet => range.from >= inlet.from && range.from < inlet.to ||
+                                           range.to > inlet.from && range.to <= inlet.to)[0];
     }
 
     addInlet(from, length) {
