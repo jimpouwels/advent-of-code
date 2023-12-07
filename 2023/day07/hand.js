@@ -7,10 +7,13 @@ export default class Hand {
 
     constructor(cards, bet, includeJokers = false) {
         this.valueMap = Array(15).fill(0);
-        cards.forEach(c => this.valueMap[c]++)
+        cards.forEach((c) => this.valueMap[c]++)
         this.cards = cards;
         this.bet = bet;
         this.includeJokers = includeJokers;
+        if (this.includeJokers) {
+            this.jokerCount = this.valueMap[1];
+        }
     }
 
     calculateScore() {
@@ -31,46 +34,20 @@ export default class Hand {
     }
 
     hasPairOf(length, count) {
-        let keys = Object.keys(this.valueMap);
-        let jokerCount = 0;
-        if (this.includeJokers) {
-            jokerCount = this.valueMap[keys.filter(k => k == 1)];
-            keys = keys.filter(k => k != 1);
-        }
-        return this.findPairs(length).length >= count;
+        let remainingJokers = this.includeJokers ? this.jokerCount : 0;
+        return this.valueMap.filter((_, i) => {
+            if (i == 1) return;
+            if (this.valueMap[i] == length - remainingJokers) {
+                remainingJokers = Math.max(0, remainingJokers - 1);
+                return true;
+            }
+        }).length >= count;
     }
 
     hasFullHouse() {
-        let keys = Object.keys(this.valueMap);
-        let jokerCount = 0;
-        if (this.includeJokers) {
-            jokerCount = this.valueMap[keys.filter(k => k == 1)];
-            keys = keys.filter(k => k != 1);
-        }
-        if (this.hasPairOf(3, 1)) {
-            let pairOfThree = this.findPairs(3)[0];
-            if (!pairOfThree) {
-                return false;
-            }
-
-            return keys.filter(k => k != pairOfThree).filter(k => this.valueMap[k] == 2).length == 1;
-        }
-        return false;
+        return (this.valueMap.filter(k => k == 3).length == 1 &&
+                this.valueMap.filter(k => k == 2).length == 1) ||
+                (this.includeJokers && this.valueMap.filter(k => k == 2).length == 2 && this.jokerCount == 1);
     }
 
-    findPairs(length) {
-        let keys = Object.keys(this.valueMap);
-        let jokerCount = 0;
-        if (this.includeJokers) {
-            jokerCount = this.valueMap[keys.filter(k => k == 1)];
-            keys = keys.filter(k => k != 1);
-        }
-        return keys.filter(k => {
-            if (this.valueMap[k] + jokerCount == length) {
-                jokerCount = Math.max(0, jokerCount - 1);
-                return true;
-            }
-            return false;
-        });
-    }
 }
