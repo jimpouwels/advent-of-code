@@ -1,18 +1,17 @@
 export default class Hand {
     cards;
-    valueMap;
+    values = Array(15).fill(0);
     bet = 0;
     score = 0;
     includeJokers = false;
 
     constructor(cards, bet, includeJokers = false) {
-        this.valueMap = Array(15).fill(0);
-        cards.forEach((c) => this.valueMap[c]++)
+        cards.forEach((c) => this.values[c]++)
         this.cards = cards;
         this.bet = bet;
         this.includeJokers = includeJokers;
         if (this.includeJokers) {
-            this.jokerCount = this.valueMap[1];
+            this.jokerCount = this.values[1];
         }
     }
 
@@ -35,9 +34,9 @@ export default class Hand {
 
     hasPairOf(length, count) {
         let remainingJokers = this.includeJokers ? this.jokerCount : 0;
-        return this.valueMap.filter((_, i) => {
+        return this.values.filter((value, i) => {
             if (i == 1) return;
-            if (this.valueMap[i] == length - remainingJokers) {
+            if (value == length - remainingJokers) {
                 remainingJokers = Math.max(0, remainingJokers - 1);
                 return true;
             }
@@ -45,9 +44,9 @@ export default class Hand {
     }
 
     hasFullHouse() {
-        return (this.valueMap.filter(k => k == 3).length == 1 &&
-                this.valueMap.filter(k => k == 2).length == 1) ||
-                (this.includeJokers && this.valueMap.filter(k => k == 2).length == 2 && this.jokerCount == 1);
+        return (this.values.filter(v => v == 3).length == 1 &&
+                this.values.filter(v => v == 2).length == 1) ||
+                (this.includeJokers && this.values.filter(v => v == 2).length == 2 && this.jokerCount == 1);
     }
 
 }
