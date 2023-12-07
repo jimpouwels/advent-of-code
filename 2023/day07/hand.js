@@ -36,10 +36,9 @@ export default class Hand {
         let remainingJokers = this.handleJokers ? this.jokerCount : 0;
         return this.values.filter((value, i) => {
             if (i == 1) return;
-            if (value == length - remainingJokers) {
-                remainingJokers = Math.max(0, remainingJokers - 1);
-                return true;
-            }
+            let hasPair = value == length - remainingJokers;
+            remainingJokers = Math.max(0, hasPair ? --remainingJokers : remainingJokers);
+            return hasPair;
         }).length >= count;
     }
 
