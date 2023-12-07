@@ -1,8 +1,6 @@
 import { readLines } from '../../common/readlines.js';
 import run from './day7.js';
 
-import HandParser from './hand_parser.js';
-
 describe('day7', () => {
 
     it('runs', () => {

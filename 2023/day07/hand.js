@@ -1,5 +1,3 @@
-import { cardValues } from "./card_values";
-
 export default class Hand {
     cards;
     valueMap;
@@ -36,8 +34,8 @@ export default class Hand {
         let keys = Object.keys(this.valueMap);
         let jokerCount = 0;
         if (this.includeJokers) {
-            jokerCount = this.valueMap[keys.filter(k => k == cardValues["J"])];
-            keys = keys.filter(k => k != cardValues["J"]);
+            jokerCount = this.valueMap[keys.filter(k => k == 1)];
+            keys = keys.filter(k => k != 1);
         }
         return keys.filter(k => {
             if (this.valueMap[k] + jokerCount == length) {
@@ -52,8 +50,8 @@ export default class Hand {
         let keys = Object.keys(this.valueMap);
         let jokerCount = 0;
         if (this.includeJokers) {
-            jokerCount = this.valueMap[keys.filter(k => k == cardValues["J"])];
-            keys = keys.filter(k => k != cardValues["J"]);
+            jokerCount = this.valueMap[keys.filter(k => k == 1)];
+            keys = keys.filter(k => k != 1);
         }
         if (this.hasPairOf(3, 1)) {
             let pairOfThree = keys.filter(k => {
