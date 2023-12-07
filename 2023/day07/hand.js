@@ -3,14 +3,14 @@ export default class Hand {
     values = Array(15).fill(0);
     bet = 0;
     score = 0;
-    includeJokers = false;
+    handleJokers = false;
 
-    constructor(cards, bet, includeJokers = false) {
+    constructor(cards, bet, handleJokers = false) {
         cards.forEach((c) => this.values[c]++)
         this.cards = cards;
         this.bet = bet;
-        this.includeJokers = includeJokers;
-        if (this.includeJokers) {
+        this.handleJokers = handleJokers;
+        if (this.handleJokers) {
             this.jokerCount = this.values[1];
         }
     }
@@ -33,7 +33,7 @@ export default class Hand {
     }
 
     hasPairOf(length, count) {
-        let remainingJokers = this.includeJokers ? this.jokerCount : 0;
+        let remainingJokers = this.handleJokers ? this.jokerCount : 0;
         return this.values.filter((value, i) => {
             if (i == 1) return;
             if (value == length - remainingJokers) {
@@ -46,7 +46,7 @@ export default class Hand {
     hasFullHouse() {
         return (this.values.filter(v => v == 3).length == 1 &&
                 this.values.filter(v => v == 2).length == 1) ||
-                (this.includeJokers && this.values.filter(v => v == 2).length == 2 && this.jokerCount == 1);
+                (this.handleJokers && this.values.filter(v => v == 2).length == 2 && this.jokerCount == 1);
     }
 
 }
