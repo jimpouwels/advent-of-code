@@ -45,15 +45,11 @@ function parseMap(mapString) {
     return mapString.split('\n\n')
                     .map(mapArr => {
                         let map = new Map();
-                        mapArr.split('\n').forEach(((m, i) => {
-                            if (i === 0) {
-                                return null;
-                            }
+                        mapArr.split('\n').slice(1).forEach(((m, i) => {
                             let rangeSplit = m.split(' ').map(r => parseInt(r));
                             map.addInlet(rangeSplit[1], rangeSplit[2]);
                             map.addOutlet(rangeSplit[0], rangeSplit[2]);
                         }));
-                        
                         return map;
                     });
 }

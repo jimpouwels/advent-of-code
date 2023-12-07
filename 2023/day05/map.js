@@ -19,7 +19,8 @@ export default class Map {
                 if (range.from < inlet.from) {
                     oulets = oulets.concat(this.findOutletsByRanges([new Range(range.from, inlet.from - 1)]));
                     range.from = inlet.from;
-                } else if (range.to > inlet.to) {
+                }
+                if (range.to > inlet.to) {
                     oulets = oulets.concat(this.findOutletsByRanges([new Range(inlet.to + 1, range.to)]));
                     range.to = inlet.to + 1;
                 }
@@ -32,12 +33,11 @@ export default class Map {
     }
 
     findFirstMatchingInlet(value) {
-        return this.inlets.filter(inlet => value >= inlet.from && value <= inlet.to)[0]
+        return this.inlets.filter(inlet => inlet.fits(value))[0]
     }
 
     findFirstMatchingInletForRange(range) {
-        return this.inlets.filter(inlet => range.from >= inlet.from && range.from < inlet.to ||
-                                           range.to > inlet.from && range.to <= inlet.to)[0];
+        return this.inlets.filter(inlet => inlet.overlapsWith(range))[0];
     }
 
     addInlet(from, length) {
