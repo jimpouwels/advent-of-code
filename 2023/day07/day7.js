@@ -11,15 +11,19 @@ export default function run(lines, includeJokers = false) {
 
 function sort(hand1, hand2) {
     if (hand1.score != hand2.score) {
-        return hand1.score > hand2.score ? 1 : -1;
+        return compare(hand1.score, hand2.score);
     } else {
         for (let i = 0; i < hand1.cards.length; i++) {
             if (hand1.cards[i] == hand2.cards[i]) {
                 continue;
             }
-            return hand1.cards[i] > hand2.cards[i] ? 1 : -1;
+            return compare(hand1.cards[i], hand2.cards[i]);
         }
     }
+}
+
+function compare(score1, score2) {
+    return score1 > score2 ? 1 : -1
 }
 
 function parseHands(lines, includeJokers) {
