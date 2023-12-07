@@ -37,13 +37,7 @@ export default class Hand {
             jokerCount = this.valueMap[keys.filter(k => k == 1)];
             keys = keys.filter(k => k != 1);
         }
-        return keys.filter(k => {
-            if (this.valueMap[k] + jokerCount == length) {
-                jokerCount = Math.max(0, jokerCount - 1);
-                return true;
-            }
-            return false;
-        }).length >= count;
+        return this.findPairs(length).length >= count;
     }
 
     hasFullHouse() {
@@ -54,13 +48,7 @@ export default class Hand {
             keys = keys.filter(k => k != 1);
         }
         if (this.hasPairOf(3, 1)) {
-            let pairOfThree = keys.filter(k => {
-                if (this.valueMap[k] + jokerCount == 3) {
-                    jokerCount = Math.max(0, jokerCount - 1);
-                    return true;
-                }
-                return false;
-            })[0];
+            let pairOfThree = this.findPairs(3)[0];
             if (!pairOfThree) {
                 return false;
             }
@@ -68,5 +56,21 @@ export default class Hand {
             return keys.filter(k => k != pairOfThree).filter(k => this.valueMap[k] == 2).length == 1;
         }
         return false;
+    }
+
+    findPairs(length) {
+        let keys = Object.keys(this.valueMap);
+        let jokerCount = 0;
+        if (this.includeJokers) {
+            jokerCount = this.valueMap[keys.filter(k => k == 1)];
+            keys = keys.filter(k => k != 1);
+        }
+        return keys.filter(k => {
+            if (this.valueMap[k] + jokerCount == length) {
+                jokerCount = Math.max(0, jokerCount - 1);
+                return true;
+            }
+            return false;
+        });
     }
 }
