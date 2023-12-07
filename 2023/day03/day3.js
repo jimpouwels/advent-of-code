@@ -6,17 +6,14 @@ export default function run(lines) {
     let symbols = parseSymbols(lines);
     let gears = symbols.filter(symbol => symbol.getValue() === '*');
 
-    let part1 = numbers.filter(number => symbols.filter(symbol => number.isAdjacentTo(symbol)).length > 0)
-                       .reduce((sum, number) => sum + number.toInt(), 0);
-
-    let part2 = gears.filter(gear => numbers.filter(number => number.isAdjacentTo(gear)).length == 2)
-                     .map(gear => numbers.filter(number => number.isAdjacentTo(gear))
-                                         .reduce((sum, number) => sum * number.toInt(), 1))
-                     .reduce((sum, ratio) => sum + ratio, 0);
-
     return {
-        part1: part1,
-        part2: part2
+        part1: numbers.filter(number => symbols.filter(symbol => number.isAdjacentTo(symbol)).length > 0)
+                      .reduce((sum, number) => sum + number.toInt(), 0),
+
+        part2: gears.filter(gear => numbers.filter(number => number.isAdjacentTo(gear)).length == 2)
+                    .map(gear => numbers.filter(number => number.isAdjacentTo(gear))
+                                        .reduce((sum, number) => sum * number.toInt(), 1))
+                    .reduce((sum, ratio) => sum + ratio, 0)
     }
 }
 
