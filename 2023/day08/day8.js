@@ -1,9 +1,9 @@
 
 export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
-    let elements = parseElements(lines.slice(2));
+    let nodes = parseNodes(lines.slice(2));
 
-    let current = elements.filter(e => e.isBegin())[0];
+    let current = nodes.filter(e => e.isBegin())[0];
     let stepCount = 0;
     let instructionIndex = 0;
     while (!current.isEnd()) {
@@ -25,16 +25,16 @@ function parseInstructions(line) {
     return line.split('').map(i => i == 'R' ? 1 : 0);
 }
 
-function parseElements(lines) {
-    let elements = lines.map(line => {
+function parseNodes(lines) {
+    let nodes = lines.map(line => {
         const { element } = line.match(/(?<element>.*) =/).groups
         return new Instruction(element);
     });
     lines.forEach((line, i) => {
         const { left, right } = line.match(/= \((?<left>.*), (?<right>.*)\)/).groups;
-        elements[i].setNext(elements.filter(e => e.name == left)[0], elements.filter(e => e.name == right)[0]);
+        nodes[i].setNext(nodes.filter(e => e.name == left)[0], nodes.filter(e => e.name == right)[0]);
     });
-    return elements;
+    return nodes;
 }
 
 class Instruction {
