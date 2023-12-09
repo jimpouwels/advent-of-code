@@ -1,3 +1,5 @@
+import { leastCommonDiviser } from "../../common/math";
+
 export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
@@ -14,14 +16,6 @@ export default function run(lines) {
         return steps;
     }).reduce((result, steps) => leastCommonDiviser(steps, result), 1);
 }
-
-function leastCommonDiviser(a, b) {
-    return a / greatestCommonDiviser(a, b) * b;
-}
-
-function greatestCommonDiviser(a, b) {
-    return b == 0 ? a : greatestCommonDiviser(b, a % b)
-}    
 
 function parseInstructions(line) {
     return line.split('').map(i => i == 'L' ? 0 : 1);

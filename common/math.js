@@ -7,3 +7,11 @@ export function max(arr) {
     }
     return max;
 }
+
+export function leastCommonDiviser(a, b) {
+    return a / greatestCommonDiviser(a, b) * b;
+}
+
+export function greatestCommonDiviser(a, b) {
+    return b == 0 ? a : greatestCommonDiviser(b, a % b)
+}   
