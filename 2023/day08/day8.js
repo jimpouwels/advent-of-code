@@ -3,23 +3,22 @@ export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
 
-    let positions = nodes.filter(n => n.isBegin());
-    let stepsTillZ = [];
+    let stepsUntilEnd = [];
     
-    positions.forEach(currentPosition => {
-        let stepCount = 0;
+    nodes.filter(n => n.isBegin()).forEach(currentNode => {
+        let steps = 0;
         let currentInstructions = [...instructions];
 
-        while (!currentPosition.isEnd()) {
-            stepCount++;
-            currentPosition = currentPosition.next[currentInstructions[0]];
+        while (!currentNode.isEnd()) {
+            steps++;
+            currentNode = currentNode.next[currentInstructions[0]];
             currentInstructions.push(currentInstructions.shift());
         }
-        stepsTillZ.push(stepCount);
+        stepsUntilEnd.push(steps);
     });
 
-    let result = stepsTillZ.pop();
-    stepsTillZ.forEach(n => {
+    let result = stepsUntilEnd.pop();
+    stepsUntilEnd.forEach(n => {
         result = leastCommonDiviser(n, result);
     });
 
