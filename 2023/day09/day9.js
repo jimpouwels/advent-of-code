@@ -8,12 +8,12 @@ export default function run(lines) {
 }
 
 function extrapolate(history, backwards = false) {
-    let differences = history.slice(0, -1).map((h, i) => {
+    let deltas = history.slice(0, -1).map((h, i) => {
         return history[i + 1] - h;
     });
     let result = backwards ? history.shift(): history.pop();
-    if (!differences.every(d => d == 0)) {
-        result += extrapolate(differences, backwards) * (backwards ? -1 : 1);
+    if (!deltas.every(d => d == 0)) {
+        result += extrapolate(deltas, backwards) * (backwards ? -1 : 1);
     }
     return result;
 }
