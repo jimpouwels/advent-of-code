@@ -1,4 +1,5 @@
 import { leastCommonDiviser } from "../../common/math";
+import Instruction from "./instruction";
 
 export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
@@ -31,26 +32,4 @@ function parseNodes(lines) {
         nodes[i].setNext(nodes.filter(e => e.name == left)[0], nodes.filter(e => e.name == right)[0]);
     });
     return nodes;
-}
-
-class Instruction {
-    name;
-    next = [];
-
-    constructor(name) {
-        this.name = name;
-    }
-    
-    setNext(left, right) {
-        this.next.push(left);
-        this.next.push(right);
-    }
-
-    isBegin() {
-        return this.name.endsWith('A');
-    }
-
-    isEnd() {
-        return this.name.endsWith('Z');
-    }
 }

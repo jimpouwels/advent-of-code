@@ -7,11 +7,9 @@ export default function run(input) {
         part2: calibration(input, getFirstWrittenNumber)
     }
 
-    function calibration(lines, calibrationFunc) {
-        return lines
-            .map(line => line.split(''))
-            .reduce((sum, val) => sum + parseInt(calibrationFunc(val) + 
-                                                 calibrationFunc(val, true)), 0);
+    function calibration(lines, calibration) {
+        return lines.map(line => line.split(''))
+                    .reduce((sum, val) => sum + parseInt(calibration(val) + calibration(val, true)), 0);
     }
 
     function getFirstNumberIn(arr, reverse = false) {
@@ -33,7 +31,6 @@ export default function run(input) {
                 if (writtenNumbers[number]) {
                     return writtenNumbers[number];
                 }
-                return null;
             }).filter(t => t)[0];
         }).filter(t => t)[0];
     }
