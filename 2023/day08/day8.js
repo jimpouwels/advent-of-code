@@ -8,16 +8,14 @@ export default function run(lines) {
     
     positions.forEach(currentPosition => {
         let stepCount = 0;
-        let firstZ = null;
         let currentInstructions = [...instructions];
 
-        while (stepCount == 0 || !currentPosition.isEnd()) {
+        while (!currentPosition.isEnd()) {
             stepCount++;
-            currentPosition = currentPosition.next[currentInstructions[0] == 'L' ? 0 : 1];
+            currentPosition = currentPosition.next[currentInstructions[0]];
             currentInstructions.push(currentInstructions.shift());
         }
         stepsTillZ.push(stepCount);
-        firstZ = currentPosition;
     });
 
     let result = stepsTillZ.pop();
@@ -37,7 +35,7 @@ function greatestCommonDiviser(a, b) {
 }    
 
 function parseInstructions(line) {
-    return line.split('');
+    return line.split('').map(i => i == 'L' ? 0 : 1);
 }
 
 function parseNodes(lines) {
