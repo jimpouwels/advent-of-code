@@ -1,5 +1,5 @@
 export default function run(lines) {
-    let histories = parseHistories(lines);
+    let histories = lines.map(l => l.split(' ').map(n => parseInt(n)));
 
     return {
         part1: histories.map(history => extrapolate([...history])).reduce((sum, val) => sum + val, 0),
@@ -16,8 +16,4 @@ function extrapolate(history, backwards = false) {
         result += extrapolate(differences, backwards) * (backwards ? -1 : 1);
     }
     return result;
-}
-
-function parseHistories(lines) {
-    return lines.map(l => l.split(' ').map(n => parseInt(n)));
 }
