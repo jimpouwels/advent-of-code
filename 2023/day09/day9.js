@@ -2,8 +2,8 @@ export default function run(lines) {
     let histories = lines.map(l => l.split(' ').map(n => parseInt(n)));
 
     return {
-        part1: histories.map(history => extrapolate([...history])).reduce((sum, val) => sum + val, 0),
-        part2: histories.map(history => extrapolate([...history], true)).reduce((sum, val) => sum + val, 0)
+        part1: sum(histories.map(history => extrapolate([...history]))),
+        part2: sum(histories.map(history => extrapolate([...history], true)))
     }
 }
 
@@ -16,4 +16,8 @@ function extrapolate(history, backwards = false) {
         result += extrapolate(deltas, backwards) * (backwards ? -1 : 1);
     }
     return result;
+}
+
+function sum(values) {
+    return values.reduce((sum, val) => sum + val, 0)
 }
