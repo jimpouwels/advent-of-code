@@ -7,9 +7,7 @@ export default function run(lines) {
 }
 
 function extrapolate(history) {
-    let deltas = history.slice(0, -1).map((h, i) => {
-        return history[i + 1] - h;
-    });
+    let deltas = history.slice(0, -1).map((h, i) => history[i + 1] - h);
     if (!deltas.every(d => d == 0)) {
         deltas = extrapolate(deltas);
     }
