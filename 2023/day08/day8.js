@@ -3,9 +3,7 @@ export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
 
-    let stepsUntilEnd = [];
-    
-    nodes.filter(n => n.isBegin()).forEach(currentNode => {
+    let result = nodes.filter(n => n.isBegin()).map(currentNode => {
         let steps = 0;
         let currentInstructions = [...instructions];
 
@@ -14,13 +12,8 @@ export default function run(lines) {
             currentNode = currentNode.next[currentInstructions[0]];
             currentInstructions.push(currentInstructions.shift());
         }
-        stepsUntilEnd.push(steps);
-    });
-
-    let result = stepsUntilEnd.pop();
-    stepsUntilEnd.forEach(n => {
-        result = leastCommonDiviser(n, result);
-    });
+        return steps;
+    }).reduce((sum, val) => leastCommonDiviser(val, sum), 1);
 
     return result;
 }
