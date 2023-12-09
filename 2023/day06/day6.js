@@ -1,6 +1,4 @@
-
 export default function run(lines) {
-
     let racesPart1 = parseRaces(lines);
     let racesPart2 = parseRaces(lines, true);
 
