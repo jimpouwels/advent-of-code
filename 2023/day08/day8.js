@@ -1,4 +1,3 @@
-
 export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
