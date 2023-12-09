@@ -1,23 +1,19 @@
 export default function run(lines) {
-    let histories = lines.map(l => l.split(' ').map(n => parseInt(n)));
-
+    let histories = lines.map(l => l.split(' ').map(n => parseInt(n))).map(h => extrapolate(h));
     return {
-        part1: sum(histories.map(history => extrapolate([...history]))),
-        part2: sum(histories.map(history => extrapolate([...history], true)))
+        part1: histories.reduce((sum, val) => sum + val.pop(), 0),
+        part2: histories.reduce((sum, val) => sum + val.shift(), 0)
     }
 }
 
-function extrapolate(history, backwards = false) {
+function extrapolate(history) {
     let deltas = history.slice(0, -1).map((h, i) => {
         return history[i + 1] - h;
     });
-    let result = backwards ? history.shift(): history.pop();
     if (!deltas.every(d => d == 0)) {
-        result += extrapolate(deltas, backwards) * (backwards ? -1 : 1);
+        deltas = extrapolate(deltas);
     }
-    return result;
-}
-
-function sum(values) {
-    return values.reduce((sum, val) => sum + val, 0)
+    history.push(history[history.length - 1] + deltas.pop());
+    history.unshift(history[0] - deltas.shift());
+    return history;
 }
