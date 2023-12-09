@@ -3,7 +3,7 @@ export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
 
-    let result = nodes.filter(n => n.isBegin()).map(currentNode => {
+    return nodes.filter(n => n.isBegin()).map(currentNode => {
         let steps = 0;
         let currentInstructions = [...instructions];
 
@@ -13,9 +13,7 @@ export default function run(lines) {
             currentInstructions.push(currentInstructions.shift());
         }
         return steps;
-    }).reduce((sum, val) => leastCommonDiviser(val, sum), 1);
-
-    return result;
+    }).reduce((result, steps) => leastCommonDiviser(steps, result), 1);
 }
 
 function leastCommonDiviser(a, b) {
