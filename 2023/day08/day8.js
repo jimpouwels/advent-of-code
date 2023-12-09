@@ -3,26 +3,41 @@ export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
 
-    let current = nodes.filter(e => e.isBegin())[0];
-    let stepCount = 0;
-    let instructionIndex = 0;
-    while (!current.isEnd()) {
-        let leftOrRight = instructions[instructionIndex++];
-        current = current.next[leftOrRight];
-        if (instructionIndex == instructions.length) {
-            instructionIndex = 0;
-        }
-        stepCount++;
-    }
+    let positions = nodes.filter(n => n.isBegin());
+    let stepsTillZ = [];
+    
+    positions.forEach(currentPosition => {
+        let stepCount = 0;
+        let firstZ = null;
+        let currentInstructions = [...instructions];
 
-    return {
-        part1: stepCount,
-        part2: 0
-    }
+        while (stepCount == 0 || !currentPosition.isEnd()) {
+            stepCount++;
+            currentPosition = currentPosition.next[currentInstructions[0] == 'L' ? 0 : 1];
+            currentInstructions.push(currentInstructions.shift());
+        }
+        stepsTillZ.push(stepCount);
+        firstZ = currentPosition;
+    });
+
+    let result = stepsTillZ.pop();
+    stepsTillZ.forEach(n => {
+        result = leastCommonDiviser(n, result);
+    });
+
+    return result;
 }
 
+function leastCommonDiviser(a, b) {
+    return a / greatestCommonDiviser(a, b) * b;
+}
+
+function greatestCommonDiviser(a, b) {
+    return b == 0 ? a : greatestCommonDiviser(b, a % b)
+}    
+
 function parseInstructions(line) {
-    return line.split('').map(i => i == 'R' ? 1 : 0);
+    return line.split('');
 }
 
 function parseNodes(lines) {
@@ -51,10 +66,10 @@ class Instruction {
     }
 
     isBegin() {
-        return this.name == 'AAA';
+        return this.name.endsWith('A');
     }
 
     isEnd() {
-        return this.name == 'ZZZ';
+        return this.name.endsWith('Z');
     }
 }
