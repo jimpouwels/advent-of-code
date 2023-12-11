@@ -7,11 +7,13 @@ export default class Network {
         this.network = network;
     }
 
-    getAdjacentPositions(position) {
+    getConnectorFor(position) {
         return [this.getPosition(position.x - 1, position.y),
                 this.getPosition(position.x + 1, position.y),
                 this.getPosition(position.x, position.y - 1),
-                this.getPosition(position.x, position.y + 1)];
+                this.getPosition(position.x, position.y + 1)].filter(p => p instanceof Pipe &&
+                                                                          !p.handled &&
+                                                                          position.isConnector(p))[0];
     }
 
     getStartPipe() {

@@ -5,7 +5,6 @@ import Pipe from "./pipe";
 export default function run(lines) {
     let network = parseNetwork(lines);
     let startPipe = network.getStartPipe();
-    console.log(startPipe);
     let pathLength = calculateDistances(startPipe, network);
     return Math.ceil(pathLength / 2);
 }
@@ -15,18 +14,13 @@ function calculateDistances(startPipe, network) {
     let currentPipe = startPipe;
     while (!currentPipe.isStartPipe() || pathLength == 0) {
         currentPipe.handled = true;
-
-        currentPipe = network.getAdjacentPositions(currentPipe).filter(p => p && isConnector(currentPipe, p))[0];
+        currentPipe = network.getConnectorFor(currentPipe);
         if (!currentPipe) {
             break;
         }
         pathLength++;
     }
     return pathLength;
-}
-
-function isConnector(currentPipe, otherPipe) {
-    return otherPipe instanceof Pipe && !otherPipe.handled && currentPipe.canConnect(otherPipe);
 }
 
 function parseNetwork(lines) {

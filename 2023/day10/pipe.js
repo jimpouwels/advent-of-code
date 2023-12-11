@@ -15,12 +15,11 @@ export default class Pipe extends Position {
         this.westOutlet = westOutlet;
     }
 
-    canConnect(otherPipe) {
-        return otherPipe instanceof Pipe &&
-               (this.northOutlet && otherPipe.southOutlet && this.isBelow(otherPipe) || 
-                this.southOutlet && otherPipe.northOutlet && this.isAbove(otherPipe) ||
-                this.westOutlet && otherPipe.eastOutlet && this.isRightOf(otherPipe) || 
-                this.eastOutlet && otherPipe.westOutlet && this.isLeftOf(otherPipe));
+    isConnector(otherPipe) {
+        return this.northOutlet && otherPipe.southOutlet && this.isBelow(otherPipe) || 
+               this.southOutlet && otherPipe.northOutlet && this.isAbove(otherPipe) ||
+               this.westOutlet && otherPipe.eastOutlet && this.isRightOf(otherPipe) || 
+               this.eastOutlet && otherPipe.westOutlet && this.isLeftOf(otherPipe);
     }
 
     isStartPipe() {
