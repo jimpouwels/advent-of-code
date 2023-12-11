@@ -1,3 +1,8 @@
+import Network from "./network";
+import Position from "./position";
+import Pipe from "./pipe";
+import { PipeType } from "./pipe_type";
+
 export default function run(lines) {
     let network = parseNetwork(lines);
     let startPosition = network.getStartPosition();
@@ -38,97 +43,6 @@ function findConnector(position, network, x, y) {
         return connector;
     }
     return null;
-}
-
-class Network {
-    network; 
-
-    constructor(network) {
-        this.network = network;
-    }
-
-    getStartPosition() {
-        for (let y = 0; y < this.network.length; y++) {
-            for (let x = 0; x < this.network[0].length; x++) {
-                if (this.getPosition(x, y).type == PipeType.Intersection) {
-                    return this.getPosition(x, y);
-                }
-            }
-        }
-    }
-
-    getPosition(x, y) {
-        if (y < 0 || y > this.network.length - 1) {
-            return null;
-        }
-        if (x < 0 || x > this.network[0].length - 1) {
-            return null;
-        }
-        return this.network[y][x];
-    }
-}
-
-class Position {
-    x;
-    y;
-
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    isAbove(otherPosition) {
-        return this.y < otherPosition.y;
-    }
-
-    isBelow(otherPosition) {
-        return this.y > otherPosition.y;
-    }
-
-    isLeftOf(otherPosition) {
-        return this.x < otherPosition.x;
-    }
-
-    isRightOf(otherPosition) {
-        return this.x > otherPosition.x;
-    }
-    
-}
-
-class Pipe extends Position {
-    type;
-    distance = -1;
-    westOutlet;
-    southOutlet;
-    northOutlet;
-    eastOutlet;
-
-    constructor(type, x, y, northOutlet, eastOutlet, southOutlet, westOutlet) {
-        super(x, y);
-        this.type = type;
-        this.northOutlet = northOutlet;
-        this.eastOutlet = eastOutlet;
-        this.southOutlet = southOutlet;
-        this.westOutlet = westOutlet;
-    }
-
-    canConnect(otherPipe) {
-        return otherPipe instanceof Pipe &&
-               (this.northOutlet && otherPipe.southOutlet && this.isBelow(otherPipe) || 
-                this.southOutlet && otherPipe.northOutlet && this.isAbove(otherPipe) ||
-                this.westOutlet && otherPipe.eastOutlet && this.isRightOf(otherPipe) || 
-                this.eastOutlet && otherPipe.westOutlet && this.isLeftOf(otherPipe));
-    }
-}
-
-const PipeType = {
-    NorthSouth: "NS",
-    NorthEast: "NE",
-    NorthWest: "NW",
-    SouthWest: "SW",
-    SouthEast: "SE",
-    WestEast: "WE",
-    Intersection: "IS"
 }
 
 function parseNetwork(lines) {
