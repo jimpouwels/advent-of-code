@@ -17,10 +17,8 @@ function calculateDistances(startPosition, network) {
     while (currentPosition.type != PipeType.Intersection || pathLength == 0) {
         currentPosition.distance = pathLength;
 
-        let connector = network.getAdjacentPositions(currentPosition).filter(p => p && isConnector(currentPosition, p))[0];
-        if (connector) {
-            currentPosition = connector;
-        } else {
+        currentPosition = network.getAdjacentPositions(currentPosition).filter(p => p && isConnector(currentPosition, p))[0];
+        if (!currentPosition) {
             break;
         }
         pathLength++;
