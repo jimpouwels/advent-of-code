@@ -52,8 +52,8 @@ export default class Network {
     }
 
     getPipeAt(x, y) {
-        if (y >= 0 && y < this.network.length && 
-            x >= 0 && x < this.network[0].length - 1) {
+        if (x >= 0 && x < this.network[0].length - 1 &&
+            y >= 0 && y < this.network.length) {
             let position = this.network[y][x];
             if (position instanceof Pipe) {
                 return position;
