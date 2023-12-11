@@ -26,8 +26,8 @@ function calculateDistances(startPosition, network) {
     return pathLength;
 }
 
-function isConnector(currentPosition, otherPosition) {
-    return otherPosition instanceof Pipe && !otherPosition.handled && currentPosition.canConnect(otherPosition);
+function isConnector(currentPipe, otherPipe) {
+    return otherPipe instanceof Pipe && !otherPipe.handled && currentPipe.canConnect(otherPipe);
 }
 
 function parseNetwork(lines) {
