@@ -19,7 +19,8 @@ export default class Pipe extends Position {
         return this.northOutlet && otherPipe.southOutlet && this.isBelow(otherPipe) || 
                this.southOutlet && otherPipe.northOutlet && this.isAbove(otherPipe) ||
                this.westOutlet && otherPipe.eastOutlet && this.isRightOf(otherPipe) || 
-               this.eastOutlet && otherPipe.westOutlet && this.isLeftOf(otherPipe);
+               this.eastOutlet && otherPipe.westOutlet && this.isLeftOf(otherPipe) ||
+               otherPipe.isStartPipe();
     }
 
     isStartPipe() {

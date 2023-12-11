@@ -11,7 +11,7 @@ export default function run(lines) {
 function calculateDistances(startPipe, network) {
     let pathLength = 0;
     let currentPipe = startPipe;
-    while (!currentPipe.isStartPipe() || pathLength == 0) {
+    while (true) {
         currentPipe.handled = true;
         currentPipe = network.getConnectingPipeFor(currentPipe);
         if (!currentPipe) {
