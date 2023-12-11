@@ -22,22 +22,17 @@ export default class Network {
     }
 
     resolveStartPipe() {
-        let left = this.getPipeLeftOf(this.startPipe);
-        if (left) {
-            this.startPipe.westOutlet = left.eastOutlet;
-        }
-        let right = this.getPipeRightOf(this.startPipe);
-        if (right) {
-            this.startPipe.eastOutlet = right.westOutlet;
-        }
-        let above = this.getPipeAbove(this.startPipe);
-        if (above) {
-            this.startPipe.northOutlet = above.southOutlet;
-        }
-        let below = this.getPipeBelow(this.startPipe);
-        if (below) {
-            this.startPipe.southOutlet = below.northOutlet;
-        }
+        this.getAdjacentPipes(this.startPipe).forEach(p => {
+            if (p.isRightOf(this.startPipe)) {
+                this.startPipe.eastOutlet = p.westOutlet;
+            } else if (p.isLeftOf(this.startPipe)) {
+                this.startPipe.westOutlet = p.eastOutlet;
+            } else if (p.isAbove(this.startPipe)) {
+                this.startPipe.northOutlet = p.southOutlet;
+            } else if (p.isBelow(this.startPipe)) {
+                this.startPipe.southOutlet = p.northOutlet;
+            }
+        });
     }
 
     getPipeLeftOf(position) {
