@@ -17,18 +17,9 @@ function calculateDistances(startPosition, network) {
     while (currentPosition.type != PipeType.Intersection || pathLength == 0) {
         currentPosition.distance = pathLength;
 
-        let left = findConnectorAt(currentPosition, network, currentPosition.x - 1, currentPosition.y);
-        let right = findConnectorAt(currentPosition, network, currentPosition.x + 1, currentPosition.y);
-        let above = findConnectorAt(currentPosition, network, currentPosition.x, currentPosition.y - 1);
-        let below = findConnectorAt(currentPosition, network, currentPosition.x, currentPosition.y + 1);
-        if (right) {
-            currentPosition = right;
-        } else if (left) {
-            currentPosition = left;
-        } else if (above) {
-            currentPosition = above;
-        } else if (below) {
-            currentPosition = below;
+        let connector = network.getAdjacentPositions(currentPosition).filter(p => p && isConnector(currentPosition, p))[0];
+        if (connector) {
+            currentPosition = connector;
         } else {
             break;
         }
@@ -37,12 +28,8 @@ function calculateDistances(startPosition, network) {
     return pathLength;
 }
 
-function findConnectorAt(position, network, x, y) {
-    let connector = network.getPosition(x, y);
-    if (connector instanceof Pipe && connector.distance == -1 && connector.canConnect(position)) {
-        return connector;
-    }
-    return null;
+function isConnector(currentPosition, otherPosition) {
+    return otherPosition instanceof Pipe && otherPosition.distance == -1 && currentPosition.canConnect(otherPosition);
 }
 
 function parseNetwork(lines) {
