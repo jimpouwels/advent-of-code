@@ -1,24 +1,23 @@
 import Network from "./network";
 import Position from "./position";
 import Pipe from "./pipe";
-import { PipeType } from "./pipe_type";
 
 export default function run(lines) {
     let network = parseNetwork(lines);
-    let startPosition = network.getStartPosition();
-    
-    let pathLength = calculateDistances(startPosition, network);
+    let startPipe = network.getStartPipe();
+    console.log(startPipe);
+    let pathLength = calculateDistances(startPipe, network);
     return Math.ceil(pathLength / 2);
 }
 
-function calculateDistances(startPosition, network) {
+function calculateDistances(startPipe, network) {
     let pathLength = 0;
-    let currentPosition = startPosition;
-    while (currentPosition.type != PipeType.Intersection || pathLength == 0) {
-        currentPosition.handled = true;
+    let currentPipe = startPipe;
+    while (!currentPipe.isStartPipe() || pathLength == 0) {
+        currentPipe.handled = true;
 
-        currentPosition = network.getAdjacentPositions(currentPosition).filter(p => p && isConnector(currentPosition, p))[0];
-        if (!currentPosition) {
+        currentPipe = network.getAdjacentPositions(currentPipe).filter(p => p && isConnector(currentPipe, p))[0];
+        if (!currentPipe) {
             break;
         }
         pathLength++;
@@ -37,19 +36,19 @@ function parseNetwork(lines) {
                 case '.':
                     return new Position(x, y);
                 case 'S':                    
-                    return new Pipe(PipeType.Intersection, x, y, true, true, true, true);
+                    return new Pipe(x, y, true, true, true, true);
                 case '|':
-                    return new Pipe(PipeType.NorthSouth, x, y, true, false, true, false);
+                    return new Pipe(x, y, true, false, true, false);
                 case 'L':
-                    return new Pipe(PipeType.NorthEast, x, y, true, true, false, false);
+                    return new Pipe(x, y, true, true, false, false);
                 case 'J':
-                    return new Pipe(PipeType.NorthWest, x, y, true, false, false, true);
+                    return new Pipe(x, y, true, false, false, true);
                 case '7':
-                    return new Pipe(PipeType.SouthWest, x, y, false, false, true, true);
+                    return new Pipe(x, y, false, false, true, true);
                 case 'F':
-                    return new Pipe(PipeType.SouthEast, x, y, false, true, true, false);
+                    return new Pipe(x, y, false, true, true, false);
                 case '-':
-                    return new Pipe(PipeType.WestEast, x, y, false, true, false, true);
+                    return new Pipe(x, y, false, true, false, true);
             }
             return item;
         });

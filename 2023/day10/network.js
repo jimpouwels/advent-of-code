@@ -1,4 +1,4 @@
-import { PipeType } from "./pipe_type";
+import Pipe from "./pipe";
 
 export default class Network {
     network; 
@@ -14,11 +14,12 @@ export default class Network {
                 this.getPosition(position.x, position.y + 1)];
     }
 
-    getStartPosition() {
+    getStartPipe() {
         for (let y = 0; y < this.network.length; y++) {
             for (let x = 0; x < this.network[0].length; x++) {
-                if (this.getPosition(x, y).type == PipeType.Intersection) {
-                    return this.getPosition(x, y);
+                let position = this.getPosition(x, y);
+                if (position instanceof Pipe && position.isStartPipe()) {
+                    return position;
                 }
             }
         }
