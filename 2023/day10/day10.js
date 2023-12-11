@@ -4,8 +4,7 @@ import Pipe from "./pipe";
 
 export default function run(lines) {
     let network = parseNetwork(lines);
-    let startPipe = network.getStartPipe();
-    let pathLength = calculateDistances(startPipe, network);
+    let pathLength = calculateDistances(network.startPipe, network);
     return Math.ceil(pathLength / 2);
 }
 
@@ -24,13 +23,15 @@ function calculateDistances(startPipe, network) {
 }
 
 function parseNetwork(lines) {
-    return new Network(lines.map((l, y) => {
+    let startPipe = null;
+    let data = lines.map((l, y) => {
         return l.split('').map((item, x) => {
             switch (item) {
                 case '.':
                     return new Position(x, y);
-                case 'S':                    
-                    return new Pipe(x, y, true, true, true, true);
+                case 'S':
+                    startPipe = new Pipe(x, y, true, true, true, true);
+                    return startPipe;
                 case '|':
                     return new Pipe(x, y, true, false, true, false);
                 case 'L':
@@ -46,5 +47,6 @@ function parseNetwork(lines) {
             }
             return item;
         });
-    }));
+    });
+    return new Network(data, startPipe);
 }
