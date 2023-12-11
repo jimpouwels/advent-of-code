@@ -4,7 +4,6 @@ import Pipe from "./pipe";
 
 export default function run(lines) {
     let network = parseNetwork(lines);
-    console.log(networ.startPipe);
     let pathLength = calculateDistances(network.startPipe, network);
     return Math.ceil(pathLength / 2);
 }
@@ -31,7 +30,7 @@ function parseNetwork(lines) {
                 case '.':
                     return new Position(x, y);
                 case 'S':
-                    startPipe = new Pipe(x, y, true, true, true, true);
+                    startPipe = new Pipe(x, y, false, false, false, false);
                     return startPipe;
                 case '|':
                     return new Pipe(x, y, true, false, true, false);
