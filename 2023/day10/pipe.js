@@ -2,7 +2,7 @@ import Position from "./position";
 
 export default class Pipe extends Position {
     type;
-    distance = -1;
+    handled = false;
     westOutlet;
     southOutlet;
     northOutlet;
