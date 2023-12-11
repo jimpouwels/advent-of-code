@@ -19,12 +19,9 @@ export default class Network {
     }
 
     getPosition(x, y) {
-        if (y < 0 || y > this.network.length - 1) {
-            return null;
+        if (y >= 0 && y < this.network.length && 
+            x >= 0 && x < this.network[0].length - 1) {
+            return this.network[y][x];
         }
-        if (x < 0 || x > this.network[0].length - 1) {
-            return null;
-        }
-        return this.network[y][x];
     }
 }
