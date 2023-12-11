@@ -1,15 +1,6 @@
 export default function run(lines) {
     let network = parseNetwork(lines);
-    network = replaceDistances(network);
-    let startPosition;
-    for (let y = 0; y < network.network.length; y++) {
-        for (let x = 0; x < network.network[0].length; x++) {
-            if (network.getPosition(x, y).type == PipeType.Intersection) {
-                startPosition = network.getPosition(x, y);
-                break;
-            }
-        }
-    }
+    let startPosition = network.getStartPosition();
     
     let pathLength = calculateDistances(startPosition, network);
     return Math.ceil(pathLength / 2);
@@ -49,37 +40,21 @@ function findConnector(position, network, x, y) {
     return null;
 }
 
-function replaceDistances(network) {
-    return new Network(network.map((row, y) => {
-        return row.map((item, x) => {
-            switch (item) {
-                case '.':
-                    return new Position(x, y);
-                case 'S':                    
-                    return new Pipe(PipeType.Intersection, x, y, true, true, true, true);
-                case '|':
-                    return new Pipe(PipeType.NorthSouth, x, y, true, false, true, false);
-                case 'L':
-                    return new Pipe(PipeType.NorthEast, x, y, true, true, false, false);
-                case 'J':
-                    return new Pipe(PipeType.NorthWest, x, y, true, false, false, true);
-                case '7':
-                    return new Pipe(PipeType.SouthWest, x, y, false, false, true, true);
-                case 'F':
-                    return new Pipe(PipeType.SouthEast, x, y, false, true, true, false);
-                case '-':
-                    return new Pipe(PipeType.WestEast, x, y, false, true, false, true);
-            }
-            return item;
-        });
-    }));
-}
-
 class Network {
     network; 
 
     constructor(network) {
         this.network = network;
+    }
+
+    getStartPosition() {
+        for (let y = 0; y < this.network.length; y++) {
+            for (let x = 0; x < this.network[0].length; x++) {
+                if (this.getPosition(x, y).type == PipeType.Intersection) {
+                    return this.getPosition(x, y);
+                }
+            }
+        }
     }
 
     getPosition(x, y) {
@@ -157,7 +132,27 @@ const PipeType = {
 }
 
 function parseNetwork(lines) {
-    return lines.map(l => {
-        return l.split('');
-    });
+    return new Network(lines.map((l, y) => {
+        return l.split('').map((item, x) => {
+            switch (item) {
+                case '.':
+                    return new Position(x, y);
+                case 'S':                    
+                    return new Pipe(PipeType.Intersection, x, y, true, true, true, true);
+                case '|':
+                    return new Pipe(PipeType.NorthSouth, x, y, true, false, true, false);
+                case 'L':
+                    return new Pipe(PipeType.NorthEast, x, y, true, true, false, false);
+                case 'J':
+                    return new Pipe(PipeType.NorthWest, x, y, true, false, false, true);
+                case '7':
+                    return new Pipe(PipeType.SouthWest, x, y, false, false, true, true);
+                case 'F':
+                    return new Pipe(PipeType.SouthEast, x, y, false, true, true, false);
+                case '-':
+                    return new Pipe(PipeType.WestEast, x, y, false, true, false, true);
+            }
+            return item;
+        });
+    }));
 }
