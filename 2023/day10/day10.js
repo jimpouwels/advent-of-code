@@ -13,7 +13,7 @@ function calculateDistances(startPipe, network) {
     let currentPipe = startPipe;
     while (!currentPipe.isStartPipe() || pathLength == 0) {
         currentPipe.handled = true;
-        currentPipe = network.getConnectorFor(currentPipe);
+        currentPipe = network.getConnectingPipeFor(currentPipe);
         if (!currentPipe) {
             break;
         }

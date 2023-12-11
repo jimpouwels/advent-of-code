@@ -9,7 +9,7 @@ export default class Network {
         this.startPipe = startPipe;
     }
 
-    getConnectorFor(position) {
+    getConnectingPipeFor(position) {
         return [this.getPosition(position.x - 1, position.y),
                 this.getPosition(position.x + 1, position.y),
                 this.getPosition(position.x, position.y - 1),
