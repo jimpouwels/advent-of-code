@@ -60,4 +60,8 @@ export default class Network {
             }
         }
     }
+
+    toString() {
+        return 'bladiebla';
+    }
 }
