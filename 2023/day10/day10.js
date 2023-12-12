@@ -7,8 +7,6 @@ export default function run(lines) {
     let logger = Logger.getLogger('2023-day10');
     let network = parseNetwork(lines);
     let pathLength = calculateDistances(network.startPipe, network);
-    logger.log(network.toString());
-    logger.log(network.toString());
     return Math.ceil(pathLength / 2);
 }
 
