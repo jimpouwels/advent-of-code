@@ -9,7 +9,7 @@ export default function run(lines) {
     let network = parseNetwork(lines);
 
     let part1 = Math.ceil(calculatePipePathDistance(network.startPipe, network) / 2);
-    let part2 = calculateEnclosedPositions(network);
+    let part2 = network.getOffPathPositions().filter(pos => network.isEnclosed(pos)).length;
 
     return {
         part1: part1,
@@ -29,12 +29,6 @@ function calculatePipePathDistance(startPipe, network) {
         pathLength++;
     }
     return pathLength;
-}
-
-function calculateEnclosedPositions(network) {
-    return network.getOffPathPositions().filter(pos => network.isEnclosedVertically(pos) && 
-                                                       network.isEnclosedHorizontally(pos))
-                                        .length;
 }
 
 function parseNetwork(lines) {

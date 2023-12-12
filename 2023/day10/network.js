@@ -35,6 +35,52 @@ export default class Network {
         });
     }
 
+    isEnclosed(position) {
+        return this.isEnclosedVertically(position) && this.isEnclosedHorizontally(position)
+    }
+
+    getOffPathPositions() {
+        return this.network.flatMap(n => n.filter(n => !(n instanceof Pipe) || ((n instanceof Pipe) && !n.onPath)));
+    }
+
+    getPipeLeftOf(position) {
+        return this.getPipeAt(position.x - 1, position.y);
+    }
+
+    getPipeRightOf(position) {
+        return this.getPipeAt(position.x + 1, position.y);
+    }
+
+    getPipeAbove(position) {
+        return this.getPipeAt(position.x, position.y - 1);
+    }
+
+    getPipeBelow(position) {
+        return this.getPipeAt(position.x, position.y + 1);
+    }
+
+    getPipeAt(x, y) {
+        if (x >= 0 && x < this.network[0].length &&
+            y >= 0 && y < this.network.length) {
+            let position = this.network[y][x];
+            if (position instanceof Pipe) {
+                return position;
+            }
+        }
+    }
+
+    getPosition(x, y) {
+        return this.network[y][x];
+    }
+
+    getHeight() {
+        return this.network.length;
+    }
+
+    getWidth() {
+        return this.network[0].length;
+    }
+
     isEnclosedVertically(position) {
         let crossings = 0;
         let previous = null;
@@ -82,48 +128,6 @@ export default class Network {
             }
         }
         return crossings % 2 == 1;
-    }
-
-    getOffPathPositions() {
-        return this.network.flatMap(n => n.filter(n => !(n instanceof Pipe) || ((n instanceof Pipe) && !n.onPath)));
-    }
-
-    getPipeLeftOf(position) {
-        return this.getPipeAt(position.x - 1, position.y);
-    }
-
-    getPipeRightOf(position) {
-        return this.getPipeAt(position.x + 1, position.y);
-    }
-
-    getPipeAbove(position) {
-        return this.getPipeAt(position.x, position.y - 1);
-    }
-
-    getPipeBelow(position) {
-        return this.getPipeAt(position.x, position.y + 1);
-    }
-
-    getPipeAt(x, y) {
-        if (x >= 0 && x < this.network[0].length &&
-            y >= 0 && y < this.network.length) {
-            let position = this.network[y][x];
-            if (position instanceof Pipe) {
-                return position;
-            }
-        }
-    }
-
-    getPosition(x, y) {
-        return this.network[y][x];
-    }
-
-    getHeight() {
-        return this.network.length;
-    }
-
-    getWidth() {
-        return this.network[0].length;
     }
 
     toString() {
