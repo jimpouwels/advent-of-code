@@ -37,22 +37,22 @@ function parseNetwork(lines) {
         return l.split('').map((item, x) => {
             switch (item) {
                 case '.':
-                    return new Position(item, x, y);
+                    return new Position(x, y);
                 case 'S':
-                    startPipe = new Pipe(item, x, y, false, false, false, false);
+                    startPipe = new Pipe(x, y, false, false, false, false);
                     return startPipe;
                 case '|':
-                    return new Pipe(item, x, y, true, false, true, false);
+                    return new Pipe(x, y, true, false, true, false);
                 case 'L':
-                    return new Pipe(item, x, y, true, true, false, false);
+                    return new Pipe(x, y, true, true, false, false);
                 case 'J':
-                    return new Pipe(item, x, y, true, false, false, true);
+                    return new Pipe(x, y, true, false, false, true);
                 case '7':
-                    return new Pipe(item, x, y, false, false, true, true);
+                    return new Pipe(x, y, false, false, true, true);
                 case 'F':
-                    return new Pipe(item, x, y, false, true, true, false);
+                    return new Pipe(x, y, false, true, true, false);
                 case '-':
-                    return new Pipe(item, x, y, false, true, false, true);
+                    return new Pipe(x, y, false, true, false, true);
             }
             return item;
         });

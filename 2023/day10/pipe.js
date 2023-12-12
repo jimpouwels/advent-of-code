@@ -7,8 +7,8 @@ export default class Pipe extends Position {
     hasNorthOutlet = false;
     hasEastOutlet = false;
 
-    constructor(value, x, y, hasNorthOutlet, hasEastOutlet, hasSouthOutlet, hasWestOutlet) {
-        super(value, x, y);
+    constructor(x, y, hasNorthOutlet, hasEastOutlet, hasSouthOutlet, hasWestOutlet) {
+        super(x, y);
         this.hasNorthOutlet = hasNorthOutlet;
         this.hasEastOutlet = hasEastOutlet;
         this.hasSouthOutlet = hasSouthOutlet;

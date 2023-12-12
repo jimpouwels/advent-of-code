@@ -1,10 +1,8 @@
 export default class Position {
-    value;
     x;
     y;
 
-    constructor(value, x, y) {
-        this.value = value;
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
