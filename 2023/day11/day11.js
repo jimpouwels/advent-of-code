@@ -6,25 +6,30 @@ let logger = Logger.getLogger('2023-day11');
 
 export default function run(lines) {
     let spaceArray = lines.map(l => l.split(''));
-    let expandedSpacePart1 = expand(spaceArray);
-    let part1 = sumDistancesBetweenGalaxies(parseSpace(expandedSpacePart1));
-
     
+    let part1 = sumDistancesBetweenGalaxiesP1(spaceArray);
+    let part2 = sumDistancesBetweenGalaxiesP2(spaceArray);
     return {
         part1: part1,
-        part2: 0
+        part2: part2
     }
 }
 
-function sumDistancesBetweenGalaxies(space) {
+function sumDistancesBetweenGalaxiesP1(spaceArray) {
+    let expandedSpacePart1 = expand(spaceArray);
+    let parsedSpace = parseSpace(expandedSpacePart1);
     let sum = 0;
-    let galaxies = space.flatMap(x => x.filter(y => y instanceof Galaxy));
+    let galaxies = parsedSpace.flatMap(x => x.filter(y => y instanceof Galaxy));
     for (let i = 0; i < galaxies.length - 1; i++) {
         for (let j = i + 1; j < galaxies.length; j++) {
             sum += ((Math.abs(galaxies[i].x - galaxies[j].x) + (Math.abs(galaxies[i].y - galaxies[j].y))));
         }
     }
     return sum;
+}
+
+function sumDistancesBetweenGalaxiesP2(spaceArray) {
+
 }
 
 function expand(space) {
