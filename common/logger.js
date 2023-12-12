@@ -23,6 +23,14 @@ export default class Logger {
         return new Logger(identifier);
     }
 
+    logGrid(array, lambda) {
+        array.forEach(a => {
+            let message = '';
+            a.forEach(i => message += lambda(i));
+            this.log(message); 
+        });
+    }
+
     log(message) {
         this.appendFile(this.getFilePath(), message);
         this.logMaster(message);

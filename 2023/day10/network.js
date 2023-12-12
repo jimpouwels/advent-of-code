@@ -62,6 +62,11 @@ export default class Network {
     }
 
     toString() {
-        return 'bladiebla';
+        let networkAsString = '';
+        this.network.forEach(row => {
+            row.forEach(element => networkAsString += element.value);
+            networkAsString += '\n';
+        });
+        return networkAsString;
     }
 }

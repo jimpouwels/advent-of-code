@@ -6,6 +6,7 @@ import Logger from "../../common/logger";
 export default function run(lines) {
     let logger = Logger.getLogger('2023-day10');
     let network = parseNetwork(lines);
+    logger.logGrid(network.network, (p => p.value));
     let pathLength = calculateDistances(network.startPipe, network);
     return Math.ceil(pathLength / 2);
 }
@@ -30,7 +31,7 @@ function parseNetwork(lines) {
         return l.split('').map((item, x) => {
             switch (item) {
                 case '.':
-                    return new Position(x, y);
+                    return new Position(item, x, y);
                 case 'S':
                     startPipe = new Pipe(item, x, y, false, false, false, false);
                     return startPipe;

@@ -1,7 +1,6 @@
 import Position from "./position";
 
 export default class Pipe extends Position {
-    value;
     handled = false;
     westOutlet;
     southOutlet;
@@ -9,8 +8,7 @@ export default class Pipe extends Position {
     eastOutlet;
 
     constructor(value, x, y, northOutlet, eastOutlet, southOutlet, westOutlet) {
-        super(x, y);
-        this.value = value;
+        super(value, x, y);
         this.northOutlet = northOutlet;
         this.eastOutlet = eastOutlet;
         this.southOutlet = southOutlet;
