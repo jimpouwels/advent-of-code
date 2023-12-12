@@ -35,6 +35,66 @@ export default class Network {
         });
     }
 
+    isEnclosedVertically(position) {
+        let crossings = 0;
+        let previous = null;
+        for (let y = 0; y < this.getHeight(); y++) {
+            let p = this.getPosition(position.x, y);
+            if (p == position) {
+                if (crossings % 2 != 1) {
+                    return false;
+                }
+                crossings = 0;
+                previous = null;
+                continue;
+            }
+            if (!p.onPath) {
+                continue;
+            }
+            if ((previous == '7' && p.value == 'L') ||
+                (previous == 'F' && p.value == 'J') ||
+                p.value == '-') {
+                previous = null;
+                crossings++;
+            } else if (['J', 'F', 'L', '7'].includes(p.value)) {
+                previous = p.value;
+            }
+        }
+        return crossings % 2 == 1;
+    }
+
+    isEnclosedHorizontally(position) {
+        let crossings = 0;
+        let previous = null;
+        for (let x = 0; x < this.getWidth(); x++) {
+            let p = this.getPosition(x, position.y);
+            if (p == position) {
+                if (crossings % 2 != 1) {
+                    return false;
+                }
+                crossings = 0;
+                previous = null;
+                continue;
+            }
+            if (!p.onPath) {
+                continue;
+            }
+            if ((previous == 'L' && p.value == '7') ||
+                ( previous == 'F' && p.value == 'J') ||
+                p.value == '|') {
+                previous = null;
+                crossings++;
+            } else if (['J', 'F', 'L', '7'].includes(p.value)) {
+                previous = p.value;
+            }
+        }
+        return crossings % 2 == 1;
+    }
+
+    getOffPathPositions() {
+        return this.network.flatMap(n => n.filter(n => !(n instanceof Pipe) || ((n instanceof Pipe) && !n.onPath)));
+    }
+
     getPipeLeftOf(position) {
         return this.getPipeAt(position.x - 1, position.y);
     }

@@ -8,159 +8,16 @@ let logger = Logger.getLogger('2023-day10');
 export default function run(lines) {
     let network = parseNetwork(lines);
 
-    let pathLength = calculateDistances(network.startPipe, network);
+    let part1 = Math.ceil(calculatePipePathDistance(network.startPipe, network) / 2);
     let part2 = calculateEnclosedPositions(network);
 
-    logger.logGrid(network.network, (a) => a.value);
     return {
-        part1: Math.ceil(pathLength / 2),
+        part1: part1,
         part2: part2
     }
 }
 
-function calculateEnclosedPositions(network) {
-    let noPipes = network.network.flatMap(n => n.filter(n => !(n instanceof Pipe) || ((n instanceof Pipe) && !n.onPath)));
-    return noPipes.filter(pos => {
-        let southCount = castSouth(pos, network);
-        let northCount = castNorth(pos, network);
-        let eastCount = castEast(pos, network);
-        let westCount = castWest(pos, network);
-        if ((southCount % 2 == 1) && (northCount % 2 == 1) && (westCount % 2 == 1) && (eastCount % 2 == 1)) {
-            pos.value = '*';
-            return true;
-        }
-    }).length;
-}
-
-function castWest(pos, network) {
-    let crossings = 0;
-    let previous = null;
-    for (let x = pos.x - 1; x >= 0; x--) {
-        let p = network.getPosition(x, pos.y);
-        if (!p.onPath) {
-            previous = null;
-            continue;
-        }
-        if (p.value == '|') {
-            previous = null;
-            crossings++;
-            continue;
-        }
-        if (p.value == '-') {
-            continue;
-        }
-        if (p.value == 'L' && previous == '7') {
-            previous = null;
-            crossings++;
-            continue;
-        } 
-        if (p.value == 'F' && previous == 'J') {
-            previous = null;
-            crossings++;
-            continue;
-        }
-        previous = p.value;
-    }
-    return crossings;
-}
-
-function castEast(pos, network) {
-    let crossings = 0;
-    let previous = null;
-    for (let x = pos.x + 1; x < network.getWidth(); x++) {
-        let p = network.getPosition(x, pos.y);
-        if (!p.onPath) {
-            previous = null;
-            continue;
-        }
-        if (p.value == '|') {
-            previous = null;
-            crossings++;
-            continue;
-        }
-        if (p.value == '-') {
-            continue;
-        }
-        if (p.value == '7' && previous == 'L') {
-            previous = null;
-            crossings++;
-            continue;
-        } 
-        if (p.value == 'J' && previous == 'F') {
-            previous = null;
-            crossings++;
-            continue;
-        } 
-        previous = p.value;
-    }
-    return crossings;
-}
-
-function castNorth(pos, network) {
-    let crossings = 0;
-    let previous = null;
-    for (let y = pos.y - 1; y >= 0; y--) {
-        let p = network.getPosition(pos.x, y);
-        if (!p.onPath) {
-            previous = null;
-            continue;
-        }
-        if (p.value == '-') {
-            previous = null;
-            crossings++;
-            continue;
-        }
-        if (p.value == '|') {
-            continue;
-        }
-        if (p.value == '7' && previous == 'L') {
-            previous = null;
-            crossings++;
-            continue;
-        } 
-        if (p.value == 'F' && previous == 'J') {
-            previous = null;
-            crossings++;
-            continue;
-        }
-        previous = p.value;
-    }
-    return crossings;
-}
-
-function castSouth(pos, network) {
-    let crossings = 0;
-    let previous = null;
-    for (let y = pos.y + 1; y < network.getHeight(); y++) {
-        let p = network.getPosition(pos.x, y);
-        if (!p.onPath) {
-            previous = null;
-            continue;
-        }
-        if (p.value == '-') {
-            previous = null;
-            crossings++;
-            continue;
-        }
-        if (p.value == '|') {
-            continue;
-        }
-        if (p.value == 'L' && previous == '7') {
-            previous = null;
-            crossings++;
-            continue;
-        } 
-        if (p.value == 'J' && previous == 'F') {
-            previous = null;
-            crossings++;
-            continue;
-        } 
-        previous = p.value;
-    }
-    return crossings;
-}
-
-function calculateDistances(startPipe, network) {
+function calculatePipePathDistance(startPipe, network) {
     let pathLength = 0;
     let currentPipe = startPipe;
     while (true) {
@@ -172,6 +29,12 @@ function calculateDistances(startPipe, network) {
         pathLength++;
     }
     return pathLength;
+}
+
+function calculateEnclosedPositions(network) {
+    return network.getOffPathPositions().filter(pos => network.isEnclosedVertically(pos) && 
+                                                       network.isEnclosedHorizontally(pos))
+                                        .length;
 }
 
 function parseNetwork(lines) {
