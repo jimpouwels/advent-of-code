@@ -51,13 +51,14 @@ export default class Network {
             if (!p.onPath) {
                 continue;
             }
-            if ((previous == '7' && p.value == 'L') ||
-                (previous == 'F' && p.value == 'J') ||
-                p.value == '-') {
+            if (previous != null && 
+                ((previous.isTopRightCorner() && p.isBottomLeftCorner()) ||
+                (previous.isTopLeftCorner() && p.isBottomRightCorner())) ||
+                p.isHorizontal()) {
                 previous = null;
                 crossings++;
             } else if (['J', 'F', 'L', '7'].includes(p.value)) {
-                previous = p.value;
+                previous = p;
             }
         }
         return crossings % 2 == 1;
@@ -79,13 +80,14 @@ export default class Network {
             if (!p.onPath) {
                 continue;
             }
-            if ((previous == 'L' && p.value == '7') ||
-                ( previous == 'F' && p.value == 'J') ||
-                p.value == '|') {
+            if (previous && 
+                ((previous.isBottomLeftCorner() && p.isTopRightCorner()) ||
+                (previous.isTopLeftCorner() && p.isBottomRightCorner())) ||
+                p.isVertical()) {
                 previous = null;
                 crossings++;
-            } else if (['J', 'F', 'L', '7'].includes(p.value)) {
-                previous = p.value;
+            } else if (p.isCorner()) {
+                previous = p;
             }
         }
         return crossings % 2 == 1;

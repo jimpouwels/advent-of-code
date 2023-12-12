@@ -23,7 +23,35 @@ export default class Pipe extends Position {
                otherPipe.isStartPipe();
     }
 
+    isVertical() {
+        return this.northOutlet && this.southOutlet;
+    }
+
+    isHorizontal() {
+        return this.eastOutlet && this.westOutlet;
+    }
+
     isStartPipe() {
         return this.northOutlet && this.southOutlet && this.eastOutlet && this.westOutlet;
+    }
+
+    isCorner() {
+        return this.isBottomRightCorner() || this.isTopLeftCorner() || this.isTopRightCorner() || this.isBottomLeftCorner();
+    }
+
+    isBottomLeftCorner() {
+        return this.northOutlet && this.eastOutlet;
+    }
+
+    isBottomRightCorner() {
+        return this.northOutlet && this.westOutlet;
+    }
+
+    isTopRightCorner() {
+        return this.westOutlet && this.southOutlet;
+    }
+
+    isTopLeftCorner() {
+        return this.eastOutlet && this.southOutlet;
     }
 }
