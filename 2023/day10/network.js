@@ -18,7 +18,7 @@ export default class Network {
         return [this.getPipeLeftOf(position),
                 this.getPipeRightOf(position),
                 this.getPipeAbove(position),
-                this.getPipeBelow(position)];
+                this.getPipeBelow(position)].filter(p => p);
     }
 
     resolveStartPipe() {

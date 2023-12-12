@@ -24,11 +24,12 @@ export default class Logger {
     }
 
     logGrid(array, lambda) {
+        let message = '';
         array.forEach(a => {
-            let message = '';
             a.forEach(i => message += lambda(i));
-            this.log(message); 
+            message += '\n'; 
         });
+        this.log(message);
     }
 
     log(message) {
