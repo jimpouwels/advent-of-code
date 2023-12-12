@@ -24,13 +24,13 @@ export default class Network {
     resolveStartPipe() {
         this.getAdjacentPipes(this.startPipe).forEach(p => {
             if (p.isRightOf(this.startPipe)) {
-                this.startPipe.eastOutlet = p.westOutlet;
+                this.startPipe.hasEastOutlet = p.hasWestOutlet;
             } else if (p.isLeftOf(this.startPipe)) {
-                this.startPipe.westOutlet = p.eastOutlet;
+                this.startPipe.hasWestOutlet = p.hasEastOutlet;
             } else if (p.isAbove(this.startPipe)) {
-                this.startPipe.northOutlet = p.southOutlet;
+                this.startPipe.hasNorthOutlet = p.hasSouthOutlet;
             } else if (p.isBelow(this.startPipe)) {
-                this.startPipe.southOutlet = p.northOutlet;
+                this.startPipe.hasSouthOutlet = p.hasNorthOutlet;
             }
         });
     }

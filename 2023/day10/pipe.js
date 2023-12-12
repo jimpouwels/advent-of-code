@@ -2,37 +2,37 @@ import Position from "./position";
 
 export default class Pipe extends Position {
     onPath = false;
-    westOutlet;
-    southOutlet;
-    northOutlet;
-    eastOutlet;
+    hasWestOutlet;
+    hasSouthOutlet;
+    hasNorthOutlet;
+    hasEastOutlet;
 
-    constructor(value, x, y, northOutlet, eastOutlet, southOutlet, westOutlet) {
+    constructor(value, x, y, hasNorthOutlet, hasEastOutlet, hasSouthOutlet, hasWestOutlet) {
         super(value, x, y);
-        this.northOutlet = northOutlet;
-        this.eastOutlet = eastOutlet;
-        this.southOutlet = southOutlet;
-        this.westOutlet = westOutlet;
+        this.hasNorthOutlet = hasNorthOutlet;
+        this.hasEastOutlet = hasEastOutlet;
+        this.hasSouthOutlet = hasSouthOutlet;
+        this.hasWestOutlet = hasWestOutlet;
     }
 
     isConnector(otherPipe) {
-        return this.northOutlet && otherPipe.southOutlet && this.isBelow(otherPipe) || 
-               this.southOutlet && otherPipe.northOutlet && this.isAbove(otherPipe) ||
-               this.westOutlet && otherPipe.eastOutlet && this.isRightOf(otherPipe) || 
-               this.eastOutlet && otherPipe.westOutlet && this.isLeftOf(otherPipe) ||
+        return this.hasNorthOutlet && otherPipe.hasSouthOutlet && this.isBelow(otherPipe) || 
+               this.hasSouthOutlet && otherPipe.hasNorthOutlet && this.isAbove(otherPipe) ||
+               this.hasWestOutlet && otherPipe.hasEastOutlet && this.isRightOf(otherPipe) || 
+               this.hasEastOutlet && otherPipe.hasWestOutlet && this.isLeftOf(otherPipe) ||
                otherPipe.isStartPipe();
     }
 
     isVertical() {
-        return this.northOutlet && this.southOutlet;
+        return this.hasNorthOutlet && this.hasSouthOutlet;
     }
 
     isHorizontal() {
-        return this.eastOutlet && this.westOutlet;
+        return this.hasEastOutlet && this.hasWestOutlet;
     }
 
     isStartPipe() {
-        return this.northOutlet && this.southOutlet && this.eastOutlet && this.westOutlet;
+        return this.hasNorthOutlet && this.hasSouthOutlet && this.hasEastOutlet && this.hasWestOutlet;
     }
 
     isCorner() {
@@ -40,18 +40,18 @@ export default class Pipe extends Position {
     }
 
     isBottomLeftCorner() {
-        return this.northOutlet && this.eastOutlet;
+        return this.hasNorthOutlet && this.hasEastOutlet;
     }
 
     isBottomRightCorner() {
-        return this.northOutlet && this.westOutlet;
+        return this.hasNorthOutlet && this.hasWestOutlet;
     }
 
     isTopRightCorner() {
-        return this.westOutlet && this.southOutlet;
+        return this.hasWestOutlet && this.hasSouthOutlet;
     }
 
     isTopLeftCorner() {
-        return this.eastOutlet && this.southOutlet;
+        return this.hasEastOutlet && this.hasSouthOutlet;
     }
 }
