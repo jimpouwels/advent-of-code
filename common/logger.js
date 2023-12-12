@@ -42,7 +42,7 @@ export default class Logger {
     }
 
     appendFile(filepath, message) {
-        fs.appendFile(filepath, message + (message ? '\n' : ''), () => {});
+        fs.appendFileSync(filepath, message + (message ? '\n' : ''), () => {});
     }
 
     getFilePath() {

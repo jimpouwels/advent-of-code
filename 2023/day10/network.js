@@ -11,7 +11,7 @@ export default class Network {
     }
 
     getConnectingPipeFor(position) {
-        return this.getAdjacentPipes(position).filter(p => p && !p.handled && position.isConnector(p))[0];
+        return this.getAdjacentPipes(position).filter(p => p && !p.onPath && position.isConnector(p))[0];
     }
 
     getAdjacentPipes(position) {
@@ -52,13 +52,25 @@ export default class Network {
     }
 
     getPipeAt(x, y) {
-        if (x >= 0 && x < this.network[0].length - 1 &&
+        if (x >= 0 && x < this.network[0].length &&
             y >= 0 && y < this.network.length) {
             let position = this.network[y][x];
             if (position instanceof Pipe) {
                 return position;
             }
         }
+    }
+
+    getPosition(x, y) {
+        return this.network[y][x];
+    }
+
+    getHeight() {
+        return this.network.length;
+    }
+
+    getWidth() {
+        return this.network[0].length;
     }
 
     toString() {
