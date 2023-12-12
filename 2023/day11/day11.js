@@ -25,11 +25,6 @@ function sumDistancesBetweenGalaxies(space) {
     return sum;
 }
 
-function parseSpace(spaceArray) {
-    return spaceArray.map((row, y) => row.map((s, x) => s == '#' ? new Galaxy(x, y) : new Position(x, y))
-                             .filter(x => x));
-}
-
 function expand(space) {
     space.map((row, y) => row.every(e => e == '.') ? y : null)
          .filter(emptyRow => emptyRow)
@@ -40,4 +35,13 @@ function expand(space) {
             .filter(emptyCol => emptyCol)
             .reverse()
             .forEach(x => space.forEach(s => s.splice(x, 0, '.')));
+}
+
+function parseSpace(spaceArray) {
+    return spaceArray.map((row, y) => row.map((position, x) => parsePosition(position, x, y))
+                     .filter(x => x));
+}
+
+function parsePosition(position, x, y) {
+    return position == '#' ? new Galaxy(x, y) : new Position(x, y);
 }
