@@ -6,8 +6,10 @@ let logger = Logger.getLogger('2023-day11');
 
 export default function run(lines) {
     let spaceArray = lines.map(l => l.split(''));
-    expand(spaceArray);
-    let part1 = sumDistancesBetweenGalaxies(parseSpace(spaceArray));
+    let expandedSpacePart1 = expand(spaceArray);
+    let part1 = sumDistancesBetweenGalaxies(parseSpace(expandedSpacePart1));
+
+    
     return {
         part1: part1,
         part2: 0
@@ -26,15 +28,21 @@ function sumDistancesBetweenGalaxies(space) {
 }
 
 function expand(space) {
-    space.map((row, y) => row.every(e => e == '.') ? y : null)
-         .filter(emptyRow => emptyRow)
-         .reverse()
-         .forEach(y => space.splice(y + 1, 0, Array(space[0].length).fill('.')));
+    let spaceCopy = space.map(s => [...s]);
+    getEmptyRows(spaceCopy).reverse()
+                           .forEach(y => spaceCopy.splice(y + 1, 0, Array(spaceCopy[0].length).fill('.')));
 
-    space[0].map((_, x) => space.every(s => s[x] == '.') ? x : null)
-            .filter(emptyCol => emptyCol)
-            .reverse()
-            .forEach(x => space.forEach(s => s.splice(x, 0, '.')));
+    getEmptyColumns(spaceCopy).reverse()
+                              .forEach(x => spaceCopy.forEach(s => s.splice(x, 0, '.')));
+    return spaceCopy;
+}
+
+function getEmptyRows(space) {
+    return space.map((row, y) => row.every(e => e == '.') ? y : null).filter(emptyRow => emptyRow);
+}
+
+function getEmptyColumns(space) {
+    return space[0].map((_, x) => space.every(s => s[x] == '.') ? x : null).filter(emptyCol => emptyCol);
 }
 
 function parseSpace(spaceArray) {
