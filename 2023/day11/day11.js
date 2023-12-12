@@ -1,4 +1,6 @@
 import Logger from "../../common/logger";
+import Position from "./position";
+import Galaxy from "./galaxy";
 
 let logger = Logger.getLogger('2023-day11');
 
@@ -29,37 +31,13 @@ function parseSpace(spaceArray) {
 }
 
 function expand(space) {
-    let expandY = [];
-    for (let y = 0; y < space.length; y++) {
-        if (space[y].every(e => e == '.')) {
-            expandY.push(y);
-        }
-    }
-    expandY.reverse().forEach(y => space.splice(y + 1, 0, Array(space[0].length).fill('.')));
+    space.map((row, y) => row.every(e => e == '.') ? y : null)
+         .filter(emptyRow => emptyRow)
+         .reverse()
+         .forEach(y => space.splice(y + 1, 0, Array(space[0].length).fill('.')));
 
-    let expandX = [];
-    for (let x = 0; x < space[0].length; x++) {
-        if (space.every(s => s[x] == '.') > 0) {
-            expandX.push(x);
-        }
-    }
-    expandX.reverse().forEach(x => space.forEach(s => s.splice(x, 0, '.')));
-    
-}
-
-class Position {
-    x;
-    y;
-
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
-class Galaxy extends Position {
-    constructor(x, y) {
-        super(x, y);
-    }
-
+    space[0].map((_, x) => space.every(s => s[x] == '.') ? x : null)
+            .filter(emptyCol => emptyCol)
+            .reverse()
+            .forEach(x => space.forEach(s => s.splice(x, 0, '.')));
 }
