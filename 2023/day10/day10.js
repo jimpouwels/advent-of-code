@@ -45,7 +45,7 @@ function parseNetwork(lines) {
                 case '.':
                     return new Position(item, x, y);
                 case 'S':
-                    startPipe = new Pipe('J', x, y, false, false, false, false);
+                    startPipe = new Pipe(item, x, y, false, false, false, false);
                     return startPipe;
                 case '|':
                     return new Pipe(item, x, y, true, false, true, false);
