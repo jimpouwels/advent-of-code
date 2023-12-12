@@ -38,27 +38,23 @@ export default class Network {
     isEnclosedVertically(position) {
         let crossings = 0;
         let previous = null;
+    
         for (let y = 0; y < this.getHeight(); y++) {
             let p = this.getPosition(position.x, y);
             if (p == position) {
-                if (crossings % 2 != 1) {
-                    return false;
-                }
+                if (crossings % 2 != 1) false;
                 crossings = 0;
                 previous = null;
-                continue;
-            }
-            if (!p.onPath) {
-                continue;
-            }
-            if (previous != null && 
-                ((previous.isTopRightCorner() && p.isBottomLeftCorner()) ||
-                (previous.isTopLeftCorner() && p.isBottomRightCorner())) ||
-                p.isHorizontal()) {
-                previous = null;
-                crossings++;
-            } else if (['J', 'F', 'L', '7'].includes(p.value)) {
-                previous = p;
+            } else {
+                if (!p.onPath) continue;
+                if (((previous?.isTopRightCorner() && p.isBottomLeftCorner()) ||
+                    (previous?.isTopLeftCorner() && p.isBottomRightCorner())) ||
+                    p.isHorizontal()) {
+                    previous = null;
+                    crossings++;
+                } else if (p.isCorner()) {
+                    previous = p;
+                }
             }
         }
         return crossings % 2 == 1;
@@ -70,24 +66,19 @@ export default class Network {
         for (let x = 0; x < this.getWidth(); x++) {
             let p = this.getPosition(x, position.y);
             if (p == position) {
-                if (crossings % 2 != 1) {
-                    return false;
-                }
+                if (crossings % 2 != 1) false;
                 crossings = 0;
                 previous = null;
-                continue;
-            }
-            if (!p.onPath) {
-                continue;
-            }
-            if (previous && 
-                ((previous.isBottomLeftCorner() && p.isTopRightCorner()) ||
-                (previous.isTopLeftCorner() && p.isBottomRightCorner())) ||
-                p.isVertical()) {
-                previous = null;
-                crossings++;
-            } else if (p.isCorner()) {
-                previous = p;
+            } else {
+                if (!p.onPath) continue;
+                if (((previous?.isBottomLeftCorner() && p.isTopRightCorner()) ||
+                    (previous?.isTopLeftCorner() && p.isBottomRightCorner())) ||
+                    p.isVertical()) {
+                    previous = null;
+                    crossings++;
+                } else if (p.isCorner()) {
+                    previous = p;
+                }
             }
         }
         return crossings % 2 == 1;
