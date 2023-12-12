@@ -3,24 +3,29 @@ import Logger from "../../common/logger";
 let logger = Logger.getLogger('2023-day11');
 
 export default function run(lines) {
-    let space = lines.map(l => l.split(''));
-    expand(space);
-    let parsedSpace = space.map((row, y) => row.map((s, x) =>
-                                              s == '#' ? new Galaxy(x, y) : new Position(x, y))
-                                         .filter(x => x));
+    let spaceArray = lines.map(l => l.split(''));
+    expand(spaceArray);
+    let part1 = sumDistancesBetweenGalaxies(parseSpace(spaceArray));
+    return {
+        part1: part1,
+        part2: 0
+    }
+}
 
-    let galaxies = parsedSpace.flatMap(x => x.filter(y => y instanceof Galaxy));
-
+function sumDistancesBetweenGalaxies(space) {
     let sum = 0;
+    let galaxies = space.flatMap(x => x.filter(y => y instanceof Galaxy));
     for (let i = 0; i < galaxies.length - 1; i++) {
         for (let j = i + 1; j < galaxies.length; j++) {
             sum += ((Math.abs(galaxies[i].x - galaxies[j].x) + (Math.abs(galaxies[i].y - galaxies[j].y))));
         }
     }
-    return {
-        part1: sum,
-        part2: 0
-    }
+    return sum;
+}
+
+function parseSpace(spaceArray) {
+    return spaceArray.map((row, y) => row.map((s, x) => s == '#' ? new Galaxy(x, y) : new Position(x, y))
+                             .filter(x => x));
 }
 
 function expand(space) {
