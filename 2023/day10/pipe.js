@@ -2,10 +2,10 @@ import Position from "./position";
 
 export default class Pipe extends Position {
     onPath = false;
-    hasWestOutlet;
-    hasSouthOutlet;
-    hasNorthOutlet;
-    hasEastOutlet;
+    hasWestOutlet = false;
+    hasSouthOutlet = false;
+    hasNorthOutlet = false;
+    hasEastOutlet = false;
 
     constructor(value, x, y, hasNorthOutlet, hasEastOutlet, hasSouthOutlet, hasWestOutlet) {
         super(value, x, y);
