@@ -1,5 +1,4 @@
 import Logger from "../../common/logger";
-import Position from "./position";
 
 let logger = Logger.getLogger('2023-day11');
 
@@ -39,5 +38,5 @@ function parseSpace(spaceArray) {
 }
 
 function parsePosition(position, x, y) {
-    return position == '#' ? new Position(x, y, true) : new Position(x, y, false);
+    return position == '#' ? {x: x, y: y, isGalaxy: true} : {x: x, y: y, isGalaxy: false};
 }
