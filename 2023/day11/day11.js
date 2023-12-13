@@ -18,17 +18,11 @@ function sumDistancesBetweenGalaxies(space, expandCount) {
     let expandXIndices = getEmptyColumns(space);
     let expandYIndices = getEmptyRows(space);
     let galaxies = space.flatMap(x => x.filter(y => y.isGalaxy));
-    let sum = 0;
-    galaxies.forEach((g1, i) => {
-        if (i >= galaxies.length - 1) return;
-        galaxies.forEach((g2, j) => {
-            if (j <= i) return;
-            sum += ((Math.abs(g1.x - g2.x) + (Math.abs(g1.y - g2.y))));
-            sum += expandXIndices.filter(x => (g1.x < x && g2.x > x) || (g2.x < x && g1.x > x)).length * (expandCount - 1);
-            sum += expandYIndices.filter(y => (g1.y < y && g2.y > y) || (g2.y < y && g1.y > y)).length * (expandCount - 1);
-        });
-    });
-    return sum;
+    return galaxies.reduce((sum, g1, i) => i >= galaxies.length - 1 ? sum : 
+                                (sum + galaxies.reduce((sum, g2, j) => j <= i ? sum :
+                                    (sum + ((Math.abs(g1.x - g2.x) + (Math.abs(g1.y - g2.y)))) +
+                                    expandXIndices.filter(x => (g1.x < x && g2.x > x) || (g2.x < x && g1.x > x)).length * (expandCount - 1) +
+                                    expandYIndices.filter(y => (g1.y < y && g2.y > y) || (g2.y < y && g1.y > y)).length * (expandCount - 1)), 0)), 0);
 }
 
 function getEmptyRows(space) {
