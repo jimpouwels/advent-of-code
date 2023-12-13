@@ -33,7 +33,6 @@ export default class Logger {
     }
 
     log(message) {
-        this.appendFile(this.getFilePath(), message);
         this.logMaster(message);
     }
 
