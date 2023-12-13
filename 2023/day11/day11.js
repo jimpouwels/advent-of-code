@@ -25,7 +25,7 @@ function sumDistancesBetweenGalaxies(space, expandCount) {
 }
 
 function getEmptyRows(space) {
-    return space.map((row, y) => row.every(e => !e.isGalaxy) ? y : null).filter(emptyRow => emptyRow);
+    return space.map((row, y) => row.every(s => !s.isGalaxy) ? y : null).filter(emptyRow => emptyRow);
 }
 
 function getEmptyColumns(space) {
