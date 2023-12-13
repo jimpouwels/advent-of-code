@@ -5,7 +5,14 @@ export default function run(lines) {
     let instructions = parseInstructions(lines[0]);
     let nodes = parseNodes(lines.slice(2));
 
-    return nodes.filter(n => n.isBegin()).map(currentNode => {
+    return {
+        part1: calculateStepCount(nodes, instructions, n => n.name == 'AAA'),
+        part2: calculateStepCount(nodes, instructions, n => n.name.endsWith('A'))
+    }
+}
+
+function calculateStepCount(nodes, instructions, beginNodeMatcher) {
+    return nodes.filter(beginNodeMatcher).map(currentNode => {
         let steps = 0;
         let currentInstructions = [...instructions];
 
