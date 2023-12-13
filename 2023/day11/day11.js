@@ -29,19 +29,19 @@ function sumDistancesBetweenGalaxiesP1(spaceArray) {
 }
 
 function sumDistancesBetweenGalaxiesP2(space) {
-    let expandYIndices = getEmptyColumns(space);
-    let expandXIndices = getEmptyRows(space);
+    let expandXIndices = getEmptyColumns(space);
+    let expandYIndices = getEmptyRows(space);
     let parsedSpace = parseSpace(space);
     let galaxies = parsedSpace.flatMap(x => x.filter(y => y instanceof Galaxy));
     let sum = 0;
     for (let i = 0; i < galaxies.length - 1; i++) {
         for (let j = i + 1; j < galaxies.length; j++) {
             sum += ((Math.abs(galaxies[i].x - galaxies[j].x) + (Math.abs(galaxies[i].y - galaxies[j].y))));
-            let countX = expandXIndices.filter(x => (galaxies[i].y < x && galaxies[j].y > x) ||
-                                                    (galaxies[j].y < x && galaxies[i].y > x)).length;
+            let countX = expandXIndices.filter(x => (galaxies[i].x < x && galaxies[j].x > x) ||
+                                                    (galaxies[j].x < x && galaxies[i].x > x)).length;
             sum += (countX * 999999);
-            let countY = expandYIndices.filter(y => (galaxies[i].x < y && galaxies[j].x > y) ||
-                                                    (galaxies[j].x < y && galaxies[i].x > y)).length;
+            let countY = expandYIndices.filter(y => (galaxies[i].y < y && galaxies[j].y > y) ||
+                                                    (galaxies[j].y < y && galaxies[i].y > y)).length;
             sum += (countY * 999999);
         }
     }

@@ -6,7 +6,7 @@ describe('day11', () => {
     it('runs', () => {
         let result = run(readLines('2023/day11/testdata.txt'));
         expect(result.part1).toEqual(10033566);
-        expect(result.part2).toEqual(8410);
+        expect(result.part2).toEqual(560822911938);
     });
 
 });
