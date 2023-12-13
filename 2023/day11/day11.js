@@ -1,6 +1,5 @@
 import Logger from "../../common/logger";
 import Position from "./position";
-import Galaxy from "./galaxy";
 
 let logger = Logger.getLogger('2023-day11');
 
@@ -19,7 +18,7 @@ function sumDistancesBetweenGalaxiesP1(spaceArray) {
     let expandedSpacePart1 = expand(spaceArray);
     let parsedSpace = parseSpace(expandedSpacePart1);
     let sum = 0;
-    let galaxies = parsedSpace.flatMap(x => x.filter(y => y instanceof Galaxy));
+    let galaxies = parsedSpace.flatMap(x => x.filter(y => y.isGalaxy));
     for (let i = 0; i < galaxies.length - 1; i++) {
         for (let j = i + 1; j < galaxies.length; j++) {
             sum += ((Math.abs(galaxies[i].x - galaxies[j].x) + (Math.abs(galaxies[i].y - galaxies[j].y))));
@@ -32,7 +31,7 @@ function sumDistancesBetweenGalaxiesP2(space) {
     let expandXIndices = getEmptyColumns(space);
     let expandYIndices = getEmptyRows(space);
     let parsedSpace = parseSpace(space);
-    let galaxies = parsedSpace.flatMap(x => x.filter(y => y instanceof Galaxy));
+    let galaxies = parsedSpace.flatMap(x => x.filter(y => y.isGalaxy));
     let sum = 0;
     for (let i = 0; i < galaxies.length - 1; i++) {
         for (let j = i + 1; j < galaxies.length; j++) {
@@ -71,5 +70,5 @@ function parseSpace(spaceArray) {
 }
 
 function parsePosition(position, x, y) {
-    return position == '#' ? new Galaxy(x, y) : new Position(x, y);
+    return position == '#' ? new Position(x, y, true) : new Position(x, y, false);
 }
