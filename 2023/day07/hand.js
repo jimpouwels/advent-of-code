@@ -1,17 +1,17 @@
 export default class Hand {
     cards;
-    values = Array(15).fill(0);
+    values = Array(14).fill(0);
     bet = 0;
     score = 0;
     handleJokers = false;
 
     constructor(cards, bet, handleJokers = false) {
-        cards.forEach((c) => this.values[c]++)
+        cards.forEach((c) => this.values[c - 1]++)
         this.cards = cards;
         this.bet = bet;
         this.handleJokers = handleJokers;
         if (this.handleJokers) {
-            this.jokerCount = this.values[1];
+            this.jokerCount = this.values[0];
         }
     }
 
@@ -35,7 +35,7 @@ export default class Hand {
     hasPairOf(length, count) {
         let remainingJokers = this.handleJokers ? this.jokerCount : 0;
         return this.values.filter((value, i) => {
-            if (i == 1) return;
+            if (i == 0) return;
             let hasPair = value == length - remainingJokers;
             remainingJokers = Math.max(0, hasPair ? --remainingJokers : remainingJokers);
             return hasPair;
