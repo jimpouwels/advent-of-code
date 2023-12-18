@@ -63,59 +63,59 @@ export default function run(lines) {
     };
 }
 
-function getCombinations(remainingArrangement, remainingGroups) {
+function getCombinations(remainingArrangement1, remainingGroups) {
     let combos = [];
+    let remainingArrangement = [...remainingArrangement1];
     if (remainingGroups.length > 0) {
-        let stepper = 0;
-        let masterCombo = '';
-        while (remainingArrangement[stepper] == '.') {
-            masterCombo += '.';
-            stepper++;
-        }
-        remainingArrangement = remainingArrangement.slice(stepper);
-        for (let gapCount = 0; gapCount < remainingArrangement.length; gapCount++) {
-            if (remainingArrangement[0 + gapCount] == '.') {
-                continue;
+        let combo = '';
+        while (true) {
+            if (remainingArrangement[0] == '.') {
+                combo += remainingArrangement.shift();
+            } else {
+                break;
             }
+        }
+        for (let gapCount = 0; gapCount < remainingArrangement.length; gapCount++) {
+            let subCombo = combo;
             let req = gapCount + (remainingGroups.length - 1) + remainingGroups.reduce((sum, val) => sum + val, 0);
             if (req > remainingArrangement.length) {
-                continue;
+                break;
             }
-            let writeIndex = 0;
-            let combo = masterCombo;
-            for (let j = 0; j < gapCount; j++) {
-                combo += '.';
-                writeIndex++
-            }
-            for (let j = 0; j < remainingGroups[0]; j++) {
-                combo += '#';
-                writeIndex++
-            }
+            subCombo += addChar('.', gapCount);
+            let writeIndex = gapCount;
+            
+            subCombo += addChar('#', remainingGroups[0]);
+            writeIndex += remainingGroups[0];
+
             if (remainingGroups.length > 1) {
                 writeIndex++;
-                combo += '.';
+                subCombo += '.';
             }
 
             // add tail
             if (remainingGroups.length == 1) {
-                for (let j = 0; j < remainingArrangement.length - writeIndex; j++) {
-                    combo += '.';
-                }
-                combos.push(combo);
+                subCombo += addChar('.', remainingArrangement.length - writeIndex);
+                combos.push(subCombo);
                 continue;
             }
-            let chunk = remainingArrangement.slice(writeIndex);
-            let groupsForChunck = remainingGroups.slice(1);
-            let more = getCombinations(chunk, groupsForChunck);
+            let more = getCombinations(remainingArrangement.slice(writeIndex), remainingGroups.slice(1));
             more.forEach(m => {
-                combos.push(combo + m);
+                combos.push(subCombo + m);
             });
             if (remainingArrangement[0 + gapCount] == '#') {
                 break;
             }
         }
-    } 
+    }
     return combos;
+}
+
+function addChar(char, times) {
+    let val = '';
+    for (let i = 0; i < times; i++) {
+        val += char;
+    }
+    return val;
 }
 
 function log(msg, level) {
