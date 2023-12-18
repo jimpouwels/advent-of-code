@@ -45,7 +45,7 @@ export default function run(lines) {
     
     //     let count = 0;
     //     combos.forEach(c => {
-    //         if (c.filter((item, i) =>{
+    //         if (c.split('').filter((item, i) =>{
     //             return (arrangement[i] == '?' && item == '.') ||
     //                    (arrangement[i] == '?' && item == '#') ||
     //                    (arrangement[i] == '.' && item == '.') ||
@@ -63,22 +63,22 @@ export default function run(lines) {
     };
 }
 
-function getCombinations(remainingArrangement1, remainingGroups) {
+function getCombinations(remainingArrangement, remainingGroups) {
     let combos = [];
-    let remainingArrangement = [...remainingArrangement1];
+    let currentArrangement = [...remainingArrangement];
     if (remainingGroups.length > 0) {
         let combo = '';
         while (true) {
-            if (remainingArrangement[0] == '.') {
-                combo += remainingArrangement.shift();
+            if (currentArrangement[0] == '.') {
+                combo += currentArrangement.shift();
             } else {
                 break;
             }
         }
-        for (let gapCount = 0; gapCount < remainingArrangement.length; gapCount++) {
+        for (let gapCount = 0; gapCount < currentArrangement.length; gapCount++) {
             let subCombo = combo;
             let req = gapCount + (remainingGroups.length - 1) + remainingGroups.reduce((sum, val) => sum + val, 0);
-            if (req > remainingArrangement.length) {
+            if (req > currentArrangement.length) {
                 break;
             }
             subCombo += addChar('.', gapCount);
@@ -88,21 +88,20 @@ function getCombinations(remainingArrangement1, remainingGroups) {
             writeIndex += remainingGroups[0];
 
             if (remainingGroups.length > 1) {
-                writeIndex++;
                 subCombo += '.';
+                writeIndex++;
             }
 
-            // add tail
             if (remainingGroups.length == 1) {
-                subCombo += addChar('.', remainingArrangement.length - writeIndex);
+                subCombo += addChar('.', currentArrangement.length - writeIndex);
                 combos.push(subCombo);
                 continue;
             }
-            let more = getCombinations(remainingArrangement.slice(writeIndex), remainingGroups.slice(1));
+            let more = getCombinations(currentArrangement.slice(writeIndex), remainingGroups.slice(1));
             more.forEach(m => {
                 combos.push(subCombo + m);
             });
-            if (remainingArrangement[0 + gapCount] == '#') {
+            if (currentArrangement[0 + gapCount] == '#') {
                 break;
             }
         }
