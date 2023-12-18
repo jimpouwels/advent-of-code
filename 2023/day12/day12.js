@@ -66,6 +66,13 @@ export default function run(lines) {
 function getCombinations(remainingArrangement, remainingGroups) {
     let combos = [];
     if (remainingGroups.length > 0) {
+        let stepper = 0;
+        let masterCombo = '';
+        while (remainingArrangement[stepper] == '.') {
+            masterCombo += '.';
+            stepper++;
+        }
+        remainingArrangement = remainingArrangement.slice(stepper);
         for (let gapCount = 0; gapCount < remainingArrangement.length; gapCount++) {
             if (remainingArrangement[0 + gapCount] == '.') {
                 continue;
@@ -75,31 +82,33 @@ function getCombinations(remainingArrangement, remainingGroups) {
                 continue;
             }
             let writeIndex = 0;
-            let combo1 = "";
+            let combo = masterCombo;
             for (let j = 0; j < gapCount; j++) {
-                combo1 += '.';
+                combo += '.';
                 writeIndex++
             }
             for (let j = 0; j < remainingGroups[0]; j++) {
-                combo1 += '#';
+                combo += '#';
                 writeIndex++
             }
             if (remainingGroups.length > 1) {
                 writeIndex++;
-                combo1 += '.';
+                combo += '.';
             }
 
             // add tail
             if (remainingGroups.length == 1) {
                 for (let j = 0; j < remainingArrangement.length - writeIndex; j++) {
-                    combo1 += '.';
+                    combo += '.';
                 }
-                combos.push(combo1);
+                combos.push(combo);
                 continue;
             }
-            let more = getCombinations(remainingArrangement.slice(writeIndex), remainingGroups.slice(1));
+            let chunk = remainingArrangement.slice(writeIndex);
+            let groupsForChunck = remainingGroups.slice(1);
+            let more = getCombinations(chunk, groupsForChunck);
             more.forEach(m => {
-                combos.push(combo1 + m);
+                combos.push(combo + m);
             });
             if (remainingArrangement[0 + gapCount] == '#') {
                 break;
