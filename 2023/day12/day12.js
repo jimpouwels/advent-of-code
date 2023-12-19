@@ -14,26 +14,25 @@ export default function run(lines) {
         part1 += combos;
     });
     let part2 = 0;
-    logger.log('=======================NU PART 2');
-    lines.forEach((line, i) => {
-        logger.log('puzzle ' + i);
-        const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
-        let groups = groupsString.split(',').map(g => parseInt(g));
-        let arrangement = arrangementString.split('');
+    // logger.log('=======================PART 2');
+    // lines.forEach((line, i) => {
+    //     logger.log('puzzle ' + i);
+    //     const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
+    //     let groups = groupsString.split(',').map(g => parseInt(g));
+    //     let arrangement = arrangementString.split('');
         
-        let newGroups = [];
-        let newArrangements = [];
-        for (let i = 0; i < 5; i++) {
-            newGroups = newGroups.concat(groups);
-            newArrangements = newArrangements.concat(arrangement);
-            if (i < 4) {
-                newArrangements.push('?');
-            }
-        }
-        let combos = getCombinations(newArrangements, new Pattern(newGroups));
-        // console.log(combos);
-        part2 += combos;
-    });
+    //     let newGroups = [];
+    //     let newArrangements = [];
+    //     for (let i = 0; i < 5; i++) {
+    //         newGroups = newGroups.concat(groups);
+    //         newArrangements = newArrangements.concat(arrangement);
+    //         if (i < 4) {
+    //             newArrangements.push('?');
+    //         }
+    //     }
+    //     let combos = getCombinations(newArrangements, new Pattern(newGroups));
+    //     part2 += combos;
+    // });
     
     return {
         part1: part1,
@@ -42,10 +41,10 @@ export default function run(lines) {
 }
 
 function getCombinations(remainingArrangement, remainingGroups) {
-    // let cached = cache.get(remainingArrangement, remainingGroups);
-    // if (cached) {
-    //     return cached;
-    // }
+    let cached = cache.get(remainingArrangement, remainingGroups);
+    if (cached) {
+        return cached;
+    }
     let total = 0;
     let currentArrangement = [...remainingArrangement];
     if (remainingGroups.length() > 0) {
@@ -102,7 +101,7 @@ function getCombinations(remainingArrangement, remainingGroups) {
             } 
         }
     }
-    // cache.add(remainingArrangement, remainingGroups, total);
+    cache.add(remainingArrangement, remainingGroups, total);
     return total;
 }
 
@@ -164,7 +163,7 @@ class Cache {
                                                  it.chunk.every((c, k) => c === chunk[k] &&
                                                  it.pattern.groups.every((p, l) => p === pattern.groups[l])));
         if (found.length > 0) {
-            return found[0].combinations;
+            return found[0].count;
         }
         return null;
     }
