@@ -9,42 +9,31 @@ export default function run(lines) {
         let groups = groupsString.split(',').map(g => parseInt(g));
         let arrangement = arrangementString.split('');
         
-        let combos = getCombinations(arrangement, groups, 1);
+        let combos = getCombinations(arrangement, groups);
         
         part1 += combos.length;
     });
     let part2 = 0;
-    // logger.log('=======================NU PART 2');
-    // lines.forEach((line, i) => {
-    //     logger.log('puzzle ' + i);
-    //     const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
-    //     let groups = groupsString.split(',').map(g => parseInt(g));
-    //     let arrangement = arrangementString.split('');
+    logger.log('=======================NU PART 2');
+    lines.forEach((line, i) => {
+        logger.log('puzzle ' + i);
+        const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
+        let groups = groupsString.split(',').map(g => parseInt(g));
+        let arrangement = arrangementString.split('');
         
-    //     let newGroups = [];
-    //     let newArrangements = [];
-    //     for (let i = 0; i < 5; i++) {
-    //         newGroups = newGroups.concat(groups);
-    //         newArrangements = newArrangements.concat(arrangement);
-    //         if (i < 4) {
-    //             newArrangements.push('?');
-    //         }
-    //     }
-    //     let combos = getCombinations(newArrangements, newGroups, 1);
+        let newGroups = [];
+        let newArrangements = [];
+        for (let i = 0; i < 5; i++) {
+            newGroups = newGroups.concat(groups);
+            newArrangements = newArrangements.concat(arrangement);
+            if (i < 4) {
+                newArrangements.push('?');
+            }
+        }
+        let combos = getCombinations(newArrangements, newGroups, 1);
     
-    //     let count = 0;
-    //     combos.forEach(c => {
-    //         if (c.split('').filter((item, i) =>{
-    //             return (arrangement[i] == '?' && item == '.') ||
-    //                    (arrangement[i] == '?' && item == '#') ||
-    //                    (arrangement[i] == '.' && item == '.') ||
-    //                    (arrangement[i] == '#' && item == '#');
-    //         }).length == c.length) {
-    //             count++;
-    //         }
-    //     });
-    //     part2 += count;
-    // });
+        part2 += combos.length;
+    });
     
     return {
         part1: part1,
@@ -52,7 +41,7 @@ export default function run(lines) {
     };
 }
 
-function getCombinations(remainingArrangement, remainingGroups) {
+function getCombinations(remainingArrangement, remainingGroups, level = 999) {
     let combos = [];
     let currentArrangement = [...remainingArrangement];
     if (remainingGroups.length > 0) {
