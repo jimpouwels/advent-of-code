@@ -11,29 +11,29 @@ export default function run(lines) {
         
         let combos = getCombinations(arrangement, groups);
         
-        part1 += combos.length;
+        part1 += combos;
     });
     let part2 = 0;
-    logger.log('=======================NU PART 2');
-    lines.forEach((line, i) => {
-        logger.log('puzzle ' + i);
-        const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
-        let groups = groupsString.split(',').map(g => parseInt(g));
-        let arrangement = arrangementString.split('');
+    // logger.log('=======================NU PART 2');
+    // lines.forEach((line, i) => {
+    //     logger.log('puzzle ' + i);
+    //     const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
+    //     let groups = groupsString.split(',').map(g => parseInt(g));
+    //     let arrangement = arrangementString.split('');
         
-        let newGroups = [];
-        let newArrangements = [];
-        for (let i = 0; i < 5; i++) {
-            newGroups = newGroups.concat(groups);
-            newArrangements = newArrangements.concat(arrangement);
-            if (i < 4) {
-                newArrangements.push('?');
-            }
-        }
-        let combos = getCombinations(newArrangements, newGroups, 1);
+    //     let newGroups = [];
+    //     let newArrangements = [];
+    //     for (let i = 0; i < 5; i++) {
+    //         newGroups = newGroups.concat(groups);
+    //         newArrangements = newArrangements.concat(arrangement);
+    //         if (i < 4) {
+    //             newArrangements.push('?');
+    //         }
+    //     }
+    //     let combos = getCombinations(newArrangements, newGroups, 1);
     
-        part2 += combos.length;
-    });
+    //     part2 += combos.length;
+    // });
     
     return {
         part1: part1,
@@ -42,7 +42,7 @@ export default function run(lines) {
 }
 
 function getCombinations(remainingArrangement, remainingGroups, level = 999) {
-    let combos = [];
+    let total = 0;
     let currentArrangement = [...remainingArrangement];
     if (remainingGroups.length > 0) {
         let combo = '';
@@ -94,19 +94,16 @@ function getCombinations(remainingArrangement, remainingGroups, level = 999) {
                     subCombo += ".";
                     nestedCurrentArrangement.shift();
                 }
-                combos.push(subCombo);
+                total++;
                 continue;
             }
-            let more = getCombinations(nestedCurrentArrangement, remainingGroups.slice(1));
-            more.forEach(m => {
-                combos.push(subCombo + m);
-            });
+            total += getCombinations(nestedCurrentArrangement, remainingGroups.slice(1));
             if (currentArrangement[0 + gapCount] == '#') {
                 break;
             }
         }
     }
-    return combos;
+    return total;
 }
 
 function addChar(char, times) {
