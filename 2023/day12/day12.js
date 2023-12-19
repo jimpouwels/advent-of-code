@@ -30,7 +30,7 @@ export default function run(lines) {
     //             newArrangements.push('?');
     //         }
     //     }
-    //     let combos = getCombinations(newArrangements, newGroups, 1);
+    //     let combos = getCombinations(newArrangements, newGroups);
     
     //     part2 += combos.length;
     // });
@@ -41,14 +41,17 @@ export default function run(lines) {
     };
 }
 
-function getCombinations(remainingArrangement, remainingGroups, level = 999) {
+function getCombinations(remainingArrangement, remainingGroups) {
+    let cached = cache.get(remainingArrangement, remainingGroups);
+    if (cached) {
+        return cached;
+    }
     let total = 0;
     let currentArrangement = [...remainingArrangement];
     if (remainingGroups.length > 0) {
-        let combo = '';
         while (true) {
             if (currentArrangement[0] == '.') {
-                combo += currentArrangement.shift();
+                currentArrangement.shift();
             } else {
                 break;
             }
@@ -56,63 +59,103 @@ function getCombinations(remainingArrangement, remainingGroups, level = 999) {
         gapLoop:
         for (let gapCount = 0; gapCount < currentArrangement.length; gapCount++) {
             let nestedCurrentArrangement = [...currentArrangement];
-            let subCombo = combo;
+            let nestedGroups = [...remainingGroups];
             let req = gapCount + (remainingGroups.length - 1) + remainingGroups.reduce((sum, val) => sum + val, 0);
-            if (req > currentArrangement.length) {
+            if (req > nestedCurrentArrangement.length) {
                 break;
             }
             for (let i = 0; i < gapCount; i++) {
                 if (nestedCurrentArrangement[0] == '#') {
                     break gapLoop;
                 }
-                subCombo += ".";
                 nestedCurrentArrangement.shift();
             }
             
-            for (let i = 0; i < remainingGroups[0]; i++) {
+            for (let i = 0; i < nestedGroups[0]; i++) {
                 if (nestedCurrentArrangement[0] == '.') {
                     continue gapLoop;
                 }
-                subCombo += '#';
                 nestedCurrentArrangement.shift();
             }
+            nestedGroups.shift();
 
-            if (remainingGroups.length > 1) {
+            if (nestedGroups.length > 0) {
                 if (nestedCurrentArrangement[0] == '#') {
                     continue gapLoop;
                 }
-                subCombo += '.';
                 nestedCurrentArrangement.shift();
             }
 
-            if (remainingGroups.length == 1) {
+            if (nestedGroups.length == 0) {
                 let remainingTail = nestedCurrentArrangement.length;
                 for (let i = 0; i < remainingTail; i++) {
                     if (nestedCurrentArrangement[0] == '#') {
                         continue gapLoop;
                     }
-                    subCombo += ".";
                     nestedCurrentArrangement.shift();
                 }
                 total++;
                 continue;
             }
-            total += getCombinations(nestedCurrentArrangement, remainingGroups.slice(1));
+            total += getCombinations(nestedCurrentArrangement, nestedGroups);
             if (currentArrangement[0 + gapCount] == '#') {
                 break;
             }
         }
     }
+    cache.add(remainingArrangement, remainingGroups, total);
     return total;
 }
 
-function addChar(char, times) {
-    let val = '';
-    for (let i = 0; i < times; i++) {
-        val += char;
+class Pattern {
+    groups;
+    count;
+
+    constructor(groups) {
+        this.groups = groups;
+        this.count = groups.reduce((sum, val) => sum + val, 0);
     }
-    return val;
+
+    length() {
+        return this.groups.length;
+    }
+
+    requiredPlaces() {
+        return (this.length() - 1) + this.count;
+    }
 }
+
+class Item {
+    chunk;
+    pattern;
+    count;
+
+    constructor(chunk, pattern, count) {
+        this.chunk = chunk;
+        this.pattern = pattern;
+        this.count = count;
+    }
+}
+
+class Cache {
+    items = [];
+
+    add(chunk, pattern, count) {
+        this.items.push(new Item(chunk, pattern, count));
+    }
+
+    get(chunk, pattern) {
+        let found = this.items.filter((it, i) => it.chunk.length == chunk.length && it.pattern.length == pattern.length &&
+                                                 it.chunk.every((c, k) => c === chunk[k] &&
+                                                 it.pattern.every((p, l) => p === pattern[l])));
+        if (found.length > 0) {
+            return found[0].combinations;
+        }
+        return null;
+    }
+}
+
+let cache = new Cache();
 
 function log(msg, level) {
     if (level ==1) logger.log(msg);
