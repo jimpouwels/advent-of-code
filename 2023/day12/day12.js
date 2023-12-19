@@ -14,26 +14,26 @@ export default function run(lines) {
         part1 += combos;
     });
     let part2 = 0;
-    // logger.log('=======================NU PART 2');
-    // lines.forEach((line, i) => {
-    //     logger.log('puzzle ' + i);
-    //     const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
-    //     let groups = groupsString.split(',').map(g => parseInt(g));
-    //     let arrangement = arrangementString.split('');
+    logger.log('=======================NU PART 2');
+    lines.forEach((line, i) => {
+        logger.log('puzzle ' + i);
+        const { arrangementString, groupsString } = line.match(/(?<arrangementString>.*) (?<groupsString>.*)/).groups;
+        let groups = groupsString.split(',').map(g => parseInt(g));
+        let arrangement = arrangementString.split('');
         
-    //     let newGroups = [];
-    //     let newArrangements = [];
-    //     for (let i = 0; i < 5; i++) {
-    //         newGroups = newGroups.concat(groups);
-    //         newArrangements = newArrangements.concat(arrangement);
-    //         if (i < 4) {
-    //             newArrangements.push('?');
-    //         }
-    //     }
-    //     let combos = getCombinations(newArrangements, newGroups);
-    
-    //     part2 += combos.length;
-    // });
+        let newGroups = [];
+        let newArrangements = [];
+        for (let i = 0; i < 5; i++) {
+            newGroups = newGroups.concat(groups);
+            newArrangements = newArrangements.concat(arrangement);
+            if (i < 4) {
+                newArrangements.push('?');
+            }
+        }
+        let combos = getCombinations(newArrangements, new Pattern(newGroups));
+        // console.log(combos);
+        part2 += combos;
+    });
     
     return {
         part1: part1,
@@ -42,10 +42,10 @@ export default function run(lines) {
 }
 
 function getCombinations(remainingArrangement, remainingGroups) {
-    let cached = cache.get(remainingArrangement, remainingGroups);
-    if (cached) {
-        return cached;
-    }
+    // let cached = cache.get(remainingArrangement, remainingGroups);
+    // if (cached) {
+    //     return cached;
+    // }
     let total = 0;
     let currentArrangement = [...remainingArrangement];
     if (remainingGroups.length() > 0) {
@@ -58,18 +58,21 @@ function getCombinations(remainingArrangement, remainingGroups) {
         }
         gapLoop:
         for (let gapCount = 0; gapCount < currentArrangement.length; gapCount++) {
-            let nestedCurrentArrangement = [...currentArrangement];
             let nestedGroups = remainingGroups.clone();
-            if (gapCount + nestedGroups.requiredPlaces() > nestedCurrentArrangement.length) {
+            if (gapCount + nestedGroups.requiredPlaces() > currentArrangement.length) {
                 break;
             }
+            let nestedCurrentArrangement = [...currentArrangement];
+
+            // match gap
             for (let i = 0; i < gapCount; i++) {
                 if (nestedCurrentArrangement[0] == '#') {
                     break gapLoop;
                 }
                 nestedCurrentArrangement.shift();
             }
-            
+
+            // match number
             for (let i = 0; i < nestedGroups.first(); i++) {
                 if (nestedCurrentArrangement[0] == '.') {
                     continue gapLoop;
@@ -78,31 +81,28 @@ function getCombinations(remainingArrangement, remainingGroups) {
             }
             nestedGroups.shift();
 
-            if (nestedGroups.length() > 0) {
-                if (nestedCurrentArrangement[0] == '#') {
-                    continue gapLoop;
-                }
+            // match gap after number
+            if (nestedCurrentArrangement[0] == '#') {
+                continue gapLoop;
+            } else {
                 nestedCurrentArrangement.shift();
             }
 
-            if (nestedGroups.length() == 0) {
-                let remainingTail = nestedCurrentArrangement.length;
-                for (let i = 0; i < remainingTail; i++) {
-                    if (nestedCurrentArrangement[0] == '#') {
-                        continue gapLoop;
-                    }
-                    nestedCurrentArrangement.shift();
+            if (nestedGroups.empty()) {
+                // match trailing . at end
+                if (!nestedCurrentArrangement.includes('#')) {
+                    total++;
                 }
-                total++;
-                continue;
-            }
-            total += getCombinations(nestedCurrentArrangement, nestedGroups);
-            if (currentArrangement[0 + gapCount] == '#') {
-                break;
-            }
+            } else {
+                // match next section
+                total += getCombinations(nestedCurrentArrangement, nestedGroups);
+                if (currentArrangement[0 + gapCount] == '#') {
+                    break;
+                }
+            } 
         }
     }
-    cache.add(remainingArrangement, remainingGroups, total);
+    // cache.add(remainingArrangement, remainingGroups, total);
     return total;
 }
 
@@ -113,6 +113,10 @@ class Pattern {
     constructor(groups) {
         this.groups = groups;
         this.count = groups.reduce((sum, val) => sum + val, 0);
+    }
+
+    empty() {
+        return this.groups.length == 0;
     }
 
     length() {
