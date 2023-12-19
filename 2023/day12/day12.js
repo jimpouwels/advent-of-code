@@ -9,7 +9,7 @@ export default function run(lines) {
         let groups = groupsString.split(',').map(g => parseInt(g));
         let arrangement = arrangementString.split('');
         
-        let combos = getCombinations(arrangement, groups);
+        let combos = getCombinations(arrangement, new Pattern(groups));
         
         part1 += combos;
     });
@@ -48,7 +48,7 @@ function getCombinations(remainingArrangement, remainingGroups) {
     }
     let total = 0;
     let currentArrangement = [...remainingArrangement];
-    if (remainingGroups.length > 0) {
+    if (remainingGroups.length() > 0) {
         while (true) {
             if (currentArrangement[0] == '.') {
                 currentArrangement.shift();
@@ -59,9 +59,8 @@ function getCombinations(remainingArrangement, remainingGroups) {
         gapLoop:
         for (let gapCount = 0; gapCount < currentArrangement.length; gapCount++) {
             let nestedCurrentArrangement = [...currentArrangement];
-            let nestedGroups = [...remainingGroups];
-            let req = gapCount + (remainingGroups.length - 1) + remainingGroups.reduce((sum, val) => sum + val, 0);
-            if (req > nestedCurrentArrangement.length) {
+            let nestedGroups = remainingGroups.clone();
+            if (gapCount + nestedGroups.requiredPlaces() > nestedCurrentArrangement.length) {
                 break;
             }
             for (let i = 0; i < gapCount; i++) {
@@ -71,7 +70,7 @@ function getCombinations(remainingArrangement, remainingGroups) {
                 nestedCurrentArrangement.shift();
             }
             
-            for (let i = 0; i < nestedGroups[0]; i++) {
+            for (let i = 0; i < nestedGroups.first(); i++) {
                 if (nestedCurrentArrangement[0] == '.') {
                     continue gapLoop;
                 }
@@ -79,14 +78,14 @@ function getCombinations(remainingArrangement, remainingGroups) {
             }
             nestedGroups.shift();
 
-            if (nestedGroups.length > 0) {
+            if (nestedGroups.length() > 0) {
                 if (nestedCurrentArrangement[0] == '#') {
                     continue gapLoop;
                 }
                 nestedCurrentArrangement.shift();
             }
 
-            if (nestedGroups.length == 0) {
+            if (nestedGroups.length() == 0) {
                 let remainingTail = nestedCurrentArrangement.length;
                 for (let i = 0; i < remainingTail; i++) {
                     if (nestedCurrentArrangement[0] == '#') {
@@ -123,6 +122,18 @@ class Pattern {
     requiredPlaces() {
         return (this.length() - 1) + this.count;
     }
+
+    clone() {
+        return new Pattern([...this.groups]);
+    }
+
+    first() {
+        return this.groups[0];
+    }
+
+    shift() {
+        this.groups.shift();
+    }
 }
 
 class Item {
@@ -145,9 +156,9 @@ class Cache {
     }
 
     get(chunk, pattern) {
-        let found = this.items.filter((it, i) => it.chunk.length == chunk.length && it.pattern.length == pattern.length &&
+        let found = this.items.filter((it, i) => it.chunk.length == chunk.length && it.pattern.length() == pattern.length() &&
                                                  it.chunk.every((c, k) => c === chunk[k] &&
-                                                 it.pattern.every((p, l) => p === pattern[l])));
+                                                 it.pattern.groups.every((p, l) => p === pattern.groups[l])));
         if (found.length > 0) {
             return found[0].combinations;
         }
