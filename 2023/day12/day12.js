@@ -1,33 +1,16 @@
 import Pattern from "./pattern";
 
 let cache = new Map();
-export default function run(lines) {
-    let part1 = 0;
+export default function run(lines, expandTimes) {
+    let result = 0;
     lines.forEach(line => {
         let data = parseLine(line);
-        let combos = getCombinations(data.springs, new Pattern(data.patterns));
-        
-        part1 += combos;
-    });
-
-    let part2 = 0;
-    lines.forEach(line => {
-        let data = parseLine(line);
-        let patternsExpanded = Array(5).fill(data.patterns).flat();
-        let springsExpanded = Array(5).fill(data.springs).join('?');
+        let patternsExpanded = Array(expandTimes).fill(data.patterns).flat();
+        let springsExpanded = Array(expandTimes).fill(data.springs).join('?');
         let combos = getCombinations(springsExpanded, new Pattern(patternsExpanded));
-        part2 += combos;
+        result += combos;
     });
-    return {
-        part1: part1,
-        part2: part2
-    };
-}
-
-function parseLine(line) {
-    const { springs, patternsString } = line.match(/(?<springs>.*) (?<patternsString>.*)/).groups;
-    let patterns = patternsString.split(',').map(g => parseInt(g));
-    return {springs: springs, patterns: patterns};
+    return result;
 }
 
 function getCombinations(springs, pattern) {
@@ -56,4 +39,10 @@ function getCombinations(springs, pattern) {
     
     cache.set(springs + pattern.stringValue, total);
     return total;
+}
+
+function parseLine(line) {
+    const { springs, patternsString } = line.match(/(?<springs>.*) (?<patternsString>.*)/).groups;
+    let patterns = patternsString.split(',').map(g => parseInt(g));
+    return {springs: springs, patterns: patterns};
 }
