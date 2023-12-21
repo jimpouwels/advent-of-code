@@ -1,4 +1,4 @@
-import Logger from "../../common/logger";
+import Pattern from "./pattern";
 
 let cache = new Map();
 export default function run(lines) {
@@ -56,16 +56,4 @@ function getCombinations(springs, pattern) {
     
     cache.set(springs + pattern.stringValue, total);
     return total;
-}
-
-class Pattern {
-    numbers;
-    stringValue;
-    length;
-
-    constructor(numbers) {
-        this.numbers = numbers;
-        this.length = numbers.length;
-        this.stringValue = numbers.join(',');
-    }
 }
