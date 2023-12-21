@@ -8,4 +8,8 @@ export default class Pattern {
         this.length = numbers.length;
         this.stringValue = numbers.join(',');
     }
+
+    first() {
+        return this.numbers[0];
+    }
 }

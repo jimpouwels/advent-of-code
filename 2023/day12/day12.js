@@ -47,10 +47,10 @@ function getCombinations(springs, pattern) {
         total += getCombinations(springs.slice(1), pattern);
     }
     if (["?", "#"].includes(springs[0])) {
-        if (pattern.numbers[0] <= springs.length && 
-            !springs.slice(0, pattern.numbers[0]).includes('.') && 
-            (pattern.numbers[0] === springs.length || springs[pattern.numbers[0]] != '#')) {
-            total += getCombinations(springs.slice(pattern.numbers[0] + 1), new Pattern(pattern.numbers.slice(1)));
+        if (pattern.first() <= springs.length && 
+            !springs.slice(0, pattern.first()).includes('.') && 
+            (pattern.first() === springs.length || springs[pattern.first()] != '#')) {
+            total += getCombinations(springs.slice(pattern.first() + 1), new Pattern(pattern.numbers.slice(1)));
         }
     }
     
