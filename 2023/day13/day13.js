@@ -1,4 +1,6 @@
 import Logger from "../../common/logger";
+import { Direction } from "./direction";
+import Match from "./match";
 
 let logger = Logger.getLogger('2023-day13');
 
@@ -25,47 +27,35 @@ export default function run(input, allowedSmudges) {
 function getMatch(grid, allowedSmudges, direction) {
     let max = new Match();
     let directionLimit = direction === Direction.Horizontal ? grid[0].length : grid.length;
+    startPosLoop:
     for (let i = 0; i < directionLimit; i++) {
         let remainingSmudges = allowedSmudges;
-        let gridCopy = grid.map(k => [...k]);
         let match = new Match();
-        let leftIndex = i;
-        let rightIndex = i+1;
+        let from = i;
+        let to = i+1;
 
-        let end = direction === Direction.Horizontal ? grid[0].length : grid.length;
-        while (leftIndex >= 0 && rightIndex < end) {
-            let leftArr = direction === Direction.Horizontal ? gridCopy.map(g => g[leftIndex]) : gridCopy[leftIndex];
-            let rightArr = direction === Direction.Horizontal ? gridCopy.map(g => g[rightIndex]) : gridCopy[rightIndex];
+        while (from >= 0 && to < directionLimit) {
+            let leftArr = direction === Direction.Horizontal ? grid.map(g => g[from]) : grid[from];
+            let rightArr = direction === Direction.Horizontal ? grid.map(g => g[to]) : grid[to];
 
             remainingSmudges -= getDiffCount(leftArr, rightArr);
             
             if (remainingSmudges < 0) {
                 match.count = 0;
-                break;
+                continue startPosLoop;
             } else {
                 match.count++;
                 match.index = i + 1
                 match.hasSmudge = remainingSmudges < allowedSmudges;
             }
-            leftIndex--;
-            rightIndex++;
+            from--;
+            to++;
         }
         if (match.hasSmudge && match.count > 0 || (!max.hasSmudge && match.count > max.count)) {
             max = match;
         }
     }
     return max;
-}
-
-const Direction = {
-    Horizontal: 'horizontal',
-    Vertical: 'vertical'
-}
-
-class Match {
-    count = 0;
-    index = 0;
-    hasSmudge = false;
 }
 
 function parse(input) {
