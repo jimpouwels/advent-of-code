@@ -37,10 +37,7 @@ function getMatch(pattern, allowedSmudges, direction) {
         let to = i+1;
 
         while (from >= 0 && to < grid.length) {
-            let leftArr = grid[from];
-            let rightArr = grid[to];
-
-            remainingSmudges -= getDiffCount(leftArr, rightArr);
+            remainingSmudges -= getDiffCount(grid[from], grid[to]);
             
             if (remainingSmudges < 0) {
                 match.count = 0;
