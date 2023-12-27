@@ -8,13 +8,12 @@ export default function run(input, allowedSmudges) {
 
     grids.forEach(grid => {
         let subTotal = 0;
-        let verticalMirror = getMatch(grid, allowedSmudges, false);
-        if (verticalMirror.count > 0) {
-            subTotal = (verticalMirror.index * 100);
-        } 
-        if (verticalMirror.count == 0 || !verticalMirror.hasSmudge) {
-            let horizontalMirror = getMatch(grid, allowedSmudges, true);
-            if (horizontalMirror.count > 0 || (verticalMirror.count > 0 && verticalMirror.hasSmudge)) {
+        let verticalMirror = getMatch(grid, allowedSmudges, Direction.Vertical);
+        subTotal = verticalMirror.index * 100;
+        
+        if (!verticalMirror.hasSmudge) {
+            let horizontalMirror = getMatch(grid, allowedSmudges, Direction.Horizontal);
+            if (horizontalMirror.count > 0) {
                 subTotal = horizontalMirror.index;
             }
         }
@@ -23,24 +22,22 @@ export default function run(input, allowedSmudges) {
     return total;
 }
 
-function getMatch(grid, allowedSmudges, horizontal = false) {
-    let matches2 = [];
-    logger.log(allowedSmudges);
-    let endHigh = horizontal ? grid[0].length : grid.length;
-    for (let i = 0; i < endHigh; i++) {
+function getMatch(grid, allowedSmudges, direction) {
+    let max = new Match();
+    let directionLimit = direction === Direction.Horizontal ? grid[0].length : grid.length;
+    for (let i = 0; i < directionLimit; i++) {
         let remainingSmudges = allowedSmudges;
         let gridCopy = grid.map(k => [...k]);
         let match = new Match();
         let leftIndex = i;
         let rightIndex = i+1;
 
-        let end = horizontal ? grid[0].length : grid.length;
+        let end = direction === Direction.Horizontal ? grid[0].length : grid.length;
         while (leftIndex >= 0 && rightIndex < end) {
-            let leftArr = horizontal ? gridCopy.map(g => g[leftIndex]) : gridCopy[leftIndex];
-            let rightArr = horizontal ? gridCopy.map(g => g[rightIndex]) : gridCopy[rightIndex];
+            let leftArr = direction === Direction.Horizontal ? gridCopy.map(g => g[leftIndex]) : gridCopy[leftIndex];
+            let rightArr = direction === Direction.Horizontal ? gridCopy.map(g => g[rightIndex]) : gridCopy[rightIndex];
 
-            let offCount = equalsOffByOne(leftArr, rightArr, remainingSmudges);
-            remainingSmudges -= offCount;
+            remainingSmudges -= getDiffCount(leftArr, rightArr);
             
             if (remainingSmudges < 0) {
                 match.count = 0;
@@ -48,29 +45,21 @@ function getMatch(grid, allowedSmudges, horizontal = false) {
             } else {
                 match.count++;
                 match.index = i + 1
+                match.hasSmudge = remainingSmudges < allowedSmudges;
             }
             leftIndex--;
             rightIndex++;
         }
-        if (remainingSmudges < allowedSmudges) {
-            match.hasSmudge = true;
+        if (match.hasSmudge && match.count > 0 || (!max.hasSmudge && match.count > max.count)) {
+            max = match;
         }
-        matches2.push(match);
     }
-    let max = new Match();
-    matches2.forEach(m => {
-        if (!m.hasSmudge && max.hasSmudge) {
-            return;
-        }
-        if (m.hasSmudge && !max.hasSmudge && m.count > 0) {
-            max = m;
-        } else if (m.hasSmudge && max.hasSmudge && m.count > max.count) {
-            max = m;
-        } else if (m.count > max.count) {
-            max = m;
-        }
-    });
     return max;
+}
+
+const Direction = {
+    Horizontal: 'horizontal',
+    Vertical: 'vertical'
 }
 
 class Match {
@@ -83,13 +72,10 @@ function parse(input) {
     return input.split('\n\n').map(grid => grid.split('\n').map(l => l.split('')));
 }
 
-function equalsOffByOne(arr1, arr2, allowedSmudges) {
+function getDiffCount(arr1, arr2) {
     let errorCount = 0;
     for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) {
-        if (allowedSmudges > 0) {
-            arr2[i] = arr1[i];
-        }
         errorCount++;
       }
     }
