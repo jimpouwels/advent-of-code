@@ -20,19 +20,25 @@ export default function run(input, allowedSmudges) {
     }, 0);
 }
 
-function getMatch(grid, allowedSmudges, direction) {
+function getMatch(pattern, allowedSmudges, direction) {
     let max = new Match();
-    let directionLimit = direction === Direction.Horizontal ? grid[0].length : grid.length;
+
+    let grid = [];
+    if (direction == Direction.Horizontal) {
+        pattern[0].forEach((_, i) => grid.push(pattern.map(g1 => g1[i]))); 
+    } else {
+        grid = pattern;
+    }
     startPosLoop:
-    for (let i = 0; i < directionLimit; i++) {
+    for (let i = 0; i < grid.length; i++) {
         let remainingSmudges = allowedSmudges;
         let match = new Match();
         let from = i;
         let to = i+1;
 
-        while (from >= 0 && to < directionLimit) {
-            let leftArr = direction === Direction.Horizontal ? grid.map(g => g[from]) : grid[from];
-            let rightArr = direction === Direction.Horizontal ? grid.map(g => g[to]) : grid[to];
+        while (from >= 0 && to < grid.length) {
+            let leftArr = grid[from];
+            let rightArr = grid[to];
 
             remainingSmudges -= getDiffCount(leftArr, rightArr);
             
