@@ -2,18 +2,18 @@ import Logger from "../../common/logger";
 
 let logger = Logger.getLogger('2023-day13');
 
-export default function run(input, allowSmudge) {
+export default function run(input, allowedSmudges) {
     let grids = parse(input);
     let total = 0;
 
     grids.forEach(grid => {
         let subTotal = 0;
-        let verticalMirror = getMatch(grid, allowSmudge, false);
+        let verticalMirror = getMatch(grid, allowedSmudges, false);
         if (verticalMirror.count > 0) {
             subTotal = (verticalMirror.index * 100);
         } 
         if (verticalMirror.count == 0 || !verticalMirror.hasSmudge) {
-            let horizontalMirror = getMatch(grid, allowSmudge, true);
+            let horizontalMirror = getMatch(grid, allowedSmudges, true);
             if (horizontalMirror.count > 0 || (verticalMirror.count > 0 && verticalMirror.hasSmudge)) {
                 subTotal = horizontalMirror.index;
             }
@@ -23,32 +23,26 @@ export default function run(input, allowSmudge) {
     return total;
 }
 
-function getMatch(grid, allowSmudge, horizontal = false) {
+function getMatch(grid, allowedSmudges, horizontal = false) {
     let matches2 = [];
+    logger.log(allowedSmudges);
     let endHigh = horizontal ? grid[0].length : grid.length;
     for (let i = 0; i < endHigh; i++) {
+        let remainingSmudges = allowedSmudges;
         let gridCopy = grid.map(k => [...k]);
         let match = new Match();
         let leftIndex = i;
         let rightIndex = i+1;
-        let fixedSmudges = 0;
 
         let end = horizontal ? grid[0].length : grid.length;
         while (leftIndex >= 0 && rightIndex < end) {
-            let equals = false;
-
             let leftArr = horizontal ? gridCopy.map(g => g[leftIndex]) : gridCopy[leftIndex];
             let rightArr = horizontal ? gridCopy.map(g => g[rightIndex]) : gridCopy[rightIndex];
 
-            if (!allowSmudge || fixedSmudges > 0) {
-                equals = equal(leftArr, rightArr);
-            } else {
-                if (!equal(leftArr, rightArr)) {
-                    fixedSmudges++;
-                }
-                equals = equalsOffByOne(leftArr, rightArr);
-            }
-            if (!equals) {
+            let offCount = equalsOffByOne(leftArr, rightArr, remainingSmudges);
+            remainingSmudges -= offCount;
+            
+            if (remainingSmudges < 0) {
                 match.count = 0;
                 break;
             } else {
@@ -58,7 +52,7 @@ function getMatch(grid, allowSmudge, horizontal = false) {
             leftIndex--;
             rightIndex++;
         }
-        if (fixedSmudges > 0) {
+        if (remainingSmudges < allowedSmudges) {
             match.hasSmudge = true;
         }
         matches2.push(match);
@@ -89,18 +83,15 @@ function parse(input) {
     return input.split('\n\n').map(grid => grid.split('\n').map(l => l.split('')));
 }
 
-function equal(arr1, arr2) {
-    return arr1.every((k, i) => k === arr2[i]);
-}
-
-function equalsOffByOne(arr1, arr2) {
+function equalsOffByOne(arr1, arr2, allowedSmudges) {
     let errorCount = 0;
     for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) {
-        arr2[i] = arr1[i];
+        if (allowedSmudges > 0) {
+            arr2[i] = arr1[i];
+        }
         errorCount++;
       }
-      if (errorCount > 1) return false;
     }
-    return true;
+    return errorCount;
 }
