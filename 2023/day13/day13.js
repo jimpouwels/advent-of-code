@@ -37,7 +37,7 @@ function getMatch(pattern, allowedSmudges, direction) {
         let to = i+1;
 
         while (from >= 0 && to < grid.length) {
-            remainingSmudges -= getDiffCount(grid[from], grid[to]);
+            remainingSmudges -= getDiffCount(grid[from--], grid[to++]);
             
             if (remainingSmudges < 0) {
                 match.count = 0;
@@ -46,7 +46,6 @@ function getMatch(pattern, allowedSmudges, direction) {
                 match.count++;
                 match.index = i + 1
                 match.hasSmudge = remainingSmudges < allowedSmudges;
-                from--, to++;
             }
         }
         if (match.hasSmudge && match.count > 0 || (!max.hasSmudge && match.count > max.count)) {
