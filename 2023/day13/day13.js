@@ -5,10 +5,7 @@ import Match from "./match";
 let logger = Logger.getLogger('2023-day13');
 
 export default function run(input, allowedSmudges) {
-    let grids = parse(input);
-    let total = 0;
-
-    grids.forEach(grid => {
+    return parse(input).reduce((sum, grid) => {
         let subTotal = 0;
         let verticalMirror = getMatch(grid, allowedSmudges, Direction.Vertical);
         subTotal = verticalMirror.index * 100;
@@ -19,9 +16,8 @@ export default function run(input, allowedSmudges) {
                 subTotal = horizontalMirror.index;
             }
         }
-        total += subTotal;
-    });
-    return total;
+        return sum += subTotal;
+    }, 0);
 }
 
 function getMatch(grid, allowedSmudges, direction) {
