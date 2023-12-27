@@ -31,7 +31,7 @@ function getMatch(pattern, allowedSmudges, direction) {
     }
     grid.forEach((_, i) => {
         let remainingSmudges = allowedSmudges;
-        let match = new Match();
+        let match = new Match(i + 1);
         let from = i;
         let to = i+1;
 
@@ -43,7 +43,6 @@ function getMatch(pattern, allowedSmudges, direction) {
                 return;
             } else {
                 match.count++;
-                match.index = i + 1
                 match.hasSmudge = remainingSmudges < allowedSmudges;
             }
         }
