@@ -8,8 +8,6 @@ export default function run(input) {
 
     let gridToMatches = [];
     grids.forEach(grid => {
-        let horizontalMatch = -1;
-        // logger.log('NIEUWE');
         let matches1 = [];
         for (let i = 0; i < grid.length; i++) {
             let match = new Match();
@@ -36,12 +34,10 @@ export default function run(input) {
             }
         });
         if (max1.count > 0) {
-            // logger.log('MATCH VERTICAL');
             gridToMatches.push({grid: grid, direction: 'vertical', match: max1.index});
-            horizontalMatch = (max1.index * 100);
+            total += (max1.index * 100);
         }
         let matches2 = [];
-        let verticalMatch = -1;
         for (let i = 0; i < grid[0].length; i++) {
             let match = new Match();
             let leftIndex = i;
@@ -66,21 +62,9 @@ export default function run(input) {
             }
         });
         if (max2.count > 0) {
-            // logger.log('MATCH HORIZONTAL');
             gridToMatches.push({grid: grid, direction: 'horizontal' , match: max2.index});
-            verticalMatch = max2.index;
+            total+= max2.index;
         }
-        if (horizontalMatch == -1 && verticalMatch == -1) {
-            logger.log('niks');
-            logger.logGrid(grid, (d) => d);
-            // total += 1;
-        } else {
-            total += (horizontalMatch > 0 ? horizontalMatch : 0) + (verticalMatch > 0 ? verticalMatch : 0);
-        }
-    });
-    gridToMatches.forEach(k => {
-        // logger.log(k.direction + ', ' + k.match);
-        // logger.logGrid(k.grid, (d) => d);
     });
     return total;
 }
