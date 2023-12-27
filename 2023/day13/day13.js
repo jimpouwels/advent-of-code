@@ -29,8 +29,7 @@ function getMatch(pattern, allowedSmudges, direction) {
     } else {
         grid = pattern;
     }
-    startPosLoop:
-    for (let i = 0; i < grid.length; i++) {
+    grid.forEach((_, i) => {
         let remainingSmudges = allowedSmudges;
         let match = new Match();
         let from = i;
@@ -41,7 +40,7 @@ function getMatch(pattern, allowedSmudges, direction) {
             
             if (remainingSmudges < 0) {
                 match.count = 0;
-                continue startPosLoop;
+                return;
             } else {
                 match.count++;
                 match.index = i + 1
@@ -51,7 +50,7 @@ function getMatch(pattern, allowedSmudges, direction) {
         if (match.hasSmudge && match.count > 0 || (!max.hasSmudge && match.count > max.count)) {
             max = match;
         }
-    }
+    });
     return max;
 }
 
