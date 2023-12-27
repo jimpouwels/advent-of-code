@@ -1,8 +1,5 @@
-import Logger from "../../common/logger";
 import { Direction } from "./direction";
 import Match from "./match";
-
-let logger = Logger.getLogger('2023-day13');
 
 export default function run(input, allowedSmudges) {
     return parse(input).reduce((sum, grid) => {
@@ -33,17 +30,16 @@ function getMatch(pattern, allowedSmudges, direction) {
         let remainingSmudges = allowedSmudges;
         let match = new Match(i + 1);
         let from = i;
-        let to = i+1;
+        let to = i + 1;
 
         while (from >= 0 && to < grid.length) {
             remainingSmudges -= getDiffCount(grid[from--], grid[to++]);
             
-            if (remainingSmudges < 0) {
-                match.count = 0;
-                return;
-            } else {
+            if (remainingSmudges >= 0) {
                 match.count++;
                 match.hasSmudge = remainingSmudges < allowedSmudges;
+            } else {
+                return;
             }
         }
         if (match.hasSmudge && match.count > 0 || (!max.hasSmudge && match.count > max.count)) {
