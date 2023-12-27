@@ -57,20 +57,20 @@ function getMatch(grid, allowedSmudges, horizontal = false) {
         }
         matches2.push(match);
     }
-    let max2 = new Match();
+    let max = new Match();
     matches2.forEach(m => {
-        if (!m.hasSmudge && max2.hasSmudge) {
+        if (!m.hasSmudge && max.hasSmudge) {
             return;
         }
-        if (m.hasSmudge && !max2.hasSmudge && m.count > 0) {
-            max2 = m;
-        } else if (m.hasSmudge && max2.hasSmudge && m.count > max2.count) {
-            max2 = m;
-        } else if (m.count > max2.count) {
-            max2 = m;
+        if (m.hasSmudge && !max.hasSmudge && m.count > 0) {
+            max = m;
+        } else if (m.hasSmudge && max.hasSmudge && m.count > max.count) {
+            max = m;
+        } else if (m.count > max.count) {
+            max = m;
         }
     });
-    return max2;
+    return max;
 }
 
 class Match {
