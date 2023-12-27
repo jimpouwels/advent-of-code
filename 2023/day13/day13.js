@@ -43,9 +43,8 @@ function getMatch(grid, allowedSmudges, direction) {
                 match.count++;
                 match.index = i + 1
                 match.hasSmudge = remainingSmudges < allowedSmudges;
+                from--, to++;
             }
-            from--;
-            to++;
         }
         if (match.hasSmudge && match.count > 0 || (!max.hasSmudge && match.count > max.count)) {
             max = match;
