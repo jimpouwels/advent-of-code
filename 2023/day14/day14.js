@@ -61,19 +61,22 @@ function tilt(platform, instruction) {
             let targetX = instruction.moveX > 0 ? platform[0].length - 1 - x : x;
             let targetY = instruction.moveY > 0 ? platform.length - 1 - y : y;
             if (platform[targetY][targetX] !== 'O') continue;
-            let nextX = targetX;
-            let nextY = targetY;
             platform[targetY][targetX] = '.';
-            while (true) {
-                nextX += instruction.moveX;
-                nextY += instruction.moveY;
-                if (nextX < 0 || nextY < 0 || nextX == platform[0].length || nextY == platform.length || ['O', '#'].includes(platform[nextY][nextX])) {
-                    break;
-                }
-                targetX = nextX;
-                targetY = nextY;
+            while (isFreeSlot(instruction, platform, targetX, targetY)) {
+                targetX += instruction.moveX;
+                targetY += instruction.moveY;
             }
             platform[targetY][targetX] = 'O';
         }
     }
+}
+
+function isFreeSlot(instruction, platform, x, y) {
+    let nextX = x + instruction.moveX;
+    let nextY = y + instruction.moveY;
+    return !(nextX < 0 || 
+        nextY < 0 || 
+        nextX == platform[0].length || 
+        nextY == platform.length || 
+        ['O', '#'].includes(platform[nextY][nextX]));
 }
