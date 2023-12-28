@@ -1,3 +1,5 @@
+import { cloneMatrix } from "../../common/arrays";
+
 const direction = {
     North: {moveY: -1, moveX: 0},
     West: {moveY: 0, moveX: -1},
@@ -8,8 +10,8 @@ let instructions = [direction.North, direction.West, direction.South, direction.
 
 export default function run(lines) {
     let platform = lines.map(l => l.split(''));
-    let platformPart1 = platform.map(r => r.map(i => i));
-    let platformPart2 = platform.map(r => r.map(i => i));
+    let platformPart1 = cloneMatrix(platform);
+    let platformPart2 = cloneMatrix(platform);
     
     // Part 1
     tilt(platformPart1, direction.North);
