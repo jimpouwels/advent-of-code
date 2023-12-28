@@ -23,21 +23,22 @@ export default function run(lines) {
             tilt(platformPart2, instructions[0]);
             instructions.push(instructions.shift());
         });      
-        
         let tiltResult = JSON.stringify(platformPart2);
-        let seenIndex = seen.indexOf(tiltResult);
-        if (seenIndex >= 0) {
-            count = cycles - (cycles - count) % (count - seenIndex);
-        } else {
-            seen.push(tiltResult);
-        }
-        count++;
+        count = skipCyclesIfSeen(seen.indexOf(tiltResult), cycles, count) + 1;
+        seen.push(tiltResult);
     }
 
     return {
         part1: sum(platformPart1),
         part2: sum(platformPart2)
     }
+}
+
+function skipCyclesIfSeen(seenIndex, cycles, count) {
+    if (seenIndex >= 0) {
+        return cycles - (cycles - count) % (count - seenIndex);
+    }
+    return count;    
 }
 
 function sum(platform) {
