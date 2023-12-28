@@ -41,17 +41,17 @@ function tilt(platform, instruction) {
             let targetX = instruction.xAdd > 0 ? platform[0].length - 1 - x : x;
             let targetY = instruction.yAdd > 0 ? platform.length - 1 - y : y;
             if (platform[targetY][targetX] !== 'O') continue;
-            let xx = targetX;
-            let yy = targetY;
+            let nextX = targetX;
+            let nextY = targetY;
             platform[targetY][targetX] = '.';
             while (true) {
-                xx += instruction.xAdd;
-                yy += instruction.yAdd;
-                if (xx < 0 || yy < 0 || xx == platform[0].length || yy == platform.length || ['O', '#'].includes(platform[yy][xx])) {
+                nextX += instruction.xAdd;
+                nextY += instruction.yAdd;
+                if (nextX < 0 || nextY < 0 || nextX == platform[0].length || nextY == platform.length || ['O', '#'].includes(platform[nextY][nextX])) {
                     break;
                 }
-                targetX = xx;
-                targetY = yy;
+                targetX = nextX;
+                targetY = nextY;
             }
             platform[targetY][targetX] = 'O';
         }
