@@ -35,10 +35,7 @@ export default function run(lines) {
 }
 
 function skipCyclesIfSeen(seenIndex, cycles, count) {
-    if (seenIndex >= 0) {
-        return cycles - (cycles - count) % (count - seenIndex);
-    }
-    return count;    
+    return seenIndex >= 0 ? cycles - (cycles - count) % (count - seenIndex) : count;    
 }
 
 function sum(platform) {
