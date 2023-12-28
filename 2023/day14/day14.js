@@ -62,7 +62,7 @@ function tilt(platform, instruction) {
             let targetY = instruction.moveY > 0 ? platform.length - 1 - y : y;
             if (platform[targetY][targetX] !== 'O') continue;
             platform[targetY][targetX] = '.';
-            while (isFreeSlot(instruction, platform, targetX, targetY)) {
+            while (isFreeSlot(targetX, targetY, platform, instruction)) {
                 targetX += instruction.moveX;
                 targetY += instruction.moveY;
             }
@@ -71,7 +71,7 @@ function tilt(platform, instruction) {
     }
 }
 
-function isFreeSlot(instruction, platform, x, y) {
+function isFreeSlot(x, y, platform, instruction) {
     let nextX = x + instruction.moveX;
     let nextY = y + instruction.moveY;
     return !(nextX < 0 || 
