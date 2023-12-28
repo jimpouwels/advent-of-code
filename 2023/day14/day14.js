@@ -7,15 +7,16 @@ const direction = {
 let instructions = [direction.North, direction.West, direction.South, direction.East];
 
 
-export default function run(lines, cycles) {
+export default function run(lines) {
     let platform = lines.map(l => l.split(''));
+    let platformPart1 = platform.map(r => r.map(i => i));
+    let platformPart2 = platform.map(r => r.map(i => i));
     
     // Part 1
-    let platformPart1 = platform.map(r => r.map(d => d));
     tilt(platformPart1, direction.North);
     
     // Part 2
-    let platformPart2 = platform.map(r => r.map(d => d));
+    let cycles = 1000000000;
     let count = 0;
     let seen = [];
     while (count < cycles) {
