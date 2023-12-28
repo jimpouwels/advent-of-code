@@ -50,11 +50,9 @@ function tiltRound(platform) {
 }
 
 function sum(platform) {
-    return platform.reverse().reduce((sum, row, i) => {
-        return sum + row.reduce((sum, item) => {
-            return sum + (item === 'O' ? i + 1 : 0);
-        }, 0);
-    }, 0);
+    return platform.reverse().reduce((sum, row, i) => 
+        sum + row.reduce((sum, item) => 
+            sum + (item === 'O' ? i + 1 : 0), 0), 0);
 }
 
 function tilt(platform, instruction) {
