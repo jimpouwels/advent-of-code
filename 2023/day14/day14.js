@@ -22,26 +22,15 @@ export default function run(lines, cycles) {
     let platformPart2 = platform.map(r => r.map(d => d));
     let count = 0;
     while (count < cycles) {
-        let platformToTilt = platformPart2.map(r => r.slice());
-        tilt(platformToTilt, instructions[0]);
-        instructions.push(instructions.shift());
-        tilt(platformToTilt, instructions[0]);
-        instructions.push(instructions.shift());
-        tilt(platformToTilt, instructions[0]);
-        instructions.push(instructions.shift());
-        tilt(platformToTilt, instructions[0]);
-        instructions.push(instructions.shift());
+        tiltRound(platformPart2);
         
-        let key = JSON.stringify(platformToTilt);
-        let seenIndex = cache.indexOf(key);
+        let tiltResult = JSON.stringify(platformPart2);
+        let seenIndex = cache.indexOf(tiltResult);
         if (seenIndex >= 0) {
-            let remainingCycles = cycles - count;
-            let rem = remainingCycles % (count - seenIndex);
-            count = cycles - rem;
+            count = cycles - (cycles - count) % (count - seenIndex);
+        } else {
+            cache.push(tiltResult);
         }
-
-        cache.push(JSON.stringify(platformToTilt));
-        platformPart2 = platformToTilt;
         count++;
     }
 
@@ -49,6 +38,17 @@ export default function run(lines, cycles) {
         part1: sum(platformPart1),
         part2: sum(platformPart2)
     }
+}
+
+function tiltRound(platform) {
+    tilt(platform, instructions[0]);
+    instructions.push(instructions.shift());
+    tilt(platform, instructions[0]);
+    instructions.push(instructions.shift());
+    tilt(platform, instructions[0]);
+    instructions.push(instructions.shift());
+    tilt(platform, instructions[0]);
+    instructions.push(instructions.shift());
 }
 
 function sum(platform) {
