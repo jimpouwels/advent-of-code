@@ -20,7 +20,7 @@ export default function run(lines) {
     let count = 0;
     let seen = [];
     while (count < cycles) {
-        tiltRound(platformPart2);
+        tiltCycle(platformPart2);
         
         let tiltResult = JSON.stringify(platformPart2);
         let seenIndex = seen.indexOf(tiltResult);
@@ -38,7 +38,7 @@ export default function run(lines) {
     }
 }
 
-function tiltRound(platform) {
+function tiltCycle(platform) {
     tilt(platform, instructions[0]);
     instructions.push(instructions.shift());
     tilt(platform, instructions[0]);
