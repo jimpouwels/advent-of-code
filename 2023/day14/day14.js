@@ -44,22 +44,19 @@ export default function run(lines, cycles) {
         platformPart2 = platformToTilt;
         count++;
     }
-    let part2 = platformPart2.reverse().reduce((sum, row, i) => {
-        return sum + row.reduce((sum, item) => {
-            return sum + (item === 'O' ? i + 1 : 0);
-        }, 0);
-    }, 0);
-
-    let part1 = platformPart1.reverse().reduce((sum, row, i) => {
-        return sum + row.reduce((sum, item) => {
-            return sum + (item === 'O' ? i + 1 : 0);
-        }, 0);
-    }, 0);
 
     return {
-        part1: part1,
-        part2: part2
+        part1: sum(platformPart1),
+        part2: sum(platformPart2)
     }
+}
+
+function sum(platform) {
+    return platform.reverse().reduce((sum, row, i) => {
+        return sum + row.reduce((sum, item) => {
+            return sum + (item === 'O' ? i + 1 : 0);
+        }, 0);
+    }, 0);
 }
 
 function tilt(platform, instruction) {
