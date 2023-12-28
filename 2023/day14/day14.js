@@ -6,7 +6,6 @@ const direction = {
 };
 let instructions = [direction.North, direction.West, direction.South, direction.East];
 
-
 export default function run(lines) {
     let platform = lines.map(l => l.split(''));
     let platformPart1 = platform.map(r => r.map(i => i));
