@@ -19,11 +19,7 @@ export default function run(lines) {
     let count = 0;
     let seen = [];
     while (count < cycles) {
-        instructions.forEach(_ => {
-            tilt(platformPart2, instructions[0]);
-            instructions.push(instructions.shift());
-        });      
-        let tiltResult = JSON.stringify(platformPart2);
+        let tiltResult = JSON.stringify(tiltCycle(platformPart2));
         count = skipCyclesIfSeen(seen.indexOf(tiltResult), cycles, count) + 1;
         seen.push(tiltResult);
     }
@@ -32,6 +28,14 @@ export default function run(lines) {
         part1: sum(platformPart1),
         part2: sum(platformPart2)
     }
+}
+
+function tiltCycle(platform) {
+    instructions.forEach(_ => {
+        tilt(platform, instructions[0]);
+        instructions.push(instructions.shift());
+    });   
+    return platform;
 }
 
 function skipCyclesIfSeen(seenIndex, cycles, count) {
