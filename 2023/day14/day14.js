@@ -3,36 +3,63 @@ import Logger from "../../common/logger";
 let logger = Logger.getLogger('2023-day14');
 
 const direction = {
-    North: {name: "north", yAdd: -1, xAdd: 0},
-    West: {name: "west", yAdd: 0, xAdd: -1},
-    South: {name: "south", yAdd: 1, xAdd: 0},
-    East: {name: "east", yAdd: 0, xAdd: 1}
+    North: {yAdd: -1, xAdd: 0},
+    West: {yAdd: 0, xAdd: -1},
+    South: {yAdd: 1, xAdd: 0},
+    East: {yAdd: 0, xAdd: 1}
 };
 
 let instructions = [direction.North, direction.West, direction.South, direction.East];
 
+let cache = [];
+
 export default function run(lines, cycles) {
     let platform = lines.map(l => l.split(''));
     
-    let timesMill = 0;
+    let platformPart1 = platform.map(r => r.map(d => d));
+    tilt(platformPart1, direction.North);
+
+    let platformPart2 = platform.map(r => r.map(d => d));
     let count = 0;
     while (count < cycles) {
-        tilt(platform, instructions[0]);
-        tilt(platform, instructions[0]);
-        tilt(platform, instructions[0]);
-        tilt(platform, instructions[0]);
-        if (count % 1000000 == 0) {
-            timesMill++;
-            logger.log(timesMill);
+        let platformToTilt = platformPart2.map(r => r.slice());
+        tilt(platformToTilt, instructions[0]);
+        instructions.push(instructions.shift());
+        tilt(platformToTilt, instructions[0]);
+        instructions.push(instructions.shift());
+        tilt(platformToTilt, instructions[0]);
+        instructions.push(instructions.shift());
+        tilt(platformToTilt, instructions[0]);
+        instructions.push(instructions.shift());
+        
+        let key = JSON.stringify(platformToTilt);
+        let seenIndex = cache.indexOf(key);
+        if (seenIndex >= 0) {
+            let remainingCycles = cycles - count;
+            let rem = remainingCycles % (count - seenIndex);
+            count = cycles - rem;
         }
+
+        cache.push(JSON.stringify(platformToTilt));
+        platformPart2 = platformToTilt;
         count++;
     }
-    logger.logGrid(platform, (g) => g);
-    return platform.reverse().reduce((sum, row, i) => {
+    let part2 = platformPart2.reverse().reduce((sum, row, i) => {
         return sum + row.reduce((sum, item) => {
             return sum + (item === 'O' ? i + 1 : 0);
         }, 0);
     }, 0);
+
+    let part1 = platformPart1.reverse().reduce((sum, row, i) => {
+        return sum + row.reduce((sum, item) => {
+            return sum + (item === 'O' ? i + 1 : 0);
+        }, 0);
+    }, 0);
+
+    return {
+        part1: part1,
+        part2: part2
+    }
 }
 
 function tilt(platform, instruction) {
@@ -56,5 +83,4 @@ function tilt(platform, instruction) {
             platform[targetY][targetX] = 'O';
         }
     }
-    instructions.push(instructions.shift());
 }
