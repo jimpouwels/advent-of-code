@@ -7,14 +7,17 @@ export default function run(lines) {
     logger.logGrid(platform, (g) => g);
     
     platform.forEach((row, y) => {
-        row.forEach((position, x) => {
+        row.forEach((_, x) => {
             if (y === 0 || platform[y][x] !== 'O') return;
-            let lowerY = y - 1;
+            let nextY = y;
             platform[y][x] = '.';
-            while (lowerY >= 0 && !['O', '#'].includes(platform[lowerY][x])) {
-                lowerY--;
+            while (true) {
+                if ((nextY - 1) < 0 || ['O', '#'].includes(platform[nextY - 1][x])) {
+                    break;
+                }
+                nextY--;
             }
-            platform[lowerY +1][x] = 'O';
+            platform[nextY][x] = 'O';
         });
     });
     return platform.reverse().reduce((sum, row, i) => {
