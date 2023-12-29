@@ -17,14 +17,10 @@ export default function run(input) {
     sequence.forEach(step => {
         if (step.includes('=')) {
             let splitted = step.split('=');
-            let boxIndex = hash(splitted[0]);
-            let box = boxes[boxIndex];
-            box.insert(splitted[0], parseInt(splitted[1]));
+            boxes[hash(splitted[0])].insert(splitted[0], parseInt(splitted[1]));
         } else {
             let label = step.split('-')[0]
-            let boxIndex = hash(label);
-            let box = boxes[boxIndex];
-            box.remove(label);
+            boxes[hash(label)].remove(label);
         }
     });
 
