@@ -11,82 +11,39 @@ export default function run(lines) {
     // Part 1
     let layoutP1 = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
     checkPosition(layoutP1, 0, 0, 1, 0, []);
-    let part1 = 0;
-    layoutP1.forEach(element => {
-        element.forEach(e => {
-            if (e.hit) {
-                part1++;
-            }
-        });
-    });
+    let part1 = layoutP1.reduce((sum, element) => sum + element.reduce((sum, e) => sum + (e.hit ? 1 : 0), 0), 0);
 
     // Part 2
     let part2 = 0;
     for (let y = 0; y < layout.length; y++) {
-        let count = 0;
-        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
-        checkPosition(cloneLayout, 0, y, 1, 0, []);
-        cloneLayout.forEach(element => {
-            element.forEach(e => {
-                if (e.hit) {
-                    count++;
-                }
-            });
-        });
-        if (count > part2) {
-            part2 = count;
-        }
-    }
-    for (let y = 0; y < layout.length; y++) {
-        let count = 0;
-        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
-        checkPosition(cloneLayout, layout[0].length - 1, y, -1, 0, []);
-        cloneLayout.forEach(element => {
-            element.forEach(e => {
-                if (e.hit) {
-                    count++;
-                }
-            });
-        });
-        if (count > part2) {
-            part2 = count;
-        }
+        part2 = Math.max(getHitsForEntry(layout, 0, y, 1, 0), 
+                         getHitsForEntry(layout, layout[0].length - 1, y, -1, 0), 
+                         part2);
     }
     for (let x = 0; x < layout[0].length; x++) {
-        let count = 0;
-        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
-        checkPosition(cloneLayout, x, 0, 0, 1, []);
-        cloneLayout.forEach(element => {
-            element.forEach(e => {
-                if (e.hit) {
-                    count++;
-                }
-            });
-        });
-        if (count > part2) {
-            part2 = count;
-        }
-    }
-    for (let x = 0; x < layout[0].length; x++) {
-        let count = 0;
-        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
-        checkPosition(cloneLayout, x, layout.length - 1, 0, -1, []);
-        cloneLayout.forEach(element => {
-            element.forEach(e => {
-                if (e.hit) {
-                    count++;
-                }
-            });
-        });
-        if (count > part2) {
-            part2 = count;
-        }
+        part2 = Math.max(getHitsForEntry(layout, x, 0, 0, 1), 
+                         getHitsForEntry(layout, x, layout.length - 1, 0, - 1), 
+                         part2);
     }
 
     return {
         part1: part1,
         part2: part2
     };
+}
+
+function getHitsForEntry(layout, x, y, moveX, moveY) {
+    let count = 0;
+    let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+    checkPosition(cloneLayout, x, y, moveX, moveY, []);
+    cloneLayout.forEach(element => {
+        element.forEach(e => {
+            if (e.hit) {
+                count++;
+            }
+        });
+    });
+    return count;
 }
 
 function checkPosition(layout, x, y, moveX, moveY, seen) {
