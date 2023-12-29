@@ -1,0 +1,11 @@
+import { readFile } from '../../common/readlines.js';
+import run from './day15.js';
+
+describe('day15', () => {
+
+    it('runs', () => {
+        let result = run(readFile('2023/day15/testdata.txt'));
+        expect(result).toEqual(1320);
+    });
+
+});
