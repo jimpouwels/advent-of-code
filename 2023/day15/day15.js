@@ -8,12 +8,10 @@ export default function run(input) {
 
     sequence.forEach(step => {
         let box = boxes[hash(step.label)];
-        switch (step.operation) {
-            case "=":
-                upsert(box.lenses, {label: step.label, focal: step.value}, (l) => l.label === step.label);
-                break;
-            default:
-                box.lenses = box.lenses.filter((l) => l.label !== step.label);
+        if (step.operation === '=') {
+            upsert(box.lenses, {label: step.label, focal: step.value}, (l) => l.label === step.label);
+        } else {
+            box.lenses = box.lenses.filter((l) => l.label !== step.label);
         }
     });
     return {
