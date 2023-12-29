@@ -8,12 +8,12 @@ export default function run(input) {
 
     sequence.forEach(step => {
         let box = boxes[hash(step.label)];
-        if (step.operation === '=') {
+        if (step.operation === '=')
             upsert(box.lenses, {label: step.label, focal: step.value}, (l) => l.label === step.label);
-        } else {
+        else
             box.lenses = box.lenses.filter((l) => l.label !== step.label);
-        }
     });
+    
     return {
         part1: sequence.reduce((sum, step) => sum + hash(step.full), 0),
         part2: boxes.reduce((sum, box, i) => 
