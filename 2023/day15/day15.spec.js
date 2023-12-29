@@ -5,7 +5,7 @@ describe('day15', () => {
 
     it('runs', () => {
         let result = run(readFile('2023/day15/testdata.txt'));
-        expect(result).toEqual(1320);
+        expect(result.part1).toEqual(1320);
     });
 
 });
