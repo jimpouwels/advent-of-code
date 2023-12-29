@@ -1,19 +1,15 @@
 import { cloneMatrix } from "../../common/arrays";
-import Logger from "../../common/logger";
 
-let logger = Logger.getLogger('day16');
+export function runPart1(lines) {
+    let layout = parseLayout(lines);
 
-export default function run(lines) {
-    let layout = lines.map(l => l.split('').map(i => {
-        return { val: i, hit: false};
-    }));
+    checkPosition(layout, 0, 0, 1, 0, []);
+    return countEnergized(layout);
+}
 
-    // Part 1
-    let layoutP1 = clone(layout);
-    checkPosition(layoutP1, 0, 0, 1, 0, []);
-    let part1 = countEnergized(layoutP1);
+export function runPart2(lines) {
+    let layout = parseLayout(lines);
 
-    // Part 2
     let part2 = 0;
     for (let y = 0; y < layout.length; y++) {
         part2 = Math.max(getHitsForEntry(layout, 0, y, 1, 0), 
@@ -25,11 +21,7 @@ export default function run(lines) {
                          getHitsForEntry(layout, x, layout.length - 1, 0, - 1), 
                          part2);
     }
-
-    return {
-        part1: part1,
-        part2: part2
-    };
+    return part2;
 }
 
 function getHitsForEntry(layout, x, y, moveX, moveY) {
@@ -38,15 +30,7 @@ function getHitsForEntry(layout, x, y, moveX, moveY) {
     return countEnergized(cloneLayout);
 }
 
-function clone(layout) {
-    return cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
-}
-
-function countEnergized(layout) {
-    return layout.reduce((sum, element) => sum + element.reduce((sum, e) => sum + (e.hit ? 1 : 0), 0), 0);
-}
-
-function checkPosition(layout, x, y, moveX, moveY, seen) {
+function checkPosition(layout, x, y, moveX, moveY, seen, cache) {
     if (x < 0 || x == layout[0].length || y < 0 || y == layout.length) return;
     let current = layout[y][x];
     if (seen.filter(c => {
@@ -59,31 +43,37 @@ function checkPosition(layout, x, y, moveX, moveY, seen) {
     current.hit = true;
     if (current.val === '.') {
         checkPosition(layout, x + moveX, y + moveY, moveX, moveY, seen);
-    } else if (current.val == '\\' && moveX > 0) {
-        checkPosition(layout, x, y + 1, 0, 1, seen);
-    } else if (current.val == '\\' && moveX < 0) {
-        checkPosition(layout, x, y - 1, 0, -1, seen);
-    } else if (current.val == '\\' && moveY > 0) {
-        checkPosition(layout, x + 1, y, 1, 0, seen);
-    } else if (current.val == '\\' && moveY < 0) {
-        checkPosition(layout, x - 1, y, -1, 0, seen);
-    } else if (current.val == '/' && moveX > 0) {
-        checkPosition(layout, x, y - 1, 0, -1, seen);
-    } else if (current.val == '/' && moveX < 0) {
-        checkPosition(layout, x, y + 1, 0, 1, seen);
-    } else if (current.val == '/' && moveY > 0) {
-        checkPosition(layout, x - 1, y, -1, 0, seen);
-    } else if (current.val == '/' && moveY < 0) {
-        checkPosition(layout, x + 1, y, 1, 0, seen);
-    } else if (current.val == '-' && moveX != 0) {
+    } else if (current.val == '\\' && moveX != 0) {
+        checkPosition(layout, x, y + moveX, moveY, moveX, seen);
+    } else if (current.val == '\\' && moveY != 0) {
+        checkPosition(layout, x + moveY, y + moveX, moveY, moveX, seen);
+    } else if (current.val == '/' && moveX != 0) {
+        checkPosition(layout, x, y - moveX, moveY, -moveX, seen);
+    } else if (current.val == '/' && moveY != 0) {
+        checkPosition(layout, x - moveY, y, -moveY, moveX, seen);
+    }else if (current.val == '-' && moveX != 0) {
         checkPosition(layout, x + moveX, y, moveX, moveY, seen);
     } else if (current.val == '-' && moveY != 0) {
-        checkPosition(layout, x - 1, y, -1, 0, seen);
-        checkPosition(layout, x + 1, y, 1, 0, seen);
+        checkPosition(layout, x + moveY, y, moveY, moveX, seen);
+        checkPosition(layout, x - moveY, y, -moveY, moveX, seen);
     } else if (current.val == '|' && moveY != 0) {
         checkPosition(layout, x, y + moveY, moveX, moveY, seen);
     } else if (current.val == '|' && moveX != 0) {
-        checkPosition(layout, x, y - 1, 0, -1, seen);
-        checkPosition(layout, x, y + 1, 0, 1, seen);
+        checkPosition(layout, x, y + moveX, moveY, moveX, seen);
+        checkPosition(layout, x, y - moveX, moveY, -moveX, seen);
     }
+}
+
+function countEnergized(layout) {
+    return layout.reduce((sum, element) => sum + element.reduce((sum, e) => sum + (e.hit ? 1 : 0), 0), 0);
+}
+
+function clone(layout) {
+    return cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+}
+
+function parseLayout(lines) {
+    return lines.map(l => l.split('').map(i => {
+        return { val: i, hit: false};
+    }));
 }

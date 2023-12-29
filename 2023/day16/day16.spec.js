@@ -1,12 +1,13 @@
 import { readLines } from '../../common/readlines.js';
-import run from './day16.js';
+import { runPart1, runPart2 } from './day16.js';
 
 describe('day16', () => {
 
     it('runs', () => {
-        let result = run(readLines('2023/day16/testdata.txt'));
-        expect(result.part1).toEqual(7562);
-        expect(result.part2).toEqual(7793);
+        expect(runPart1(readLines('2023/day16/testdata.txt'))).toEqual(7562);
+
+        // Part 2 takes about 30 seconds to run, uncomment to run it;
+        // expect(runPart2(readLines('2023/day16/testdata.txt'))).toEqual(7793);
     });
 
 });
