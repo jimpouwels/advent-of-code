@@ -1,5 +1,5 @@
-export function cloneMatrix(arrayToClone) {
-    return arrayToClone.map(x => x.map(y => y));
+export function cloneMatrix(arrayToClone, selector) {
+    return arrayToClone.map(x => x.map(y => selector(y)));
 }
 
 export function upsert(arrayToUpsert, object, lambda) {

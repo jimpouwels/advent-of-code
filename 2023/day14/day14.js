@@ -10,8 +10,8 @@ let instructions = [direction.North, direction.West, direction.South, direction.
 
 export default function run(lines) {
     let platform = lines.map(l => l.split(''));
-    let platformPart1 = cloneMatrix(platform);
-    let platformPart2 = cloneMatrix(platform);
+    let platformPart1 = cloneMatrix(platform, p => p);
+    let platformPart2 = cloneMatrix(platform, p => p);
     
     // Part 1
     tilt(platformPart1, direction.North);

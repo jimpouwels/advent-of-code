@@ -1,3 +1,4 @@
+import { cloneMatrix } from "../../common/arrays";
 import Logger from "../../common/logger";
 
 let logger = Logger.getLogger('day16');
@@ -6,16 +7,90 @@ export default function run(lines) {
     let layout = lines.map(l => l.split('').map(i => {
         return { val: i, hit: false};
     }));
-    checkPosition(layout, 0, 0, 1, 0, []);
-    let count = 0;
-    layout.forEach(element => {
+
+    // Part 1
+    let layoutP1 = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+    checkPosition(layoutP1, 0, 0, 1, 0, []);
+    let part1 = 0;
+    layoutP1.forEach(element => {
         element.forEach(e => {
             if (e.hit) {
-                count++;
+                part1++;
             }
         });
     });
-    return count;
+
+    // Part 2
+    let part2 = 0;
+    for (let y = 0; y < layout.length; y++) {
+        let count = 0;
+        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+        checkPosition(cloneLayout, 0, y, 1, 0, []);
+        cloneLayout.forEach(element => {
+            element.forEach(e => {
+                if (e.hit) {
+                    count++;
+                }
+            });
+        });
+        if (count > part2) {
+            logger.log('van links: ' + y + ', ' + count);
+            part2 = count;
+        }
+    }
+    for (let y = 0; y < layout.length; y++) {
+        let count = 0;
+        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+        checkPosition(cloneLayout, layout[0].length - 1, y, -1, 0, []);
+        cloneLayout.forEach(element => {
+            element.forEach(e => {
+                if (e.hit) {
+                    count++;
+                }
+            });
+        });
+        if (count > part2) {
+            logger.log('van rechts: ' + y + ', ' + count);
+            part2 = count;
+        }
+    }
+    for (let x = 0; x < layout[0].length; x++) {
+        let count = 0;
+        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+        checkPosition(cloneLayout, x, 0, 0, 1, []);
+        cloneLayout.forEach(element => {
+            element.forEach(e => {
+                if (e.hit) {
+                    count++;
+                }
+            });
+        });
+        if (count > part2) {
+            logger.log('van bovenaf: ' + x + ', ' + count);
+            part2 = count;
+        }
+    }
+    for (let x = 0; x < layout[0].length; x++) {
+        let count = 0;
+        let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+        checkPosition(cloneLayout, x, layout.length - 1, 0, -1, []);
+        cloneLayout.forEach(element => {
+            element.forEach(e => {
+                if (e.hit) {
+                    count++;
+                }
+            });
+        });
+        if (count > part2) {
+            logger.log('van onderaf: ' + x + ', ' + count);
+            part2 = count;
+        }
+    }
+
+    return {
+        part1: part1,
+        part2: part2
+    };
 }
 
 function checkPosition(layout, x, y, moveX, moveY, seen) {
