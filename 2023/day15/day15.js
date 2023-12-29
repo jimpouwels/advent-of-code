@@ -4,7 +4,7 @@ export default function run(input) {
     let sequence = input.split(',');
     
     let boxes = Array(256).fill(null);
-    boxes.forEach((_, i) => {boxes[i] = {lenses: []};});
+    boxes.forEach((_, i) => boxes[i] = {lenses: []});
 
     sequence.forEach(s => {
         let step = parseStep(s);
