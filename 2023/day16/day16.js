@@ -9,9 +9,9 @@ export default function run(lines) {
     }));
 
     // Part 1
-    let layoutP1 = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+    let layoutP1 = clone(layout);
     checkPosition(layoutP1, 0, 0, 1, 0, []);
-    let part1 = layoutP1.reduce((sum, element) => sum + element.reduce((sum, e) => sum + (e.hit ? 1 : 0), 0), 0);
+    let part1 = countEnergized(layoutP1);
 
     // Part 2
     let part2 = 0;
@@ -33,17 +33,17 @@ export default function run(lines) {
 }
 
 function getHitsForEntry(layout, x, y, moveX, moveY) {
-    let count = 0;
-    let cloneLayout = cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+    let cloneLayout = clone(layout);
     checkPosition(cloneLayout, x, y, moveX, moveY, []);
-    cloneLayout.forEach(element => {
-        element.forEach(e => {
-            if (e.hit) {
-                count++;
-            }
-        });
-    });
-    return count;
+    return countEnergized(cloneLayout);
+}
+
+function clone(layout) {
+    return cloneMatrix(layout, i => {return {val: i.val, hit: i.hit}});
+}
+
+function countEnergized(layout) {
+    return layout.reduce((sum, element) => sum + element.reduce((sum, e) => sum + (e.hit ? 1 : 0), 0), 0);
 }
 
 function checkPosition(layout, x, y, moveX, moveY, seen) {
