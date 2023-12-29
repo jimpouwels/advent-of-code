@@ -34,7 +34,6 @@ export default function run(lines) {
             });
         });
         if (count > part2) {
-            logger.log('van links: ' + y + ', ' + count);
             part2 = count;
         }
     }
@@ -50,7 +49,6 @@ export default function run(lines) {
             });
         });
         if (count > part2) {
-            logger.log('van rechts: ' + y + ', ' + count);
             part2 = count;
         }
     }
@@ -66,7 +64,6 @@ export default function run(lines) {
             });
         });
         if (count > part2) {
-            logger.log('van bovenaf: ' + x + ', ' + count);
             part2 = count;
         }
     }
@@ -82,7 +79,6 @@ export default function run(lines) {
             });
         });
         if (count > part2) {
-            logger.log('van onderaf: ' + x + ', ' + count);
             part2 = count;
         }
     }
