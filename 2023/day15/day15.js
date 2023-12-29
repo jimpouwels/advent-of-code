@@ -1,18 +1,16 @@
-import Logger from "../../common/logger";
-
-let logger = Logger.getLogger('day15');
+import Box from "./box";
 
 export default function run(input) {
     let sequence = input.split(',');
     
+    // PART 1
     let part1 = sequence.reduce((sum, string) => {
         return sum + hash(string);
     }, 0);
 
-    let boxes = Array(256);
-    for (let i = 0; i < boxes.length; i++) {
-        boxes[i] = new Box();
-    }
+    // PART 2
+    let boxes = Array(256).fill(null);
+    boxes.forEach((_, i) => boxes[i] = new Box());
 
     sequence.forEach(step => {
         if (step.includes('=')) {
@@ -24,12 +22,9 @@ export default function run(input) {
         }
     });
 
-    let part2 = 0;
-    boxes.forEach((box, i) => {
-        box.lenses.forEach((lens, j) => {
-            part2 += ((i + 1) * (j + 1) * lens.focalLength);
-        });
-    });
+    let part2 = boxes.reduce((sum, box, i) => 
+                              sum + box.lenses.reduce((sum, lens, j) => 
+                              sum + ((i + 1) * (j + 1) * lens.focalLength), 0), 0);
     return {
         part1: part1,
         part2: part2
@@ -37,38 +32,5 @@ export default function run(input) {
 }
 
 function hash(value) {
-    let currentValue = 0;
-    value.split('').forEach(char => {
-        currentValue += char.charCodeAt(0);
-        currentValue *= 17;
-        currentValue %= 256;
-    });
-    return currentValue;
-}
-
-class Box {
-    lenses = [];
-
-    insert(label, focalLength) {
-        let existingLens = this.lenses.filter(l => l.label === label);
-        if (existingLens.length == 0) {
-            this.lenses.push(new Lens(label, focalLength));
-        } else {
-            existingLens[0].focalLength = focalLength;
-        }
-    }
-
-    remove(label) {
-        this.lenses = this.lenses.filter(l => l.label !== label);
-    }
-}
-
-class Lens {
-    label;
-    focalLength;
-
-    constructor(label, focalLength) {
-        this.label = label;
-        this.focalLength = focalLength;
-    }
+    return value.split('').reduce((sum, char) => ((sum + char.charCodeAt(0)) * 17) % 256, 0);
 }
