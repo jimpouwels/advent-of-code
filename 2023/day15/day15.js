@@ -6,16 +6,16 @@ export default function run(input) {
     let boxes = Array(256).fill(null);
     boxes.forEach((_, i) => boxes[i] = {lenses: []});
 
-    sequence.forEach(s => {
-        let step = parseStep(s);
-        let box = boxes[hash(step.label)];
-        switch (step.operation) {
-            case "=":
-                upsert(box.lenses, {label: step.label, focal: step.value}, (l) => l.label === step.label);
-                break;
-            default:
-                box.lenses = box.lenses.filter((l) => l.label !== step.label);
-        }
+    sequence.map(step => parseStep(step))
+            .forEach(step => {
+                        let box = boxes[hash(step.label)];
+                        switch (step.operation) {
+                            case "=":
+                                upsert(box.lenses, {label: step.label, focal: step.value}, (l) => l.label === step.label);
+                                break;
+                            default:
+                                box.lenses = box.lenses.filter((l) => l.label !== step.label);
+                        }
     });
     return {
         part1: sequence.reduce((sum, string) => sum + hash(string), 0),
