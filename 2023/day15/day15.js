@@ -13,10 +13,10 @@ export default function run(input) {
         else
             box.lenses = box.lenses.filter((l) => l.label !== step.label);
     });
-    
+
     return {
         part1: sequence.reduce((sum, step) => sum + hash(step.full), 0),
-        part2: boxes.reduce((sum, box, i) => 
+        part2: boxes.reduce((sum, box, i) =>
                              sum + box.lenses.reduce((sum, lens, j) => 
                              sum + ((i + 1) * (j + 1) * lens.focal), 0), 0)
     }
