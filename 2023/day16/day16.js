@@ -33,7 +33,7 @@ function getHitsForEntry(layout, x, y, moveX, moveY) {
 function checkPosition(layout, x, y, moveX, moveY, seen, cache) {
     if (x < 0 || x == layout[0].length || y < 0 || y == layout.length ||
         seen.filter(c => c.x === x && c.y === y && c.moveX === moveX && c.moveY === moveY).length > 0) return;
-    seen.push({x: x, y: y, moveX: moveX, moveY: moveY});
+        seen.push({x: x, y: y, moveX: moveX, moveY: moveY});
     let current = layout[y][x];
     current.hit = true;
     if (current.val === '.') {
@@ -46,7 +46,7 @@ function checkPosition(layout, x, y, moveX, moveY, seen, cache) {
         checkPosition(layout, x, y - moveX, moveY, -moveX, seen);
     } else if (current.val == '/' && moveY != 0) {
         checkPosition(layout, x - moveY, y, -moveY, moveX, seen);
-    }else if (current.val == '-' && moveX != 0) {
+    } else if (current.val == '-' && moveX != 0) {
         checkPosition(layout, x + moveX, y, moveX, moveY, seen);
     } else if (current.val == '-' && moveY != 0) {
         checkPosition(layout, x + moveY, y, moveY, moveX, seen);
