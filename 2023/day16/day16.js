@@ -31,15 +31,10 @@ function getHitsForEntry(layout, x, y, moveX, moveY) {
 }
 
 function checkPosition(layout, x, y, moveX, moveY, seen, cache) {
-    if (x < 0 || x == layout[0].length || y < 0 || y == layout.length) return;
+    if (x < 0 || x == layout[0].length || y < 0 || y == layout.length ||
+        seen.filter(c => c.x === x && c.y === y && c.moveX === moveX && c.moveY === moveY).length > 0) return;
+    seen.push({x: x, y: y, moveX: moveX, moveY: moveY});
     let current = layout[y][x];
-    if (seen.filter(c => {
-        return c.x === x && c.y === y && c.moveX === moveX && c.moveY === moveY;
-    }).length > 0) {
-        return;
-    } else {
-        seen.push({x: x, y: y, moveX: moveX, moveY: moveY});
-    }
     current.hit = true;
     if (current.val === '.') {
         checkPosition(layout, x + moveX, y + moveY, moveX, moveY, seen);
