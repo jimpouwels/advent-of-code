@@ -9,8 +9,11 @@ export default function day3(input, delivererCount) {
         let deliverer = deliverers[currentDeliverer];
         deliverer.handleCommand(c);
         let house = houses.filter((h) => h.x == deliverer.posX && h.y == deliverer.posY)[0];
-        if (house) house.presents++
-        else houses.push(new House(deliverer.posX, deliverer.posY));
+        if (house)
+            house.presents++
+        else
+            houses.push(new House(deliverer.posX, deliverer.posY));
+
         currentDeliverer = ++currentDeliverer == delivererCount ? 0 : currentDeliverer;
     });
     return houses.filter((h) => h.presents > 0).length;
