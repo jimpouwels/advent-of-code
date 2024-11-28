@@ -10,10 +10,7 @@ export default function day3(input, delivererCount) {
 
     commands.forEach(c => {
         let deliverer = deliverers[currentDeliverer];
-        if (c === '>') deliverer.posX++;
-        if (c === '<') deliverer.posX--;
-        if (c === 'v') deliverer.posY++;
-        if (c === '^') deliverer.posY--;
+        deliverer.handleCommand(c);
         let house = houses.filter((h) => h.x == deliverer.posX && h.y == deliverer.posY)[0];
         if (house) house.presents++
         else houses.push(new House(deliverer.posX, deliverer.posY));
@@ -28,6 +25,13 @@ export default function day3(input, delivererCount) {
 class Deliverer {
     posX = 0;
     posY = 0;
+
+    handleCommand(command) {
+        if (command === '>') this.posX++;
+        if (command === '<') this.posX--;
+        if (command === 'v') this.posY++;
+        if (command === '^') this.posY--;
+    }
 }
 
 class House {
