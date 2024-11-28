@@ -7,11 +7,11 @@ export default function day3(input, delivererCount) {
     input.split('').forEach(c => {
         let deliverer = deliverers[currentDeliverer];
         deliverer.handleCommand(c);
-        let house = houses.filter((h) => h.x == deliverer.posX && h.y == deliverer.posY)[0];
+        let house = houses.filter((h) => h.isAtPos(deliverer))[0];
         if (house)
             house.presents++
         else
-            houses.push(new House(deliverer.posX, deliverer.posY));
+            houses.push(new House(deliverer.x, deliverer.y));
 
         currentDeliverer = ++currentDeliverer == delivererCount ? 0 : currentDeliverer;
     });
@@ -19,14 +19,14 @@ export default function day3(input, delivererCount) {
 }
 
 class Deliverer {
-    posX = 0;
-    posY = 0;
+    x = 0;
+    y = 0;
 
     handleCommand(command) {
-        if (command === '>') this.posX++;
-        if (command === '<') this.posX--;
-        if (command === 'v') this.posY++;
-        if (command === '^') this.posY--;
+        if (command === '>') this.x++;
+        if (command === '<') this.x--;
+        if (command === 'v') this.y++;
+        if (command === '^') this.y--;
     }
 }
 
@@ -38,5 +38,9 @@ class House {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    isAtPos(deliverer) {
+        return this.x == deliverer.x && this.y == deliverer.y;
     }
 }
