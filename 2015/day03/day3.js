@@ -1,11 +1,10 @@
 export default function day3(input, delivererCount) {
-    let commands = input.split('');
     let houses = Array(1).fill(new House(0, 0));
-    let currentDeliverer = 0;
     let deliverers = Array(delivererCount).fill(null);
     deliverers.forEach((_, i) => deliverers[i] = new Deliverer());
 
-    commands.forEach(c => {
+    let currentDeliverer = 0;
+    input.split('').forEach(c => {
         let deliverer = deliverers[currentDeliverer];
         deliverer.handleCommand(c);
         let house = houses.filter((h) => h.x == deliverer.posX && h.y == deliverer.posY)[0];
