@@ -7,7 +7,7 @@ export default function day3(input, delivererCount) {
     input.split('').forEach(c => {
         let deliverer = deliverers[currentDeliverer];
         deliverer.handleCommand(c);
-        let house = houses.filter((h) => h.isAtPos(deliverer))[0];
+        let house = houses.filter(h => h.isAtPos(deliverer))[0];
         if (house)
             house.presents++
         else
@@ -15,7 +15,7 @@ export default function day3(input, delivererCount) {
 
         currentDeliverer = ++currentDeliverer == delivererCount ? 0 : currentDeliverer;
     });
-    return houses.filter((h) => h.presents > 0).length;
+    return houses.filter(h => h.presents > 0).length;
 }
 
 class Deliverer {
