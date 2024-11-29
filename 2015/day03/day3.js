@@ -11,7 +11,7 @@ export default function day3(input, delivererCount) {
         if (!house)
             houses.push({ x: deliverer.x, y: deliverer.y });
 
-        currentDeliverer = ++currentDeliverer == delivererCount ? 0 : currentDeliverer;
+        currentDeliverer = ++currentDeliverer % delivererCount;
     });
     return houses.length;
 }
