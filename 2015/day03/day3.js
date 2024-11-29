@@ -7,7 +7,7 @@ export default function day3(input, delivererCount) {
 
     input.split('').forEach((c, i) => {
         let deliverer = deliverers[i % delivererCount];
-        pushIfNotContains(houses, { x: deliverer.x, y: deliverer.y }, h => h.x == deliverer.x && h.y == deliverer.y);
+        pushIfNotContains(houses, { x: deliverer.x, y: deliverer.y }, h => deliverer.isAt(h));
         deliverer.handleCommand(c);
     });
     return houses.length;
@@ -22,5 +22,9 @@ class Deliverer {
         if (command === '<') this.x--;
         if (command === 'v') this.y++;
         if (command === '^') this.y--;
+    }
+
+    isAt(house) {
+        return house.x == this.x && house.y == this.y;
     }
 }
