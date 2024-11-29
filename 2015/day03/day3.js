@@ -5,11 +5,11 @@ export default function day3(input, delivererCount) {
 
     let currentDeliverer = 0;
     input.split('').forEach(c => {
-        let deliverer = deliverers[currentDeliverer];
+        let deliverer = deliverers[currentDeliverer++];
         if (houses.filter(h => h.x == deliverer.x && h.y == deliverer.y).length == 0)
             houses.push({ x: deliverer.x, y: deliverer.y });
 
-        currentDeliverer = ++currentDeliverer % delivererCount;
+        currentDeliverer %= delivererCount;
         deliverer.handleCommand(c);
     });
     return houses.length;
