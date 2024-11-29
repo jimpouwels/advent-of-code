@@ -10,3 +10,9 @@ export function upsert(arrayToUpsert, object, lambda) {
         arrayToUpsert[arrayToUpsert.findIndex(i => lambda(i))] = object;
     }
 }
+
+export function pushIfNotContains(arrayToUpsert, value, predicate) {
+    if (!arrayToUpsert.some(predicate)) {
+        arrayToUpsert.push(value);
+    }
+}

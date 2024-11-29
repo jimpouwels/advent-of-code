@@ -1,3 +1,5 @@
+import { pushIfNotContains } from "../../common/arrays";
+
 export default function day3(input, delivererCount) {
     let houses = [];
     let deliverers = Array(delivererCount).fill(null);
@@ -6,9 +8,7 @@ export default function day3(input, delivererCount) {
     let i = 0;
     input.split('').forEach(c => {
         let deliverer = deliverers[i++];
-        if (!houses.some(h => h.x == deliverer.x && h.y == deliverer.y))
-            houses.push({ x: deliverer.x, y: deliverer.y });
-
+        pushIfNotContains(houses, { x: deliverer.x, y: deliverer.y }, h => h.x == deliverer.x && h.y == deliverer.y);
         deliverer.handleCommand(c);
         i %= delivererCount;
     });
