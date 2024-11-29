@@ -6,8 +6,7 @@ export default function day3(input, delivererCount) {
     let currentDeliverer = 0;
     input.split('').forEach(c => {
         let deliverer = deliverers[currentDeliverer];
-        let house = houses.filter(h => h.x == deliverer.x && h.y == deliverer.y)[0];
-        if (!house)
+        if (houses.filter(h => h.x == deliverer.x && h.y == deliverer.y).length == 0)
             houses.push({ x: deliverer.x, y: deliverer.y });
 
         currentDeliverer = ++currentDeliverer % delivererCount;
