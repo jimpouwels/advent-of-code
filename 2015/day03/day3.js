@@ -18,10 +18,16 @@ class Deliverer {
     y = 0;
 
     handleCommand(command) {
-        if (command === '>') this.x++;
-        if (command === '<') this.x--;
-        if (command === 'v') this.y++;
-        if (command === '^') this.y--;
+        switch (command) {
+            case ">":
+                this.x++; break;
+            case "<":
+                this.x--; break;
+            case "v":
+                this.y++; break;
+            case "^":
+                this.y--; break;
+        }
     }
 
     isAt(house) {
