@@ -9,8 +9,8 @@ export default function day3(input, delivererCount) {
         if (houses.filter(h => h.x == deliverer.x && h.y == deliverer.y).length == 0)
             houses.push({ x: deliverer.x, y: deliverer.y });
 
-        i %= delivererCount;
         deliverer.handleCommand(c);
+        i %= delivererCount;
     });
     return houses.length;
 }
