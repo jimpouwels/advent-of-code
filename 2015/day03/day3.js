@@ -3,13 +3,13 @@ export default function day3(input, delivererCount) {
     let deliverers = Array(delivererCount).fill(null);
     deliverers.forEach((_, i) => deliverers[i] = new Deliverer());
 
-    let currentDeliverer = 0;
+    let i = 0;
     input.split('').forEach(c => {
-        let deliverer = deliverers[currentDeliverer++];
+        let deliverer = deliverers[i++];
         if (houses.filter(h => h.x == deliverer.x && h.y == deliverer.y).length == 0)
             houses.push({ x: deliverer.x, y: deliverer.y });
 
-        currentDeliverer %= delivererCount;
+        i %= delivererCount;
         deliverer.handleCommand(c);
     });
     return houses.length;
