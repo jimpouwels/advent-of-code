@@ -5,7 +5,6 @@ export default function day3(input, delivererCount) {
     let deliverers = Array(delivererCount).fill(null);
     deliverers.forEach((_, i) => deliverers[i] = new Deliverer());
 
-    let i = 0;
     input.split('').forEach((c, i) => {
         let deliverer = deliverers[i % delivererCount];
         pushIfNotContains(houses, { x: deliverer.x, y: deliverer.y }, h => h.x == deliverer.x && h.y == deliverer.y);
