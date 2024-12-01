@@ -1,13 +1,6 @@
 export default function run(input) {
-    let leftList = [];
-    let rightList = [];
-    input.forEach(l => {
-        let split = l.split('   ');
-        leftList.push(parseInt(split[0]));
-        rightList.push(parseInt(split[1]));
-    });
-    leftList.sort();
-    rightList.sort();
+    let leftList = input.map(l => l.split('   ')[0]).sort();
+    let rightList = input.map(l => l.split('   ')[1]).sort();
 
     return {
         part1: leftList.reduce((sum, left, i) => sum + (Math.abs(left - rightList[i])), 0),
