@@ -1,21 +1,36 @@
-export default function run(input) {
+export default function run(input, allows1Deletion) {
     let reports = input.map(l => l.split(' ').map(l => parseInt(l)));
 
     let safeCount = reports.reduce((sum, r) => {
-        let direction = 0;
-        let safe = false;
-        for (let l = 1; l < r.length; l++) {
-            if ((direction < 0 && r[l] > r[l - 1]) || (direction > 0 && r[l] < r[l - 1]) || r[l] == r[l - 1] || Math.abs(r[l] - r[l - 1]) > 3) {
-                safe = false;
-                break;
+        let safe = isSafe(r);
+        if (!safe && allows1Deletion) {
+            for (let i = 0; i < r.length; i++) {
+                let copy = [...r];
+                copy.splice(i, 1);
+                safe = isSafe(copy);
+                if (safe) {
+                    break;
+                }
             }
-            direction = r[l] - r[l - 1];
-            safe = true;
         }
-        return safe ? sum + 1 : 0;
+        return sum + (safe ? 1 : 0);
     }, 0);
 
-    return {
-        part1: safeCount
+    return safeCount;
+}
+
+function isSafe(r) {
+    let safe = true;
+    let direction = 0;
+    let previous = r[0];
+    for (let l = 1; l < r.length; l++) {
+        if ((direction < 0 && r[l] > previous) || (direction > 0 && r[l] < previous) || r[l] == previous || Math.abs(r[l] - previous) > 3) {
+            safe = false;
+            break;
+        } else {
+            direction = r[l] - previous;
+            previous = r[l];
+        }
     }
+    return safe;
 }

@@ -3,8 +3,11 @@ import run from './day2.js';
 
 describe('day2', () => {
 
-    it('run1', () => {
-        let result = run(readLines('2024/day02/testdata.txt'));
-        expect(result.part1).toEqual(516);
+    it('part1', () => {
+        expect(run(readLines('2024/day02/testdata.txt'), false)).toEqual(516);
+    });
+
+    it('part2', () => {
+        expect(run(readLines('2024/day02/testdata.txt'), true)).toEqual(561);
     });
 });
