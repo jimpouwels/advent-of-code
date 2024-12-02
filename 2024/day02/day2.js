@@ -1,10 +1,10 @@
 export default function run(input, allows1Deletion) {
     let reports = input.map(l => l.split(' ').map(l => parseInt(l)));
 
-    let safeCount = reports.reduce((sum, r) => {
-        if (isSafe(r)) return sum + 1;
+    let safeCount = reports.reduce((sum, report) => {
+        if (isSafe(report)) return sum + 1;
         if (allows1Deletion)
-            return sum + (r.some((_, i) => isSafe(r.filter((_, j) => j != i))) ? 1 : 0);
+            return sum + (report.some((_, i) => isSafe(report.filter((_, j) => j != i))) ? 1 : 0);
         return sum;
     }, 0);
 
