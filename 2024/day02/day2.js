@@ -9,15 +9,9 @@ export default function run(input, allows1Deletion) {
 }
 
 function isSafe(r) {
-    let direction = 0;
-
     return r.filter((l, i) => {
         if (i == 0) return false;
-        let unsafe = direction < 0 && l > r[i - 1] ||
-            direction > 0 && l < r[i - 1] ||
-            l == r[i - 1] ||
-            Math.abs(l - r[i - 1]) > 3;
-        direction = l - r[i - 1];
+        let unsafe = r[i - 1] - r[i - 2] < 0 && l > r[i - 1] || r[i - 1] - r[i - 2] > 0 && l < r[i - 1] || l == r[i - 1] || Math.abs(l - r[i - 1]) > 3;
         return !unsafe;
     }).length == r.length - 1;
 }
