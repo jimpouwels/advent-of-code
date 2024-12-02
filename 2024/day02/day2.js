@@ -8,12 +8,12 @@ export default function run(input, allows1Deletion) {
         }, 0);
 }
 
-function isSafe(r) {
-    return r.every((l, i) =>
+function isSafe(report) {
+    return report.every((l, i) =>
         i == 0 ||
-        !(r[i - 1] - r[i - 2] < 0 && l > r[i - 1]
-            || r[i - 1] - r[i - 2] > 0 && l < r[i - 1]
-            || l == r[i - 1]
-            || Math.abs(l - r[i - 1]) > 3)
+        !(report[i - 1] - report[i - 2] < 0 && l > report[i - 1]
+            || report[i - 1] - report[i - 2] > 0 && l < report[i - 1]
+            || l == report[i - 1]
+            || Math.abs(l - report[i - 1]) > 3)
     );
 }
