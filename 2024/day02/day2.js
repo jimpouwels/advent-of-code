@@ -1,5 +1,3 @@
-import { removeAt } from "../../common/arrays";
-
 export default function run(input, allows1Deletion) {
     let reports = input.map(l => l.split(' ').map(l => parseInt(l)));
 
