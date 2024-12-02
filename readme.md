@@ -20,6 +20,11 @@ To run tests from a specific year:
 npm run test 20xx
 ```
 
+To run tests from a specific day:
+```sh
+npm run test 20xx/dayxx
+```
+
 If you want execute an assignment based on your own input:
 
 1. Navigate to the appropriate day
