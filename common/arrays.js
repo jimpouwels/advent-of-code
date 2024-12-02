@@ -16,9 +16,3 @@ export function pushIfNotContains(arrayToUpsert, value, predicate) {
         arrayToUpsert.push(value);
     }
 }
-
-export function removeAt(arrayToUpdate, index) {
-    let copy = [...arrayToUpdate];
-    copy.splice(index, 1);
-    return copy;
-}

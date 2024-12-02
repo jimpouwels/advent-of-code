@@ -6,7 +6,7 @@ export default function run(input, allows1Deletion) {
     let safeCount = reports.reduce((sum, r) => {
         if (isSafe(r)) return sum + 1;
         if (allows1Deletion)
-            return sum + (r.some((_, i) => isSafe(removeAt(r, i))) ? 1 : 0);
+            return sum + (r.some((_, i) => isSafe(r.filter((_, j) => j != i))) ? 1 : 0);
         return sum;
     }, 0);
 
