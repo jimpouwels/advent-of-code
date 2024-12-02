@@ -9,9 +9,7 @@ export default function run(input, allows1Deletion) {
 }
 
 function isSafe(r) {
-    return r.filter((l, i) => {
-        if (i == 0) return false;
-        let unsafe = r[i - 1] - r[i - 2] < 0 && l > r[i - 1] || r[i - 1] - r[i - 2] > 0 && l < r[i - 1] || l == r[i - 1] || Math.abs(l - r[i - 1]) > 3;
-        return !unsafe;
-    }).length == r.length - 1;
+    return r.filter((l, i) =>
+        i != 0 && !(r[i - 1] - r[i - 2] < 0 && l > r[i - 1] || r[i - 1] - r[i - 2] > 0 && l < r[i - 1] || l == r[i - 1] || Math.abs(l - r[i - 1]) > 3)
+    ).length == r.length - 1;
 }
