@@ -4,14 +4,14 @@ export default function run(lines) {
     return {
         part1: grid.reduce((sum, line, y) =>
             sum + line.reduce((sum, _, x) => sum + allDirections.filter(direction =>
-                findAdjacentChar(grid, "XMAS".split(''), { x: x, y: y }, direction)).length, 0), 0),
+                findAdjacentChars(grid, "XMAS".split(''), { x: x, y: y }, direction)).length, 0), 0),
 
         part2: grid.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
             sum + (findX(grid, { x: x, y: y })), 0), 0)
     }
 }
 
-function findAdjacentChar(grid, remainingChars, currentPosition, direction) {
+function findAdjacentChars(grid, remainingChars, currentPosition, direction) {
     if (grid[currentPosition.y][currentPosition.x] == remainingChars[0]) {
         if (remainingChars.length == 1) {
             return true;
@@ -28,7 +28,7 @@ function findAdjacentChar(grid, remainingChars, currentPosition, direction) {
     if (nextPosition.x < 0 || nextPosition.x == grid[0].length || nextPosition.y < 0 || nextPosition.y == grid.length) {
         return false;
     }
-    return findAdjacentChar(grid, remainingChars.slice(1), nextPosition, direction);
+    return findAdjacentChars(grid, remainingChars.slice(1), nextPosition, direction);
 }
 
 function findX(grid, currentPosition) {
