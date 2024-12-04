@@ -27,7 +27,7 @@ export class Grid {
 
     findX_MASCount() {
         return this.data.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
-            sum += this.at(x, y) == 'A' && !this.isAtEdge(x, y) &&
+            sum += this.at(x, y) == 'A' && !this.isEdge(x, y) &&
                 (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
                     || (this.at(x - 1, y - 1) == 'S' && this.at(x + 1, y + 1) == 'M')) &&
                     ((this.at(x + 1, y - 1) == 'M' && this.at(x - 1, y + 1) == 'S')
@@ -51,7 +51,7 @@ export class Grid {
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
     }
 
-    isAtEdge(x, y) {
+    isEdge(x, y) {
         return x == 0 || x == this.width() - 1 || y == 0 || y == this.height() - 1;
     }
 }
