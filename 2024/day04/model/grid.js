@@ -45,9 +45,7 @@ export class Grid {
         nextPosition.y -= direction == Direction.NORTH || direction == Direction.NORTH_EAST || direction == Direction.NORTH_WEST ? 1 : 0;
         nextPosition.y += direction == Direction.SOUTH || direction == Direction.SOUTH_EAST || direction == Direction.SOUTH_WEST ? 1 : 0;
 
-        if (nextPosition.x < 0 || nextPosition.x == this.width() || nextPosition.y < 0 || nextPosition.y == this.height()) {
-            return false;
-        }
+        if (nextPosition.x < 0 || nextPosition.x == this.width() || nextPosition.y < 0 || nextPosition.y == this.height()) return false;
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
     }
 
