@@ -14,6 +14,7 @@ export default function run(lines) {
 function findAdjacentChars(grid, remainingChars, currentPosition, direction) {
     if (grid[currentPosition.y][currentPosition.x] != remainingChars[0]) return false;
     if (remainingChars.length == 1) return true;
+
     let nextPosition = { x: currentPosition.x, y: currentPosition.y };
     nextPosition.x -= direction == Direction.WEST || direction == Direction.NORTH_WEST || direction == Direction.SOUTH_WEST ? 1 : 0;
     nextPosition.x += direction == Direction.EAST || direction == Direction.NORTH_EAST || direction == Direction.SOUTH_EAST ? 1 : 0;
