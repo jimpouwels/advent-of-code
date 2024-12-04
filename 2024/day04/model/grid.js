@@ -26,15 +26,13 @@ export class Grid {
     }
 
     findX_MASCount() {
-        return this.data.reduce((sum, line, y) => sum + line.reduce((sum, _, x) => {
-            if (this.at(x, y) != 'A' || x < 1 || x == this.width() - 1 || y < 1 || y == this.height() - 1) {
-                return sum;
-            }
-            return sum += (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
-                || (this.at(x - 1, y - 1) == 'S' && this.at(x + 1, y + 1) == 'M')) &&
-                ((this.at(x + 1, y - 1) == 'M' && this.at(x - 1, y + 1) == 'S')
-                    || (this.at(x + 1, y - 1) == 'S' && this.at(x - 1, y + 1) == 'M'))) ? 1 : 0
-        }, 0), 0)
+        return this.data.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
+            sum += this.at(x, y) == 'A' && !this.isAtEdge(x, y) &&
+                (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
+                    || (this.at(x - 1, y - 1) == 'S' && this.at(x + 1, y + 1) == 'M')) &&
+                    ((this.at(x + 1, y - 1) == 'M' && this.at(x - 1, y + 1) == 'S')
+                        || (this.at(x + 1, y - 1) == 'S' && this.at(x - 1, y + 1) == 'M'))) ? 1 : 0
+            , 0), 0)
     }
 
     findAdjacentChars(chars, currentPosition, direction) {
@@ -51,5 +49,9 @@ export class Grid {
             return false;
         }
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
+    }
+
+    isAtEdge(x, y) {
+        return x == 0 || x == this.width() - 1 || y == 0 || y == this.height() - 1;
     }
 }
