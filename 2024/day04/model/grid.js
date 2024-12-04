@@ -26,8 +26,18 @@ export class Grid {
     }
 
     findX_MASCount() {
-        return this.data.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
-            sum + this.findX({ x: x, y: y }), 0), 0)
+        return this.data.reduce((sum, line, y) => sum + line.reduce((sum, _, x) => {
+            if (this.at(x, y) != 'A' || x < 1 || x == this.width() - 1 || y < 1 || y == this.height() - 1) {
+                return sum;
+            }
+            if (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
+                || (this.at(x - 1, y - 1) == 'S' && this.at(x + 1, y + 1) == 'M')) &&
+                ((this.at(x + 1, y - 1) == 'M' && this.at(x - 1, y + 1) == 'S')
+                    || (this.at(x + 1, y - 1) == 'S' && this.at(x - 1, y + 1) == 'M'))) {
+                sum += 1;
+            }
+            return sum;
+        }, 0), 0)
     }
 
     findAdjacentChars(chars, currentPosition, direction) {
@@ -44,15 +54,5 @@ export class Grid {
             return false;
         }
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
-    }
-
-    findX(currentPosition) {
-        if (this.at(currentPosition.x, currentPosition.y) != 'A' || currentPosition.x < 1 || currentPosition.x == this.width() - 1 || currentPosition.y < 1 || currentPosition.y == this.height() - 1) {
-            return false;
-        }
-        return ((this.at(currentPosition.x - 1, currentPosition.y - 1) == 'M' && this.at(currentPosition.x + 1, currentPosition.y + 1) == 'S')
-            || (this.at(currentPosition.x - 1, currentPosition.y - 1) == 'S' && this.at(currentPosition.x + 1, currentPosition.y + 1) == 'M')) &&
-            ((this.at(currentPosition.x + 1, currentPosition.y - 1) == 'M' && this.at(currentPosition.x - 1, currentPosition.y + 1) == 'S')
-                || (this.at(currentPosition.x + 1, currentPosition.y - 1) == 'S' && this.at(currentPosition.x - 1, currentPosition.y + 1) == 'M'))
     }
 }
