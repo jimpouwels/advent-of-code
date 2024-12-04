@@ -27,9 +27,13 @@ export default class Logger {
         let message = '';
         array.forEach(a => {
             a.forEach(i => message += lambda(i));
-            message += '\n'; 
+            message += '\n';
         });
         this.log(message);
+    }
+
+    logObject(object) {
+        this.logMaster(JSON.stringify(object));
     }
 
     log(message) {
@@ -41,7 +45,7 @@ export default class Logger {
     }
 
     appendFile(filepath, message) {
-        fs.appendFileSync(filepath, message + '\n'), () => {};
+        fs.appendFileSync(filepath, message + '\n'), () => { };
     }
 
     getFilePath() {
