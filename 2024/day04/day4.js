@@ -1,19 +1,12 @@
-export function part1(lines) {
+export default function run(lines) {
     let grid = lines.map(l => l.split(''));
-    return grid.reduce((sum, line, y) => {
-        return sum + line.reduce((sum, _, x) => {
-            return sum + ([Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NORTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_EAST, Direction.SOUTH_WEST].filter(direction => findAdjacentChar(grid, "XMAS".split(''), { x: x, y: y }, direction)).length);
-        }, 0);
-    }, 0);
-}
-
-export function part2(lines) {
-    let grid = lines.map(l => l.split(''));
-    return grid.reduce((sum, line, y) => {
-        return sum + line.reduce((sum, _, x) => {
-            return sum + (findX(grid, { x: x, y: y }));
-        }, 0);
-    }, 0);
+    return {
+        part1: grid.reduce((sum, line, y) =>
+            sum + line.reduce((sum, _, x) => sum + allDirections.filter(direction =>
+                findAdjacentChar(grid, "XMAS".split(''), { x: x, y: y }, direction)).length, 0), 0),
+        part2: grid.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
+            sum + (findX(grid, { x: x, y: y })), 0), 0)
+    }
 }
 
 function findAdjacentChar(grid, remainingChars, currentPosition, direction) {
@@ -56,3 +49,4 @@ export const Direction = {
     SOUTH_WEST: 'SoutWest',
     SOUTH_EAST: 'SouthEast'
 }
+const allDirections = [Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NORTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_EAST, Direction.SOUTH_WEST];
