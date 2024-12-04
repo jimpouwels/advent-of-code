@@ -8,6 +8,6 @@ describe('day4', () => {
     });
 
     it('part2', () => {
-        expect(part2(readLines('2024/day04/testdata.txt'))).toEqual(18);
+        expect(part2(readLines('2024/day04/testdata.txt'))).toEqual(1916);
     });
 });
