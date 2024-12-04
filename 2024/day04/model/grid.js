@@ -30,9 +30,9 @@ export class Grid {
             sum + this.findX({ x: x, y: y }), 0), 0)
     }
 
-    findAdjacentChars(remainingChars, currentPosition, direction) {
-        if (this.at(currentPosition.x, currentPosition.y) != remainingChars[0]) return false;
-        if (remainingChars.length == 1) return true;
+    findAdjacentChars(chars, currentPosition, direction) {
+        if (this.at(currentPosition.x, currentPosition.y) != chars[0]) return false;
+        if (chars.length == 1) return true;
 
         let nextPosition = { x: currentPosition.x, y: currentPosition.y };
         nextPosition.x -= direction == Direction.WEST || direction == Direction.NORTH_WEST || direction == Direction.SOUTH_WEST ? 1 : 0;
@@ -43,7 +43,7 @@ export class Grid {
         if (nextPosition.x < 0 || nextPosition.x == this.width() || nextPosition.y < 0 || nextPosition.y == this.height()) {
             return false;
         }
-        return this.findAdjacentChars(remainingChars.slice(1), nextPosition, direction);
+        return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
     }
 
     findX(currentPosition) {
