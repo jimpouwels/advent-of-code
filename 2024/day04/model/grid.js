@@ -30,13 +30,10 @@ export class Grid {
             if (this.at(x, y) != 'A' || x < 1 || x == this.width() - 1 || y < 1 || y == this.height() - 1) {
                 return sum;
             }
-            if (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
+            return sum += (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
                 || (this.at(x - 1, y - 1) == 'S' && this.at(x + 1, y + 1) == 'M')) &&
                 ((this.at(x + 1, y - 1) == 'M' && this.at(x - 1, y + 1) == 'S')
-                    || (this.at(x + 1, y - 1) == 'S' && this.at(x - 1, y + 1) == 'M'))) {
-                sum += 1;
-            }
-            return sum;
+                    || (this.at(x + 1, y - 1) == 'S' && this.at(x - 1, y + 1) == 'M'))) ? 1 : 0
         }, 0), 0)
     }
 
