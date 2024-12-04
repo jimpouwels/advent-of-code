@@ -1,9 +1,11 @@
 export default function run(lines) {
     let grid = lines.map(l => l.split(''));
+
     return {
         part1: grid.reduce((sum, line, y) =>
             sum + line.reduce((sum, _, x) => sum + allDirections.filter(direction =>
                 findAdjacentChar(grid, "XMAS".split(''), { x: x, y: y }, direction)).length, 0), 0),
+
         part2: grid.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
             sum + (findX(grid, { x: x, y: y })), 0), 0)
     }
