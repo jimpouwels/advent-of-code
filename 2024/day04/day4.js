@@ -1,8 +1,17 @@
-export default function run(lines) {
+export function part1(lines) {
     let grid = lines.map(l => l.split(''));
     return grid.reduce((sum, line, y) => {
         return sum + line.reduce((sum, _, x) => {
             return sum + ([Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NORTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_EAST, Direction.SOUTH_WEST].filter(direction => findAdjacentChar(grid, "XMAS".split(''), { x: x, y: y }, direction)).length);
+        }, 0);
+    }, 0);
+}
+
+export function part2(lines) {
+    let grid = lines.map(l => l.split(''));
+    return grid.reduce((sum, line, y) => {
+        return sum + line.reduce((sum, _, x) => {
+            return sum + (findX(grid, { x: x, y: y }));
         }, 0);
     }, 0);
 }
@@ -25,6 +34,16 @@ function findAdjacentChar(grid, remainingChars, currentPosition, direction) {
         return false;
     }
     return findAdjacentChar(grid, remainingChars.slice(1), nextPosition, direction);
+}
+
+function findX(grid, currentPosition) {
+    if (grid[currentPosition.y][currentPosition.x] != 'A' || currentPosition.x < 1 || currentPosition.x == grid[0].length - 1 || currentPosition.y < 1 || currentPosition.y == grid.length - 1) {
+        return false;
+    }
+    return ((grid[currentPosition.y - 1][currentPosition.x - 1] == 'M' && grid[currentPosition.y + 1][currentPosition.x + 1] == 'S')
+        || (grid[currentPosition.y - 1][currentPosition.x - 1] == 'S' && grid[currentPosition.y + 1][currentPosition.x + 1] == 'M')) &&
+        ((grid[currentPosition.y - 1][currentPosition.x + 1] == 'M' && grid[currentPosition.y + 1][currentPosition.x - 1] == 'S')
+            || (grid[currentPosition.y - 1][currentPosition.x + 1] == 'S' && grid[currentPosition.y + 1][currentPosition.x - 1] == 'M'))
 }
 
 export const Direction = {
