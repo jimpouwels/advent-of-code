@@ -7,11 +7,9 @@ export default class Rule {
         this.after = parseInt(after);
     }
 
-    meets(a, b, onIncorrect) {
+    meets(a, b, callback) {
         let inCorrect = this.before == b && this.after == a;
-        if (inCorrect) {
-            onIncorrect();
-        }
+        callback(!inCorrect);
         return !inCorrect;
     }
 }
