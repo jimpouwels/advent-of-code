@@ -16,3 +16,9 @@ export function pushIfNotContains(arrayToUpsert, value, predicate) {
         arrayToUpsert.push(value);
     }
 }
+
+export function swap(array, index1, index2) {
+    let temp = array[index1];
+    array[index1] = array[index2];
+    array[index2] = temp;
+}

@@ -1,3 +1,4 @@
+import { swap } from "../../common/arrays";
 import Rule from "./model/rule";
 
 export default function run(input, fixIncorrect = false) {
@@ -13,8 +14,7 @@ export default function run(input, fixIncorrect = false) {
                 meets &= rules.every(r => {
                     let m = r.meets(pn1, update[j]);
                     if (!m && fixIncorrect) {
-                        update[i] = update[j];
-                        update[j] = pn1;
+                        swap(update, i, j);
                         pn1 = update[i];
                     }
                     return m;
@@ -22,10 +22,7 @@ export default function run(input, fixIncorrect = false) {
             }
             return meets;
         }).length == update.length;
-        if (fixIncorrect)
-            return sum += (!allMeet ? update[Math.floor(update.length / 2)] : 0);
-        else
-            return sum += (allMeet ? update[Math.floor(update.length / 2)] : 0);
+        return sum += (!allMeet && fixIncorrect) || (allMeet && !fixIncorrect) ? update[Math.floor(update.length / 2)] : 0;
     }, 0);
     return result;
 }
