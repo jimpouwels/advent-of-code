@@ -6,16 +6,16 @@ export default function run(input, fixIncorrect = false) {
     let updates = split[1].split('\n').map(l => l.split(',').map(pn => parseInt(pn)));
 
     let result = updates.reduce((sum, update) => {
-        let allMeet = update.filter((pn, i) => {
+        let allMeet = update.filter((pn1, i) => {
             if (i == update.length - 1) return true;
             let meets = true;
             for (let j = i + 1; j < update.length; j++) {
                 meets &= rules.every(r => {
-                    let m = r.meets(pn, update[j]);
+                    let m = r.meets(pn1, update[j]);
                     if (!m && fixIncorrect) {
                         update[i] = update[j];
-                        update[j] = pn;
-                        pn = update[i];
+                        update[j] = pn1;
+                        pn1 = update[i];
                     }
                     return m;
                 });
