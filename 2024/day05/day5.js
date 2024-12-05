@@ -10,14 +10,8 @@ export default function run(input, fixIncorrect = false) {
         let allMeet = update.filter((_, i) => {
             if (i == update.length - 1) return true;
             return update.slice(i + 1).filter((_, j) =>
-                rules.every(r => {
-                    let m = r.meets(update[i], update[i + j + 1]);
-                    if (!m && fixIncorrect) {
-                        swap(update, i, i + j + 1);
-                    }
-                    return m;
-                })
-            ).length == update.slice(i + 1).length;
+                rules.every(r => r.meets(update[i], update[i + j + 1], () => { if (fixIncorrect) swap(update, i, i + j + 1); })
+                )).length == update.slice(i + 1).length;
         }).length == update.length;
         return sum += (!allMeet && fixIncorrect) || (allMeet && !fixIncorrect) ? update[Math.floor(update.length / 2)] : 0;
     }, 0);
