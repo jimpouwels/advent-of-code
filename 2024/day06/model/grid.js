@@ -9,6 +9,8 @@ export class Grid {
     }
 
     at(position) {
+        if (this.isOutside(position))
+            return null;
         return this.data[position.y][position.x];
     }
 
@@ -32,13 +34,26 @@ export class Grid {
         return this.data[0].length;
     }
 
-    move(currentPosition, currentDirection, checkNextPosition) {
-        while (true) {
+    move(currentPosition, currentDirection, onNewPosition, checkObstruction, checkLoop) {
+        let running = true;
+        while (running) {
+            onNewPosition(this.at(currentPosition));
             let nextPosition = currentPosition.clone();
             nextPosition.move(currentDirection);
-            if (!checkNextPosition(this.at(currentPosition), this.at(nextPosition), (direction) => currentDirection = direction)) {
+            if (!this.at(nextPosition)) {
                 break;
             }
+            if (checkObstruction(this.at(nextPosition), (direction) => currentDirection = direction)) {
+                nextPosition = currentPosition.clone();
+                nextPosition.move(currentDirection);
+                checkObstruction(this.at(nextPosition), (direction) => currentDirection = direction); // check if the new direction is also obstructed, change direction again if so...
+            }
+            if (checkLoop && !checkLoop(this.at(currentPosition), currentDirection)) {
+                break;
+            }
+
+            let currentPositionData = this.at(currentPosition);
+            currentPositionData.addDirection(currentDirection);
             currentPosition.move(currentDirection);
         }
     }
