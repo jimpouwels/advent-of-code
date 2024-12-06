@@ -32,9 +32,7 @@ export class Grid {
         return this.data[0].length;
     }
 
-    moveUntil(startPosition, startDirection, onPositionChanged, onOutside) {
-        let currentPosition = new Position(startPosition.x, startPosition.y);
-        let currentDirection = startDirection;
+    moveUntil(currentPosition, currentDirection, onPositionChanged, onOutside) {
         while (true) {
             let nextPosition = currentPosition.clone();
             nextPosition.move(currentDirection);
