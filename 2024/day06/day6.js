@@ -8,7 +8,7 @@ export default function run(input) {
     let startPosition = grid.find('^');
     let visited = new Set();
     let directionIndex = 0;
-    grid.moveUntilOutside(startPosition, directions[directionIndex], (currentPosition, nextPosition, changeDirectionCallback) => {
+    grid.move(startPosition, directions[directionIndex], (currentPosition, nextPosition, changeDirectionCallback) => {
         visited.add(currentPosition);
         if (!nextPosition) return false;
         if (nextPosition.value == '#')
