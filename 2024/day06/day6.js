@@ -25,8 +25,7 @@ export function part1(input) {
 export function part2(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let startPosition = grid.find('^');
-    let infinitePaths = 0;
-    grid.data.forEach((l, extraObstructionY) => l.forEach((_, extraObstructionX) => {
+    return grid.data.reduce((sum, l, extraObstructionY) => sum + l.reduce((sum, _, extraObstructionX) => {
         let seen = new Map();
         let directionIndex = 0;
         grid.move(startPosition.clone(), directions[directionIndex],
@@ -34,7 +33,7 @@ export function part2(input) {
                 let seenPosition = seen.get(currentPosition);
                 if (seenPosition) {
                     if (seenPosition.has(currentDirection)) {
-                        infinitePaths++;
+                        sum += 1;
                         return false;
                     }
                     seenPosition.add(currentDirection);
@@ -50,6 +49,6 @@ export function part2(input) {
                 }
                 return false;
             });
-    }));
-    return infinitePaths;
+        return sum;
+    }, 0), 0);
 }
