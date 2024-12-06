@@ -1,5 +1,6 @@
 import { Grid } from "./model/grid";
 import { Direction } from "./model/direction";
+import Position from "./model/position";
 
 const directions = [Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST];
 
@@ -28,6 +29,10 @@ export function part2(input) {
     return grid.data.reduce((sum, l, extraObstructionY) => sum + l.reduce((sum, _, extraObstructionX) => {
         let seen = new Map();
         let directionIndex = 0;
+        let replacePosition = grid.at(new Position(extraObstructionX, extraObstructionY));
+        if (replacePosition.value == '#' || replacePosition.value == '^') {
+            return sum;
+        }
         grid.move(startPosition.clone(), directions[directionIndex],
             (currentPosition, currentDirection) => {
                 let seenPosition = seen.get(currentPosition);
