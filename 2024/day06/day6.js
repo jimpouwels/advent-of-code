@@ -26,10 +26,10 @@ export function part1(input) {
 export function part2(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let startPosition = grid.find('^');
-    return grid.data.reduce((sum, l, extraObstructionY) => sum + l.reduce((sum, _, extraObstructionX) => {
+    return grid.data.reduce((sum, l) => sum + l.reduce((sum, tryPos) => {
         let seen = new Map();
         let directionIndex = 0;
-        let replacePosition = grid.at(new Position(extraObstructionX, extraObstructionY));
+        let replacePosition = grid.at(new Position(tryPos.x, tryPos.y));
         if (replacePosition.value == '#' || replacePosition.value == '^') {
             return sum;
         }
@@ -47,7 +47,7 @@ export function part2(input) {
                 }
                 return true;
             }, (nextPosition, changeDirectionCallback) => {
-                if (nextPosition.value == '#' || nextPosition.x == extraObstructionX && nextPosition.y == extraObstructionY) {
+                if (nextPosition.value == '#' || nextPosition.x == tryPos.x && nextPosition.y == tryPos.y) {
                     changeDirectionCallback(directions[++directionIndex % directions.length]);
                     return true;
                 }
