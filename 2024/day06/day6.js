@@ -10,8 +10,10 @@ export default function run(input) {
     let directionIndex = 0;
     grid.moveUntilOutside(startPosition, directions[directionIndex], (currentPosition, nextPosition, changeDirectionCallback) => {
         visited.add(currentPosition);
+        if (!nextPosition) return false;
         if (nextPosition.value == '#')
             changeDirectionCallback(directions[++directionIndex % directions.length]);
+        return true;
     });
-    return visited.size + 1;
+    return visited.size;
 }

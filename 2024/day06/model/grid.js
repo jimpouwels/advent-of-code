@@ -36,10 +36,9 @@ export class Grid {
         while (true) {
             let nextPosition = currentPosition.clone();
             nextPosition.move(currentDirection);
-            if (this.isOutside(nextPosition)) {
+            if (!checkNextPosition(this.at(currentPosition), this.at(nextPosition), (direction) => currentDirection = direction)) {
                 break;
             }
-            checkNextPosition(this.at(currentPosition), this.at(nextPosition), (direction) => currentDirection = direction);
             currentPosition.move(currentDirection);
         }
     }
