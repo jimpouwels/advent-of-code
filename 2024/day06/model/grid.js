@@ -34,13 +34,12 @@ export class Grid {
         return this.data[0].length;
     }
 
-    move(currentPosition, currentDirection, onNewPosition, checkObstruction, checkLoop) {
+    move(currentPosition, currentDirection, onNewPosition, checkObstruction) {
         let running = true;
         while (running) {
-            if (checkLoop && !checkLoop(this.at(currentPosition), currentDirection)) {
+            if (!onNewPosition(this.at(currentPosition), currentDirection)) {
                 break;
             }
-            onNewPosition(this.at(currentPosition), currentDirection);
             let nextPosition = currentPosition.clone();
             nextPosition.move(currentDirection);
             if (!this.at(nextPosition)) {
