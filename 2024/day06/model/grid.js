@@ -45,10 +45,9 @@ export class Grid {
             if (!this.at(nextPosition)) {
                 break;
             }
-            if (checkObstruction(this.at(nextPosition), (direction) => currentDirection = direction)) {
+            while (checkObstruction(this.at(nextPosition), (direction) => currentDirection = direction)) {
                 nextPosition = currentPosition.clone();
                 nextPosition.move(currentDirection);
-                checkObstruction(this.at(nextPosition), (direction) => currentDirection = direction); // check if the new direction is also obstructed, change direction again if so...
             }
 
             currentPosition.move(currentDirection);
