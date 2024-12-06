@@ -20,10 +20,6 @@ export default class Position {
         this.y += direction == Direction.SOUTH ? 1 : direction == Direction.NORTH ? -1 : 0;
     }
 
-    hasDirection(direction) {
-        return this.visitedDirections.find(d => d == direction) != null;
-    }
-
     equals(position) {
         return this.x == position.x && this.y == position.y;
     }
