@@ -1,28 +1,17 @@
 import { Grid } from "./model/grid";
 import { Direction } from "./model/direction";
 
+const directions = [Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST];
+
 export default function run(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let start = grid.find('^');
     let visited = new Set();
-    grid.moveUntil(start, Direction.NORTH, (currentPosition, currentDirection, nextPosition, changeDirectionCallback) => {
+    let directionIndex = 0;
+    grid.moveUntil(start, directions[0], (currentPosition, nextPosition, changeDirectionCallback) => {
         visited.add(currentPosition);
-        if (nextPosition.value == '#') {
-            switch (currentDirection) {
-                case Direction.NORTH:
-                    changeDirectionCallback(Direction.EAST);
-                    break;
-                case Direction.EAST:
-                    changeDirectionCallback(Direction.SOUTH);
-                    break;
-                case Direction.SOUTH:
-                    changeDirectionCallback(Direction.WEST);
-                    break;
-                case Direction.WEST:
-                    changeDirectionCallback(Direction.NORTH);
-                    break;
-            }
-        }
+        if (nextPosition.value == '#')
+            changeDirectionCallback(directions[++directionIndex % directions.length]);
     }, (_) => {
         return false;
     });
