@@ -26,7 +26,7 @@ export function part2(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let startPosition = grid.find('^');
     let infinitePaths = 0;
-    grid.data.forEach((l, y) => l.forEach((_, x) => {
+    grid.data.forEach((l, extraObstructionY) => l.forEach((_, extraObstructionX) => {
         let seen = new Map();
         let directionIndex = 0;
         grid.move(startPosition.clone(), directions[directionIndex],
@@ -44,7 +44,7 @@ export function part2(input) {
                 }
                 return true;
             }, (newPosition, changeDirectionCallback) => {
-                if (newPosition.value == '#' || newPosition.x == x && newPosition.y == y) {
+                if (newPosition.value == '#' || newPosition.x == extraObstructionX && newPosition.y == extraObstructionY) {
                     changeDirectionCallback(directions[++directionIndex % directions.length]);
                     return true;
                 }
