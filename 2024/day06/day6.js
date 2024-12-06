@@ -3,7 +3,7 @@ import { Direction } from "./model/direction";
 
 const directions = [Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST];
 
-export default function run(input) {
+export function part1(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let startPosition = grid.find('^');
     let directionIndex = 0;
@@ -19,19 +19,23 @@ export default function run(input) {
             }
             return false;
         });
-    let part1 = seen.size;
+    return seen.size;
+}
 
-    let part2 = 0;
+export function part2(input) {
+    let grid = new Grid(input.map(l => l.split('')));
+    let startPosition = grid.find('^');
+    let infinitePaths = 0;
     for (let y = 0; y < grid.height(); y++) {
         for (let x = 0; x < grid.width(); x++) {
             let seen = new Map();
-            directionIndex = 0;
+            let directionIndex = 0;
             grid.move(startPosition.clone(), directions[directionIndex],
                 (newPosition, currentDirection) => {
                     let ex = seen.get(newPosition);
                     if (ex) {
                         if (ex.has(currentDirection)) {
-                            part2++;
+                            infinitePaths++;
                             return false;
                         }
                         ex.add(currentDirection);
@@ -49,8 +53,5 @@ export default function run(input) {
                 });
         }
     }
-    return {
-        part1: part1,
-        part2: part2
-    }
+    return infinitePaths;
 }
