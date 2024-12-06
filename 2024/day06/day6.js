@@ -37,8 +37,7 @@ export function part2(input) {
                         return false;
                     }
                     seenPosition.add(currentDirection);
-                }
-                else {
+                } else {
                     seen.set(currentPosition, new Set([currentDirection]));
                 }
                 return true;
