@@ -30,8 +30,8 @@ export function part2(input) {
         let seen = new Map();
         let directionIndex = 0;
         grid.move(startPosition.clone(), directions[directionIndex],
-            (newPosition, currentDirection) => {
-                let seenPosition = seen.get(newPosition);
+            (currentPosition, currentDirection) => {
+                let seenPosition = seen.get(currentPosition);
                 if (seenPosition) {
                     if (seenPosition.has(currentDirection)) {
                         infinitePaths++;
@@ -40,11 +40,11 @@ export function part2(input) {
                     seenPosition.add(currentDirection);
                 }
                 else {
-                    seen.set(newPosition, new Set([currentDirection]));
+                    seen.set(currentPosition, new Set([currentDirection]));
                 }
                 return true;
-            }, (newPosition, changeDirectionCallback) => {
-                if (newPosition.value == '#' || newPosition.x == extraObstructionX && newPosition.y == extraObstructionY) {
+            }, (nextPosition, changeDirectionCallback) => {
+                if (nextPosition.value == '#' || nextPosition.x == extraObstructionX && nextPosition.y == extraObstructionY) {
                     changeDirectionCallback(directions[++directionIndex % directions.length]);
                     return true;
                 }
