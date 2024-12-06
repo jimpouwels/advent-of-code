@@ -5,7 +5,7 @@ export class Grid {
     data;
 
     constructor(data) {
-        this.data = data.map((l, y) => l.map((val, x) => new Position(y, x, val)));
+        this.data = data.map((l, y) => l.map((val, x) => new Position(x, y, val)));
     }
 
     at(position) {
@@ -15,8 +15,9 @@ export class Grid {
     find(char) {
         for (let y = 0; y < this.data.length; y++) {
             for (let x = 0; x < this.data[y].length; x++) {
-                if (this.data[y][x].value == char) {
-                    return new Position(x, y);
+                let curr = this.data[y][x];
+                if (curr.value == char) {
+                    return curr.clone();
                 }
             }
         }
