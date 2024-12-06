@@ -1,11 +1,10 @@
 import Position from "./position";
-import { Direction } from "./direction";
 
 export class Grid {
     data;
 
     constructor(data) {
-        this.data = data.map((l, y) => l.map((val, x) => new Position(x, y, val)));
+        this.data = data.map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), val)));
     }
 
     at(position) {
