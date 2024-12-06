@@ -26,32 +26,30 @@ export function part2(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let startPosition = grid.find('^');
     let infinitePaths = 0;
-    for (let y = 0; y < grid.height(); y++) {
-        for (let x = 0; x < grid.width(); x++) {
-            let seen = new Map();
-            let directionIndex = 0;
-            grid.move(startPosition.clone(), directions[directionIndex],
-                (newPosition, currentDirection) => {
-                    let ex = seen.get(newPosition);
-                    if (ex) {
-                        if (ex.has(currentDirection)) {
-                            infinitePaths++;
-                            return false;
-                        }
-                        ex.add(currentDirection);
+    grid.data.forEach((l, y) => l.forEach((_, x) => {
+        let seen = new Map();
+        let directionIndex = 0;
+        grid.move(startPosition.clone(), directions[directionIndex],
+            (newPosition, currentDirection) => {
+                let ex = seen.get(newPosition);
+                if (ex) {
+                    if (ex.has(currentDirection)) {
+                        infinitePaths++;
+                        return false;
                     }
-                    else {
-                        seen.set(newPosition, new Set([currentDirection]));
-                    }
+                    ex.add(currentDirection);
+                }
+                else {
+                    seen.set(newPosition, new Set([currentDirection]));
+                }
+                return true;
+            }, (newPosition, changeDirectionCallback) => {
+                if (newPosition.value == '#' || newPosition.x == x && newPosition.y == y) {
+                    changeDirectionCallback(directions[++directionIndex % directions.length]);
                     return true;
-                }, (newPosition, changeDirectionCallback) => {
-                    if (newPosition.value == '#' || newPosition.x == x && newPosition.y == y) {
-                        changeDirectionCallback(directions[++directionIndex % directions.length]);
-                        return true;
-                    }
-                    return false;
-                });
-        }
-    }
+                }
+                return false;
+            });
+    }));
     return infinitePaths;
 }
