@@ -31,13 +31,13 @@ export function part2(input) {
         let directionIndex = 0;
         grid.move(startPosition.clone(), directions[directionIndex],
             (newPosition, currentDirection) => {
-                let ex = seen.get(newPosition);
-                if (ex) {
-                    if (ex.has(currentDirection)) {
+                let seenPosition = seen.get(newPosition);
+                if (seenPosition) {
+                    if (seenPosition.has(currentDirection)) {
                         infinitePaths++;
                         return false;
                     }
-                    ex.add(currentDirection);
+                    seenPosition.add(currentDirection);
                 }
                 else {
                     seen.set(newPosition, new Set([currentDirection]));
