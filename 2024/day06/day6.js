@@ -26,13 +26,9 @@ export function part1(input) {
 export function part2(input) {
     let grid = new Grid(input.map(l => l.split('')));
     let startPosition = grid.find('^');
-    return grid.data.reduce((sum, l) => sum + l.reduce((sum, tryPos) => {
+    return grid.data.reduce((sum, l) => sum + l.filter(p => p.value == '.').reduce((sum, tryPos) => {
         let seen = new Map();
         let directionIndex = 0;
-        let replacePosition = grid.at(new Position(tryPos.x, tryPos.y));
-        if (replacePosition.value == '#' || replacePosition.value == '^') {
-            return sum;
-        }
         grid.move(startPosition.clone(), directions[directionIndex],
             (currentPosition, currentDirection) => {
                 let seenPosition = seen.get(currentPosition);
