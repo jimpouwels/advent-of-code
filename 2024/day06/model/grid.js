@@ -32,11 +32,11 @@ export class Grid {
         return this.data[0].length;
     }
 
-    moveUntil(currentPosition, currentDirection, checkNextPosition, onOutside) {
+    moveUntil(currentPosition, currentDirection, checkNextPosition) {
         while (true) {
             let nextPosition = currentPosition.clone();
             nextPosition.move(currentDirection);
-            if (this.isOutside(nextPosition) && !onOutside((direction) => currentDirection = direction)) {
+            if (this.isOutside(nextPosition)) {
                 break;
             }
             checkNextPosition(this.at(currentPosition), this.at(nextPosition), (direction) => currentDirection = direction);

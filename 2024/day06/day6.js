@@ -12,8 +12,6 @@ export default function run(input) {
         visited.add(currentPosition);
         if (nextPosition.value == '#')
             changeDirectionCallback(directions[++directionIndex % directions.length]);
-    }, (_) => {
-        return false;
     });
     return visited.size + 1;
 }
