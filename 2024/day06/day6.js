@@ -29,14 +29,18 @@ export default function run(input) {
             if (tryPos.value == '#' || tryPos.value == '^') continue;
             let tryOriginalValue = tryPos.value;
             tryPos.value = '#';
-            let visitedPart2 = new Set();
+            let visitedPart2 = new Map();
             directionIndex = 0;
-            if (x == 0) {
-                console.log(x, y);
-            }
             grid.move(startPosition.clone(), directions[directionIndex],
-                (newPosition) => {
-                    visitedPart2.add(newPosition);
+                (newPosition, currentDirection) => {
+                    let ex = visitedPart2.get(newPosition);
+                    if (ex)
+                        ex.add(currentDirection);
+                    else {
+                        let newSet = new Set();
+                        newSet.add(currentDirection);
+                        visitedPart2.set(newPosition, newSet);
+                    }
                 }, (newPosition, changeDirectionCallback) => {
                     if (newPosition.value == '#') {
                         changeDirectionCallback(directions[++directionIndex % directions.length]);
@@ -44,13 +48,13 @@ export default function run(input) {
                     }
                     return false;
                 }, (currentPosition, currentDirection) => {
-                    if (Array.from(visitedPart2).find(v => v.equals(currentPosition) && v.hasDirection(currentDirection))) {
+                    let ex = visitedPart2.get(currentPosition);
+                    if (ex && ex.has(currentDirection)) {
                         looping++;
                         return false;
                     }
                     return true;
                 });
-            visitedPart2.forEach(v => v.visitedDirections = []);
             tryPos.value = tryOriginalValue;
         }
     }

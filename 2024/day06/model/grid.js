@@ -37,7 +37,10 @@ export class Grid {
     move(currentPosition, currentDirection, onNewPosition, checkObstruction, checkLoop) {
         let running = true;
         while (running) {
-            onNewPosition(this.at(currentPosition));
+            if (checkLoop && !checkLoop(this.at(currentPosition), currentDirection)) {
+                break;
+            }
+            onNewPosition(this.at(currentPosition), currentDirection);
             let nextPosition = currentPosition.clone();
             nextPosition.move(currentDirection);
             if (!this.at(nextPosition)) {
@@ -48,12 +51,7 @@ export class Grid {
                 nextPosition.move(currentDirection);
                 checkObstruction(this.at(nextPosition), (direction) => currentDirection = direction); // check if the new direction is also obstructed, change direction again if so...
             }
-            if (checkLoop && !checkLoop(this.at(currentPosition), currentDirection)) {
-                break;
-            }
 
-            let currentPositionData = this.at(currentPosition);
-            currentPositionData.addDirection(currentDirection);
             currentPosition.move(currentDirection);
         }
     }
