@@ -14,8 +14,7 @@ export default function run(input, anyDistance = false) {
                 let nextAntinode = position;
                 while (true) {
                     nextAntinode = grid.at(nextAntinode.x - deltaX, nextAntinode.y - deltaY);
-                    if (!nextAntinode) break;
-                    antinodes.add(nextAntinode);
+                    if (nextAntinode) antinodes.add(nextAntinode); else break;
                     if (!anyDistance) break;
                 }
             });
