@@ -7,10 +7,10 @@ export class Grid {
         this.data = data.map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), val)));
     }
 
-    at(position) {
-        if (this.isOutside(position))
+    at(x, y) {
+        if (this.isOutside(x, y))
             return null;
-        return this.data[position.y][position.x];
+        return this.data[y][x];
     }
 
     rows() {
@@ -38,7 +38,7 @@ export class Grid {
         return this.data[0].length;
     }
 
-    isOutside(position) {
-        return position.x < 0 || position.x >= this.width() || position.y < 0 || position.y >= this.height();
+    isOutside(x, y) {
+        return x < 0 || x >= this.width() || y < 0 || y >= this.height();
     }
 }
