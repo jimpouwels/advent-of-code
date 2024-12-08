@@ -1,6 +1,5 @@
 import { Grid } from "./model/grid";
 import { Direction } from "./model/direction";
-import Position from "./model/position";
 
 const directions = [Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST];
 
