@@ -12,10 +12,10 @@ export default function run(input, anyDistance = false) {
                 }
                 let deltaX = otherPosition.x - position.x;
                 let deltaY = otherPosition.y - position.y;
-                let antinode = grid.at(position.x - deltaX, position.y - deltaY);
-                while (antinode) {
-                    total.add(antinode);
-                    antinode = anyDistance ? grid.at(antinode.x - deltaX, antinode.y - deltaY) : null;
+                let nextAntinode = grid.at(position.x - deltaX, position.y - deltaY);
+                while (nextAntinode) {
+                    total.add(nextAntinode);
+                    nextAntinode = anyDistance ? grid.at(nextAntinode.x - deltaX, nextAntinode.y - deltaY) : null;
                 }
             });
         }
