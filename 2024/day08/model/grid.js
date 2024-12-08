@@ -18,16 +18,7 @@ export class Grid {
     }
 
     find(char) {
-        let matches = [];
-        for (let y = 0; y < this.data.length; y++) {
-            for (let x = 0; x < this.data[y].length; x++) {
-                let curr = this.data[y][x];
-                if (curr.value == char) {
-                    matches.push(curr);
-                }
-            }
-        }
-        return matches;
+        return this.rows().reduce((matches, r) => [...matches, ...r.filter(element => element.value == char)], new Array());
     }
 
     height() {

@@ -5,7 +5,7 @@ const directions = [Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.
 
 export function part1(input) {
     let grid = new Grid(input.map(l => l.split('')));
-    let startPosition = grid.find('^');
+    let startPosition = grid.find('^')[0];
     let directionIndex = 0;
     let seen = new Set();
     new Grid(input.map(l => l.split(''))).move(startPosition.clone(), directions[directionIndex],
@@ -24,7 +24,7 @@ export function part1(input) {
 
 export function part2(input) {
     let grid = new Grid(input.map(l => l.split('')));
-    let startPosition = grid.find('^');
+    let startPosition = grid.find('^')[0];
     return grid.data.reduce((sum, l) => sum + l.filter(p => p.value == '.').reduce((sum, tryPos) => {
         let seen = new Map();
         let directionIndex = 0;

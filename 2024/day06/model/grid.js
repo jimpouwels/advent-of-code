@@ -13,16 +13,12 @@ export class Grid {
         return this.data[position.y][position.x];
     }
 
+    rows() {
+        return this.data;
+    }
+
     find(char) {
-        for (let y = 0; y < this.data.length; y++) {
-            for (let x = 0; x < this.data[y].length; x++) {
-                let curr = this.data[y][x];
-                if (curr.value == char) {
-                    return curr.clone();
-                }
-            }
-        }
-        return null;
+        return this.rows().reduce((matches, r) => [...matches, ...r.filter(element => element.value == char)], new Array()).map(p => p.clone());
     }
 
     height() {
