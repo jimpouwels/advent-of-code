@@ -6,13 +6,22 @@ export default function run(input) {
         let numbers = split[1].trim().split(' ').map(v => parseInt(v));
         let operators = operatorList(numbers.length - 1);
         if (operators.reduce((sum, o) => {
-            if (numbers.slice(1).reduce((fSum, n, j) => {
+            if (numbers.slice(0, -1).reduce((fSum, n, j) => {
                 if (o.charAt(j) == "+") {
-                    return fSum + n;
+                    if (fSum == 0) {
+                        fSum += (n + numbers[j + 1])
+                    } else {
+                        fSum += numbers[j + 1];
+                    }
                 } else {
-                    return fSum * n;
+                    if (fSum == 0) {
+                        fSum += (n * numbers[j + 1])
+                    } else {
+                        fSum *= numbers[j + 1];
+                    }
                 }
-            }, numbers[0]) == result) {
+                return fSum;
+            }, 0) == result) {
                 sum += result;
             }
             return sum;
