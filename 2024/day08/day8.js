@@ -4,8 +4,7 @@ export default function run(input, anyDistance = false) {
     let grid = new Grid(input.map(l => l.split('')));
     return grid.rows().reduce((antinodes, r) => {
         r.filter(p => p.value !== '.').forEach(position => {
-            grid.find(position.value).forEach(otherPosition => {
-                if (position.equals(otherPosition)) return;
+            grid.find(position.value).filter(p => !p.equals(position)).forEach(otherPosition => {
                 if (anyDistance) {
                     antinodes.add(otherPosition);
                 }
