@@ -23,7 +23,7 @@ export class Grid {
             for (let x = 0; x < this.data[y].length; x++) {
                 let curr = this.data[y][x];
                 if (curr.value == char) {
-                    matches.push(curr.clone());
+                    matches.push(curr);
                 }
             }
         }
