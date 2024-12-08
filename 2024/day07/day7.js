@@ -13,14 +13,12 @@ export default function run(input, possibleOperators) {
 }
 
 function calculate(val1, val2, operator) {
-    if (operator == "+") {
-        val1 += val2;
-    } else if (operator == "*") {
-        val1 *= val2;
-    } else {
-        val1 = parseInt(val1.toString() + val2.toString());
-    }
-    return val1;
+    if (operator == "+")
+        return val1 + val2;
+    else if (operator == "*")
+        return val1 * val2;
+    else
+        return parseInt("" + val1 + val2);
 }
 
 function operatorCombinations(possibleOperators, depth, current = '') {
