@@ -1,6 +1,5 @@
 export default function run(input, possibleOperators) {
-    let total = 0;
-    input.forEach(l => {
+    return input.reduce((sum, l) => {
         let split = l.split(':');
         let result = parseInt(split[0]);
         let numbers = split[1].trim().split(' ').map(v => parseInt(v));
@@ -21,11 +20,10 @@ export default function run(input, possibleOperators) {
             }
             return sum;
         }, 0) > 0) {
-            total += result;
+            sum += result;
         }
-    });
-
-    return total;
+        return sum;
+    }, 0);
 }
 
 function operatorList(possibleOperators, depth, current = '') {
