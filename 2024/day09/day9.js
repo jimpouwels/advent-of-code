@@ -27,11 +27,9 @@ function defragmentPart2(memory) {
         reverseMemoryReader.readUntil(v => v != -1);
         let requiredSpace = reverseMemoryReader.read(reverseMemoryReader.peek());
         let movableBlockIndex = memoryReader.length() - reverseMemoryReader.readIndex;
-
         let targetSpaceIndex = memoryReader.findSequence(-1, requiredSpace);
-
-        if (!targetSpaceIndex || targetSpaceIndex > movableBlockIndex) continue;
-        memoryReader.move(movableBlockIndex, targetSpaceIndex, requiredSpace);
+        if (targetSpaceIndex && targetSpaceIndex < movableBlockIndex)
+            memoryReader.move(movableBlockIndex, targetSpaceIndex, requiredSpace);
     }
     return memoryReader.array();
 }
