@@ -2,8 +2,7 @@ import { swap } from "../../common/arrays";
 import ArrayReader from "../../common/array_reader";
 
 export default function run(input) {
-    let id = 0;
-    let originalMemory = input.split('').map(p => parseInt(p)).flatMap((p, i) => i % 2 == 0 ? Array(p).fill(id++) : Array(p).fill(-1));
+    let originalMemory = input.split('').map(p => parseInt(p)).flatMap((p, i) => i % 2 == 0 ? Array(p).fill(i / 2) : Array(p).fill(-1));
     let part1Memory = defragmentPart1(originalMemory);
     let part2Memory = defragmentPart2(originalMemory);
 
