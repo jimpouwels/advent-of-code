@@ -21,25 +21,25 @@ function defragmentPart1(memory) {
 }
 
 function defragmentPart2(memory) {
-    let memCopy = [...memory];
-    let reverse = new ArrayReader([...memCopy].reverse());
+    let memCopy = new ArrayReader([...memory]);
+    let reverse = new ArrayReader([...memCopy.array()].reverse());
     while (!reverse.end()) {
         reverse.readUntil(v => v != -1);
         let requiredSpace = reverse.read(reverse.peek());
-        let readIndex = memCopy.length - reverse.readIndex;
+        let readIndex = memCopy.length() - reverse.readIndex;
         for (let i = 0; i < readIndex; i++) {
-            if (memCopy[i] != -1) continue;
+            if (memCopy.at(i) != -1) continue;
 
             let writeIndex = i;
-            while (memCopy[++i] == -1) { }
+            while (memCopy.at(++i) == -1) { }
             if (i - writeIndex < requiredSpace) continue;
             Array.from({ length: requiredSpace }, () => {
-                swap(memCopy, writeIndex++, readIndex++);
+                memCopy.swap(writeIndex++, readIndex++);
             });
             break;
         };
     };
-    return memCopy;
+    return memCopy.array();
 }
 
 function checksum(memory) {
