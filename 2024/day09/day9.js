@@ -36,35 +36,38 @@ function defragmentPart1(memory) {
 
 function defragmentPart2(memory) {
     let memCopy = [...memory];
-    let indexOfMovableBlock = memCopy.length;
+    let backPos = memCopy.length;
     let reverse = [...memCopy].reverse();
     while (reverse.length > 0) {
         let value = reverse[0];
         if (value == '.') {
             reverse.shift();
-            indexOfMovableBlock--;
+            backPos--;
             continue;
         }
         let requiredSpace = 0;
         while (reverse[0] == value) {
             requiredSpace++;
             reverse.shift();
-            indexOfMovableBlock--;
+            backPos--;
         }
 
-        for (let i = 0; i < indexOfMovableBlock; i++) {
+        for (let i = 0; i < backPos; i++) {
             if (memCopy[i] != '.') continue;
-
-            let freeSpaceStart = i;
             let availableSpace = 0;
-            while (memCopy[i++] == '.') {
+
+            let writeIndex = i;
+            while (memCopy[writeIndex++] == '.') {
                 availableSpace++;
             }
             if (availableSpace < requiredSpace) {
+                i += availableSpace; // skip this free space block
                 continue;
             }
+            let j = i;
             for (let x = 0; x < requiredSpace; x++) {
-                swap(memCopy, freeSpaceStart++, indexOfMovableBlock + x);
+                swap(memCopy, j++, backPos + x);
+                i++;
             }
             break;
         };
