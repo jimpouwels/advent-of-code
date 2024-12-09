@@ -35,15 +35,15 @@ function defragmentPart2(memory) {
     while (reverse.length() > 0) {
         let requiredSpace = reverse.read(reverse.at(0));
 
-        let indexOfMovableBlock = memCopy.length - reverse.readIndex;
-        for (let i = 0; i < indexOfMovableBlock; i++) {
+        let readIndex = memCopy.length - reverse.readIndex;
+        for (let i = 0; i < readIndex; i++) {
             if (memCopy[i] != -1) continue;
 
             let writeIndex = i;
             while (memCopy[++i] == -1) { }
             if (i - writeIndex < requiredSpace) continue;
             for (let x = 0; x < requiredSpace; x++) {
-                swap(memCopy, writeIndex++, indexOfMovableBlock + x);
+                swap(memCopy, writeIndex++, readIndex + x);
             }
             break;
         };
