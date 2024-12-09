@@ -1,4 +1,3 @@
-import { swap } from "../../common/arrays";
 import ArrayReader from "../../common/array_reader";
 
 export default function run(input) {
