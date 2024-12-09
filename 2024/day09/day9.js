@@ -39,11 +39,11 @@ function defragmentPart2(memory) {
         for (let i = 0; i < indexOfMovableBlock; i++) {
             if (memCopy[i] != -1) continue;
 
-            let freeSpaceStartIndex = i;
+            let writeIndex = i;
             while (memCopy[++i] == -1) { }
-            if (i - freeSpaceStartIndex < requiredSpace) continue;
+            if (i - writeIndex < requiredSpace) continue;
             for (let x = 0; x < requiredSpace; x++) {
-                swap(memCopy, freeSpaceStartIndex++, indexOfMovableBlock + x);
+                swap(memCopy, writeIndex++, indexOfMovableBlock + x);
             }
             break;
         };
