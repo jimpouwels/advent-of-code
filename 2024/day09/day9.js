@@ -16,14 +16,8 @@ function defragmentPart1(memory) {
     let memCopy = [...memory];
     memCopy.forEach((element, i) => {
         if (element != -1) return;
-        while (true) {
-            let end = memCopy.pop();
-            if (end != -1) {
-                memCopy[i] = end;
-                break;
-            }
-
-        }
+        while (memCopy[memCopy.length - 1] == -1) memCopy.pop();
+        memCopy[i] = memCopy.pop();
     });
     return memCopy;
 }
