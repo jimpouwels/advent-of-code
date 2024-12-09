@@ -49,7 +49,12 @@ export default class ArrayReader {
                 return begin;
             }
         }
-        return undefined;
+    }
+
+    move(from, to, length) {
+        Array.from({ length: length }, () => {
+            this.swap(to++, from++);
+        });
     }
 
     readNext() {
