@@ -31,8 +31,28 @@ export default class ArrayReader {
         }
     }
 
+    reset() {
+        this.readIndex = 0;
+    }
+
     array() {
         return this.arr;
+    }
+
+    findSequence(value, length, before) {
+        let targetSpaceIndex = -1;
+        while (true) {
+            this.readUntil(v => v == value);
+            if (this.readIndex > before) break;
+            targetSpaceIndex = this.readIndex;
+            this.readUntil(v => v != value);
+            if (this.readIndex - targetSpaceIndex < length) {
+                targetSpaceIndex = -1;
+            } else {
+                break;
+            }
+        }
+        return targetSpaceIndex;
     }
 
     readNext() {

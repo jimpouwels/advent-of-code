@@ -26,19 +26,16 @@ function defragmentPart2(memory) {
     while (!reverseMemoryReader.end()) {
         reverseMemoryReader.readUntil(v => v != -1);
         let requiredSpace = reverseMemoryReader.read(reverseMemoryReader.peek());
-        let readIndex = memoryReader.length() - reverseMemoryReader.readIndex;
-        for (let i = 0; i < readIndex; i++) {
-            if (memoryReader.at(i) != -1) continue;
+        let movableBlockIndex = memoryReader.length() - reverseMemoryReader.readIndex;
 
-            let writeIndex = i;
-            while (memoryReader.at(++i) == -1) { }
-            if (i - writeIndex < requiredSpace) continue;
-            Array.from({ length: requiredSpace }, () => {
-                memoryReader.swap(writeIndex++, readIndex++);
-            });
-            break;
-        };
-    };
+        memoryReader.reset();
+        let targetSpaceIndex = memoryReader.findSequence(-1, requiredSpace, movableBlockIndex);
+
+        if (targetSpaceIndex == -1) continue;
+        Array.from({ length: requiredSpace }, () => {
+            memoryReader.swap(targetSpaceIndex++, movableBlockIndex++);
+        });
+    }
     return memoryReader.array();
 }
 
