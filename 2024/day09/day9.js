@@ -7,7 +7,7 @@ export default function run(input) {
         if (i % 2 == 0) {
             return Array(p).fill(id++);
         } else {
-            return Array(p).fill('.');
+            return Array(p).fill(-1);
         }
     });
     let part1Memory = defragmentPart1(originalMemory);
@@ -22,10 +22,10 @@ export default function run(input) {
 function defragmentPart1(memory) {
     let memCopy = [...memory];
     memCopy.forEach((element, i) => {
-        if (element == '.')
+        if (element == -1)
             while (true) {
                 let end = memCopy.pop();
-                if (end != '.') {
+                if (end != -1) {
                     memCopy[i] = end;
                     break;
                 }
@@ -40,7 +40,7 @@ function defragmentPart2(memory) {
     let reverse = [...memCopy].reverse();
     while (reverse.length > 0) {
         let value = reverse[0];
-        if (value == '.') {
+        if (value == -1) {
             reverse.shift();
             indexOfMovableBlock--;
             continue;
@@ -53,13 +53,11 @@ function defragmentPart2(memory) {
         }
 
         for (let i = 0; i < indexOfMovableBlock; i++) {
-            if (memCopy[i] != '.') continue;
+            if (memCopy[i] != -1) continue;
 
             let freeSpaceStartIndex = i;
-            while (memCopy[++i] == '.') { }
-            if ((i - freeSpaceStartIndex) < requiredSpace) {
-                continue;
-            }
+            while (memCopy[++i] == -1) { }
+            if (i - freeSpaceStartIndex < requiredSpace) continue;
             for (let x = 0; x < requiredSpace; x++) {
                 swap(memCopy, freeSpaceStartIndex++, indexOfMovableBlock + x);
             }
@@ -70,5 +68,5 @@ function defragmentPart2(memory) {
 }
 
 function checksum(memory) {
-    return memory.reduce((sum, val, i) => sum + (val != '.' ? (i * val) : 0), 0);
+    return memory.reduce((sum, val, i) => sum + (val != -1 ? (i * val) : 0), 0);
 }
