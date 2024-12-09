@@ -15,14 +15,15 @@ export default function run(input) {
 function defragmentPart1(memory) {
     let memCopy = [...memory];
     memCopy.forEach((element, i) => {
-        if (element == -1)
-            while (true) {
-                let end = memCopy.pop();
-                if (end != -1) {
-                    memCopy[i] = end;
-                    break;
-                }
+        if (element != -1) return;
+        while (true) {
+            let end = memCopy.pop();
+            if (end != -1) {
+                memCopy[i] = end;
+                break;
             }
+
+        }
     });
     return memCopy;
 }
