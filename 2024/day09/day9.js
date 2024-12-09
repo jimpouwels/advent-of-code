@@ -30,22 +30,20 @@ function defragmentPart1(memory) {
 
 function defragmentPart2(memory) {
     let memCopy = [...memory];
-    let indexOfMovableBlock = memCopy.length;
-    let reverse = [...memCopy].reverse();
-    while (reverse.length > 0) {
-        let value = reverse[0];
+    let reverse = new CustomArray([...memCopy].reverse());
+    while (reverse.length() > 0) {
+        let value = reverse.at(0);
         if (value == -1) {
             reverse.shift();
-            indexOfMovableBlock--;
             continue;
         }
         let requiredSpace = 0;
-        while (reverse[0] == value) {
+        while (reverse.at(0) == value) {
             requiredSpace++;
             reverse.shift();
-            indexOfMovableBlock--;
         }
 
+        let indexOfMovableBlock = memCopy.length - reverse.readIndex;
         for (let i = 0; i < indexOfMovableBlock; i++) {
             if (memCopy[i] != -1) continue;
 
@@ -63,4 +61,26 @@ function defragmentPart2(memory) {
 
 function checksum(memory) {
     return memory.reduce((sum, val, i) => sum + (val != -1 ? (i * val) : 0), 0);
+}
+
+class CustomArray {
+    arr;
+    readIndex = 0;
+
+    constructor(arr) {
+        this.arr = arr;
+    }
+
+    shift() {
+        this.readIndex++;
+        return this.arr.shift();
+    }
+
+    at(i) {
+        return this.arr[i];
+    }
+
+    length() {
+        return this.arr.length;
+    }
 }
