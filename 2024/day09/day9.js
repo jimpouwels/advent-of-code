@@ -35,9 +35,9 @@ function defragmentPart2(memory) {
             let writeIndex = i;
             while (memCopy[++i] == -1) { }
             if (i - writeIndex < requiredSpace) continue;
-            for (let x = 0; x < requiredSpace; x++) {
-                swap(memCopy, writeIndex++, readIndex + x);
-            }
+            Array.from({ length: requiredSpace }, () => {
+                swap(memCopy, writeIndex++, readIndex++);
+            });
             break;
         };
     };
