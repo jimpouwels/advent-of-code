@@ -1,3 +1,5 @@
+import { swap } from '../common/arrays'
+
 export default class ArrayReader {
     arr;
     readIndex = 0;
@@ -7,15 +9,34 @@ export default class ArrayReader {
     }
 
     read(number) {
-        while (this.arr[0] == -1) {
-            this.shift();
-        }
         let count = 0;
-        while (this.arr[0] == number) {
-            this.shift();
+        while (this.arr[this.readIndex] == number) {
+            this.readIndex++;
             count++;
         }
         return count;
+    }
+
+    end() {
+        return this.readIndex == this.arr.length;
+    }
+
+    swap(index1, index2) {
+        swap(this.arr, index1, index2);
+    }
+
+    array() {
+        return this.arr;
+    }
+
+    readNext() {
+        this.readIndex++
+        if (this.readIndex >= this.arr.length) return null;
+        return this.arr[this.readIndex];
+    }
+
+    peek() {
+        return this.arr[this.readIndex];
     }
 
     shift() {
