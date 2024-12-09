@@ -15,9 +15,7 @@ export default function run(input) {
 function defragmentPart1(memory) {
     let memCopy = [...memory];
     memCopy.forEach((element, i) => {
-        if (element != -1) return;
-        while (memCopy[memCopy.length - 1] == -1) memCopy.pop();
-        memCopy[i] = memCopy.pop();
+        while (element == -1 && (memCopy[i] = memCopy.pop()) == -1);
     });
     return memCopy;
 }
