@@ -8,7 +8,7 @@ export class Grid {
     }
 
     at(x, y) {
-        if (this.isOutside(x, y))
+        if (this.isOutOfBounds(x, y))
             return null;
         return this.data[y][x];
     }
@@ -29,7 +29,7 @@ export class Grid {
         return this.data[0].length;
     }
 
-    isOutside(x, y) {
+    isOutOfBounds(x, y) {
         return x < 0 || x >= this.width() || y < 0 || y >= this.height();
     }
 }

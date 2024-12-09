@@ -44,7 +44,7 @@ export class Grid {
         nextPosition.x += direction == Direction.EAST || direction == Direction.NORTH_EAST || direction == Direction.SOUTH_EAST ? 1 : 0;
         nextPosition.y -= direction == Direction.NORTH || direction == Direction.NORTH_EAST || direction == Direction.NORTH_WEST ? 1 : 0;
         nextPosition.y += direction == Direction.SOUTH || direction == Direction.SOUTH_EAST || direction == Direction.SOUTH_WEST ? 1 : 0;
-        if (this.isOutside(nextPosition.x, nextPosition.y)) return false;
+        if (this.isOutOfBounds(nextPosition.x, nextPosition.y)) return false;
 
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
     }
@@ -53,7 +53,7 @@ export class Grid {
         return x == 0 || x == this.width() - 1 || y == 0 || y == this.height() - 1;
     }
 
-    isOutside(x, y) {
+    isOutOfBounds(x, y) {
         return x < 0 || x >= this.width() || y < 0 || y >= this.height();
     }
 }

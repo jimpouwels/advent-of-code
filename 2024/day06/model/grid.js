@@ -8,7 +8,7 @@ export class Grid {
     }
 
     at(position) {
-        if (this.isOutside(position))
+        if (this.isOutOfBounds(position))
             return null;
         return this.data[position.y][position.x];
     }
@@ -49,7 +49,7 @@ export class Grid {
         }
     }
 
-    isOutside(position) {
+    isOutOfBounds(position) {
         return position.x < 0 || position.x >= this.width() || position.y < 0 || position.y >= this.height();
     }
 }
