@@ -24,9 +24,7 @@ function defragmentPart2(memory) {
     let memCopy = [...memory];
     let reverse = new ArrayReader([...memCopy].reverse());
     while (!reverse.end()) {
-        while (reverse.peek() == -1) {
-            reverse.readNext();
-        }
+        reverse.readUntil(v => v != -1);
         let requiredSpace = reverse.read(reverse.peek());
         let readIndex = memCopy.length - reverse.readIndex;
         for (let i = 0; i < readIndex; i++) {

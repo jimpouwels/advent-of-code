@@ -25,6 +25,12 @@ export default class ArrayReader {
         swap(this.arr, index1, index2);
     }
 
+    readUntil(predicate) {
+        while (!predicate(this.peek())) {
+            this.readNext();
+        }
+    }
+
     array() {
         return this.arr;
     }
