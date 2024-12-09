@@ -39,20 +39,17 @@ export default class ArrayReader {
         return this.arr;
     }
 
-    findSequence(value, length, before) {
-        let targetSpaceIndex = -1;
+    findSequence(value, length) {
+        this.reset();
         while (true) {
             this.readUntil(v => v == value);
-            if (this.readIndex > before) break;
-            targetSpaceIndex = this.readIndex;
+            let begin = this.readIndex;
             this.readUntil(v => v != value);
-            if (this.readIndex - targetSpaceIndex < length) {
-                targetSpaceIndex = -1;
-            } else {
-                break;
+            if (this.readIndex - begin >= length) {
+                return begin;
             }
         }
-        return targetSpaceIndex;
+        return undefined;
     }
 
     readNext() {
