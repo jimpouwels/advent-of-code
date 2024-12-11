@@ -13,6 +13,6 @@ function findPathsTo(grid, position, end) {
     if (!position) return [];
     if (position.value == end) return [position];
     return [grid.left(position), grid.right(position), grid.above(position), grid.below(position)]
-        .filter(p => p && !isNaN(p.value) && p.value - position.value == 1)
+        .filter(p => p && p.value - position.value == 1)
         .flatMap(p => findPathsTo(grid, p, end));
 }
