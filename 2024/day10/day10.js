@@ -10,7 +10,6 @@ export default function run(input) {
 }
 
 function findPathsTo(grid, position, end) {
-    if (!position) return [];
     if (position.value == end) return [position];
     return [grid.left(position), grid.right(position), grid.above(position), grid.below(position)]
         .filter(p => p && p.value - position.value == 1)
