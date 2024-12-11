@@ -12,10 +12,7 @@ export default function run(input) {
 function findPathsFrom(grid, position) {
     if (!position) return [];
     if (position.value == 9) return [position];
-    return [
-        ...findPathsFrom(grid, grid.left(position, (v) => !isNaN(v.value) && v.value - position.value == 1)),
-        ...findPathsFrom(grid, grid.right(position, (v) => !isNaN(v.value) && v.value - position.value == 1)),
-        ...findPathsFrom(grid, grid.above(position, (v) => !isNaN(v.value) && v.value - position.value == 1)),
-        ...findPathsFrom(grid, grid.below(position, (v) => !isNaN(v.value) && v.value - position.value == 1))
-    ];
+    return [grid.left(position), grid.right(position), grid.above(position), grid.below(position)]
+        .filter(p => p && !isNaN(p.value) && p.value - position.value == 1)
+        .flatMap(p => findPathsFrom(grid, p));
 }

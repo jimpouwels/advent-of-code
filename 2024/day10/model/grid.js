@@ -17,24 +17,20 @@ export class Grid {
         return this.data;
     }
 
-    left(position, predicate) {
-        let found = this.isOutOfBounds(position.x - 1, position.y) ? null : this.at(position.x - 1, position.y);
-        return (found && (!predicate || predicate(found))) ? found : null;
+    left(position) {
+        return this.isOutOfBounds(position.x - 1, position.y) ? null : this.at(position.x - 1, position.y);
     }
 
-    right(position, predicate) {
-        let found = this.isOutOfBounds(position.x + 1, position.y) ? null : this.at(position.x + 1, position.y);
-        return (found && (!predicate || predicate(found))) ? found : null;
+    right(position) {
+        return this.isOutOfBounds(position.x + 1, position.y) ? null : this.at(position.x + 1, position.y);
     }
 
-    above(position, predicate) {
-        let found = this.isOutOfBounds(position.x, position.y - 1) ? null : this.at(position.x, position.y - 1);
-        return (found && (!predicate || predicate(found))) ? found : null;
+    above(position) {
+        return this.isOutOfBounds(position.x, position.y - 1) ? null : this.at(position.x, position.y - 1);
     }
 
-    below(position, predicate) {
-        let found = this.isOutOfBounds(position.x, position.y + 1) ? null : this.at(position.x, position.y + 1);
-        return (found && (!predicate || predicate(found))) ? found : null;
+    below(position) {
+        return this.isOutOfBounds(position.x, position.y + 1) ? null : this.at(position.x, position.y + 1);
     }
 
     find(value) {
