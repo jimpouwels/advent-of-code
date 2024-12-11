@@ -1,4 +1,4 @@
-import { Grid } from "./model/grid";
+import Grid from "./model/grid";
 
 export default function run(input) {
     let grid = new Grid(input.map(l => l.split('')));

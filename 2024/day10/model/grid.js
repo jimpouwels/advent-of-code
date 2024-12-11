@@ -1,6 +1,6 @@
 import Position from "./position";
 
-export class Grid {
+export default class Grid {
     data;
 
     constructor(data) {
