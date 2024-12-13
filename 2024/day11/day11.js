@@ -2,7 +2,7 @@ export default function run(input, blinkCnt) {
     let map = new Map();
     input.split(' ').map(n => parseInt(n)).forEach(n => map.set(n, 1));
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < blinkCnt; i++) {
         let add = [];
         let remove = [];
         map.keys().forEach(key => {
