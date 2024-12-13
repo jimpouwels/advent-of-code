@@ -1,12 +1,11 @@
 export default function run(input, blinkCnt) {
-    let map = new Map();
-    input.split(' ').map(n => parseInt(n)).forEach(n => map.set(n, 1));
+    let numbers = new Numbers(input.split(' ').map(n => parseInt(n)));
 
     for (let i = 0; i < blinkCnt; i++) {
         let add = [];
         let remove = [];
-        map.keys().forEach(key => {
-            let cnt = map.get(key);
+        numbers.keys().forEach(key => {
+            let cnt = numbers.get(key);
             let keyStr = key.toString();
             if (key == 0) {
                 remove.push(new Delta(0, cnt));
@@ -20,20 +19,41 @@ export default function run(input, blinkCnt) {
                 add.push(new Delta(key * 2024, cnt));
             }
         });
-        add.forEach(a => {
-            if (!map.has(a.number))
-                map.set(a.number, a.count);
-            else
-                map.set(a.number, map.get(a.number) + a.count);
-        });
-        remove.forEach(a => {
-            if (map.has(a.number))
-                map.set(a.number, map.get(a.number) - a.count);
-        });
-    }
+        add.forEach(a => numbers.increase(a));
+        remove.forEach(a => numbers.decrease(a));
+
+    };
     let total = 0;
-    map.forEach((value, key) => total += (value > 0 ? value : 0));
+    numbers.map.forEach(value => total += (value > 0 ? value : 0));
     return total;
+}
+
+class Numbers {
+    map = new Map();
+
+    constructor(data) {
+        data.forEach(n => this.map.set(n, 1));
+    }
+
+    keys() {
+        return this.map.keys();
+    }
+
+    get(key) {
+        return this.map.get(key);
+    }
+
+    increase(delta) {
+        if (!this.map.has(delta.number))
+            this.map.set(delta.number, delta.count);
+        else
+            this.map.set(delta.number, this.map.get(delta.number) + delta.count);
+    }
+
+    decrease(delta) {
+        if (this.map.has(delta.number))
+            this.map.set(delta.number, this.map.get(delta.number) - delta.count);
+    }
 }
 
 class Delta {
