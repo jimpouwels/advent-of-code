@@ -1,5 +1,5 @@
-import Numbers from "./model/delta";
-import Delta from "./model/numbers";
+import Delta from "./model/delta";
+import Numbers from "./model/numbers";
 
 export default function run(input, blinkCnt) {
     let numbers = new Numbers(input.split(' ').map(n => parseInt(n)));
@@ -7,7 +7,7 @@ export default function run(input, blinkCnt) {
     for (let i = 0; i < blinkCnt; i++) {
         let deltas = [];
         numbers.keys().forEach(key => {
-            let cnt = numbers.get(key);
+            let cnt = numbers.countFor(key);
             let keyStr = key.toString();
             if (key == 0) {
                 deltas.push(new Delta(0, -cnt));
