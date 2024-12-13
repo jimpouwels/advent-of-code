@@ -2,25 +2,23 @@ export default function run(input, blinkCnt) {
     let numbers = new Numbers(input.split(' ').map(n => parseInt(n)));
 
     for (let i = 0; i < blinkCnt; i++) {
-        let add = [];
-        let remove = [];
+        let deltas = [];
         numbers.keys().forEach(key => {
             let cnt = numbers.get(key);
             let keyStr = key.toString();
             if (key == 0) {
-                remove.push(new Delta(0, cnt));
-                add.push(new Delta(1, cnt));
+                deltas.push(new Delta(0, -cnt));
+                deltas.push(new Delta(1, cnt));
             } else if (keyStr.length % 2 == 0) {
-                remove.push(new Delta(key, cnt));
-                add.push(new Delta(parseInt(keyStr.substring(0, keyStr.length / 2)), cnt));
-                add.push(new Delta(parseInt(keyStr.substring(keyStr.length / 2, keyStr.length)), cnt));
+                deltas.push(new Delta(key, -cnt));
+                deltas.push(new Delta(parseInt(keyStr.substring(0, keyStr.length / 2)), cnt));
+                deltas.push(new Delta(parseInt(keyStr.substring(keyStr.length / 2, keyStr.length)), cnt));
             } else {
-                remove.push(new Delta(key, cnt));
-                add.push(new Delta(key * 2024, cnt));
+                deltas.push(new Delta(key, -cnt));
+                deltas.push(new Delta(key * 2024, cnt));
             }
         });
-        add.forEach(a => numbers.increase(a));
-        remove.forEach(a => numbers.decrease(a));
+        deltas.forEach(d => numbers.handle(d));
 
     };
     let total = 0;
@@ -43,16 +41,11 @@ class Numbers {
         return this.map.get(key);
     }
 
-    increase(delta) {
+    handle(delta) {
         if (!this.map.has(delta.number))
-            this.map.set(delta.number, delta.count);
-        else
-            this.map.set(delta.number, this.map.get(delta.number) + delta.count);
-    }
+            this.map.set(delta.number, 0);
 
-    decrease(delta) {
-        if (this.map.has(delta.number))
-            this.map.set(delta.number, this.map.get(delta.number) - delta.count);
+        this.map.set(delta.number, this.map.get(delta.number) + delta.count);
     }
 }
 
