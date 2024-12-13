@@ -13,7 +13,7 @@ export default class Numbers {
         return this.map.get(key);
     }
 
-    handle(delta) {
+    process(delta) {
         if (!this.map.has(delta.number))
             this.map.set(delta.number, 0);
 

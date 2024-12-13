@@ -21,7 +21,7 @@ export default function run(input, blinkCnt) {
                 deltas.push(new Delta(key * 2024, cnt));
             }
         });
-        deltas.forEach(d => numbers.handle(d));
+        deltas.forEach(d => numbers.process(d));
     };
     return numbers.count();
 }
