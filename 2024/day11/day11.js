@@ -1,3 +1,6 @@
+import Numbers from "./model/delta";
+import Delta from "./model/numbers";
+
 export default function run(input, blinkCnt) {
     let numbers = new Numbers(input.split(' ').map(n => parseInt(n)));
 
@@ -21,43 +24,4 @@ export default function run(input, blinkCnt) {
         deltas.forEach(d => numbers.handle(d));
     };
     return numbers.count();
-}
-
-class Numbers {
-    map = new Map();
-
-    constructor(data) {
-        data.forEach(n => this.map.set(n, 1));
-    }
-
-    keys() {
-        return this.map.keys();
-    }
-
-    get(key) {
-        return this.map.get(key);
-    }
-
-    handle(delta) {
-        if (!this.map.has(delta.number))
-            this.map.set(delta.number, 0);
-
-        this.map.set(delta.number, this.map.get(delta.number) + delta.count);
-    }
-
-    count() {
-        let total = 0;
-        this.map.forEach(value => total += (value > 0 ? value : 0));
-        return total;
-    }
-}
-
-class Delta {
-    number;
-    count;
-
-    constructor(number, count) {
-        this.number = number;
-        this.count = count;
-    }
 }
