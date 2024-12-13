@@ -4,7 +4,7 @@ export default class Grid {
     data;
 
     constructor(data) {
-        this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), parseInt(val))));
+        this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), val)));
     }
 
     at(x, y) {

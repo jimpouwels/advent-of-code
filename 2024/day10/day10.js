@@ -1,7 +1,7 @@
 import Grid from "./model/grid";
 
 export default function run(input) {
-    let grid = new Grid(input.map(l => l.split('')));
+    let grid = new Grid(input);
     let results = grid.find(0).map(val => findPathsTo(grid, val, 9));
     return {
         part1: results.reduce((sum, val) => sum + new Set([...val]).size, 0),
