@@ -7,30 +7,31 @@ export default class Grid {
         this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), val)));
     }
 
-    at(x, y) {
+    at(x, y, predicate) {
         if (this.isOutOfBounds(x, y))
             return null;
-        return this.data[y][x];
+        let pos = this.data[y][x];
+        return predicate(pos) ? pos : null;
     }
 
     rows() {
         return this.data;
     }
 
-    left(position) {
-        return this.isOutOfBounds(position.x - 1, position.y) ? null : this.at(position.x - 1, position.y);
+    left(position, predicate) {
+        return this.isOutOfBounds(position.x - 1, position.y) ? null : this.at(position.x - 1, position.y, predicate);
     }
 
-    right(position) {
-        return this.isOutOfBounds(position.x + 1, position.y) ? null : this.at(position.x + 1, position.y);
+    right(position, predicate) {
+        return this.isOutOfBounds(position.x + 1, position.y) ? null : this.at(position.x + 1, position.y, predicate);
     }
 
-    above(position) {
-        return this.isOutOfBounds(position.x, position.y - 1) ? null : this.at(position.x, position.y - 1);
+    above(position, predicate) {
+        return this.isOutOfBounds(position.x, position.y - 1) ? null : this.at(position.x, position.y - 1, predicate);
     }
 
-    below(position) {
-        return this.isOutOfBounds(position.x, position.y + 1) ? null : this.at(position.x, position.y + 1);
+    below(position, predicate) {
+        return this.isOutOfBounds(position.x, position.y + 1) ? null : this.at(position.x, position.y + 1, predicate);
     }
 
     find(value) {
