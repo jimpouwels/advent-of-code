@@ -7,35 +7,41 @@ export default function run(input, blinkCnt) {
         let remove = [];
         map.keys().forEach(key => {
             let cnt = map.get(key);
-            for (let i = 0; i < cnt; i++) {
-                let keyStr = key.toString();
-                if (key == 0) {
-                    remove.push(0);
-                    add.push(1);
-                } else if (keyStr.length % 2 == 0) {
-                    remove.push(key);
-                    add.push(parseInt(keyStr.substring(0, keyStr.length / 2)));
-                    add.push(parseInt(keyStr.substring(keyStr.length / 2, keyStr.length)));
-                } else {
-                    remove.push(key);
-                    add.push(key * 2024);
-                }
+            let keyStr = key.toString();
+            if (key == 0) {
+                remove.push(new Delta(0, cnt));
+                add.push(new Delta(1, cnt));
+            } else if (keyStr.length % 2 == 0) {
+                remove.push(new Delta(key, cnt));
+                add.push(new Delta(parseInt(keyStr.substring(0, keyStr.length / 2)), cnt));
+                add.push(new Delta(parseInt(keyStr.substring(keyStr.length / 2, keyStr.length)), cnt));
+            } else {
+                remove.push(new Delta(key, cnt));
+                add.push(new Delta(key * 2024, cnt));
             }
         });
         add.forEach(a => {
-            if (!map.has(a))
-                map.set(a, 1);
+            if (!map.has(a.number))
+                map.set(a.number, a.count);
             else
-                map.set(a, map.get(a) + 1);
+                map.set(a.number, map.get(a.number) + a.count);
         });
         remove.forEach(a => {
-            if (!map.has(a))
-                map.set(a, 0);
-            else
-                map.set(a, map.get(a) - 1);
+            if (map.has(a.number))
+                map.set(a.number, map.get(a.number) - a.count);
         });
     }
     let total = 0;
     map.forEach((value, key) => total += (value > 0 ? value : 0));
     return total;
+}
+
+class Delta {
+    number;
+    count;
+
+    constructor(number, count) {
+        this.number = number;
+        this.count = count;
+    }
 }
