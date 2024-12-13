@@ -19,11 +19,8 @@ export default function run(input, blinkCnt) {
             }
         });
         deltas.forEach(d => numbers.handle(d));
-
     };
-    let total = 0;
-    numbers.map.forEach(value => total += (value > 0 ? value : 0));
-    return total;
+    return numbers.count();
 }
 
 class Numbers {
@@ -46,6 +43,12 @@ class Numbers {
             this.map.set(delta.number, 0);
 
         this.map.set(delta.number, this.map.get(delta.number) + delta.count);
+    }
+
+    count() {
+        let total = 0;
+        this.map.forEach(value => total += (value > 0 ? value : 0));
+        return total;
     }
 }
 
