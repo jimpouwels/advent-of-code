@@ -10,7 +10,10 @@ export default function run(input) {
             regions.push(detectRegion(grid, new Region(), plot));
         });
     })
-    return regions.reduce((sum, r) => sum + r.price(), 0);
+    return {
+        part1: regions.reduce((sum, r) => sum + r.priceByPerimeter(), 0),
+        part2: regions.reduce((sum, r) => sum + r.priceBySides(), 0)
+    };
 }
 
 function detectRegion(grid, region, currentPlot) {
