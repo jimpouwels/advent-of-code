@@ -3,12 +3,16 @@ import Button from "./model/button";
 import Prize from "./model/prize";
 
 export default function run(input) {
-    let machines = input.split('\n\n').map(m => {
+    let machines = parseMachines(input);
+    console.log(machines);
+    return 0;
+}
+
+function parseMachines(input) {
+    return input.split('\n\n').map(m => {
         let parts = m.split('\n');
         return new Machine(parseButton(parts[0]), parseButton(parts[1]), parsePrize(parts[2]));
     });
-    console.log(machines);
-    return 0;
 }
 
 function parseButton(parts) {
