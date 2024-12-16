@@ -3,15 +3,15 @@ import Position from "./position";
 export default class Grid {
     data;
 
-    constructor(data) {
-        this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), val)));
+    constructor(data, fieldParser) {
+        this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), fieldParser(val))));
     }
 
     at(x, y, predicate) {
         if (this.isOutOfBounds(x, y))
             return null;
         let pos = this.data[y][x];
-        return predicate(pos) ? pos : null;
+        return predicate ? predicate(pos) ? pos : null : pos;
     }
 
     rows() {

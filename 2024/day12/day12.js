@@ -1,8 +1,8 @@
-import Grid from "./model/grid";
+import Grid from "../../common/grid/grid";
 import Region from "./model/region";
 
 export default function run(input) {
-    let grid = new Grid(input);
+    let grid = new Grid(input, (v) => v);
     let regions = [];
     grid.rows().forEach(row => {
         row.forEach(plot => {
