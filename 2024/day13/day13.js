@@ -1,33 +1,15 @@
 import Machine from "./model/machine";
 import Button from "./model/button";
 import Prize from "./model/prize";
-import { leastCommonDiviser } from "../../common/math";
 
 export default function run(input, further = 0) {
-    let machines = parseMachines(input, further);
-    return machines.reduce((sum, val, i) => {
-        let tokens = press(val, i);
-        return sum + ((tokens < Number.MAX_VALUE) ? tokens : 0);
+    return parseMachines(input, further).reduce((sum, m) => {
+        let d = m.buttonA.xDelta * m.buttonB.yDelta - m.buttonA.yDelta * m.buttonB.xDelta;
+        let result = ((m.prize.x * m.buttonB.yDelta - m.prize.y * m.buttonB.xDelta) / d * m.buttonA.tokenCost) +
+            (((m.buttonA.xDelta * m.prize.y - m.buttonA.yDelta * m.prize.x) / d) * m.buttonB.tokenCost);
+        return sum + (result % 1 == 0 ? result : 0);
     }, 0);
 }
-
-function press(machine, i) {
-    let x = 0;
-    let y = 0;
-    while (x < machine.prize.x && y < machine.prize.y) {
-        x += machine.buttonA.xDelta;
-        y += machine.buttonA.yDelta;
-        let distanceToPrize = { x: machine.prize.x - x, y: machine.prize.y - y };
-        if ((distanceToPrize.x % machine.buttonB.xDelta == 0) && (distanceToPrize.y % machine.buttonB.yDelta == 0)
-            && (distanceToPrize.x / machine.buttonB.xDelta == distanceToPrize.y / machine.buttonB.yDelta)) {
-            return ((x / machine.buttonA.xDelta) * 3) + (distanceToPrize.x / machine.buttonB.xDelta);
-        }
-        if (distanceToPrize.x == 0 && distanceToPrize.y == 0) {
-            return ((x / machine.buttonA.xDelta) * 3);
-        }
-    }
-    return Number.MAX_VALUE;
-};
 
 function parseMachines(input, further) {
     return input.split('\n\n').map(m => {
