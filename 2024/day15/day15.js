@@ -12,16 +12,16 @@ export default function run(input) {
 
 function swapIfRoom(currentPosition, grid, direction) {
     let next = grid.next(currentPosition, direction);
-    if (next.value == '#') return false;
-    if (next.value == '.') {
-        currentPosition.swap(next);
-        return true;
-    }
-    if (next.value == 'O') {
-        let roomToSwap = swapIfRoom(next, grid, direction);
-        if (roomToSwap) {
-            currentPosition.swap(next)
+    switch (next.value) {
+        case '#':
+            return false;
+        case '.':
+            currentPosition.swap(next);
             return true;
-        }
+        case 'O':
+            if (swapIfRoom(next, grid, direction)) {
+                currentPosition.swap(next)
+                return true;
+            }
     }
 }
