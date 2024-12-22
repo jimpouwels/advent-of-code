@@ -16,4 +16,10 @@ export default class Position {
     equals(position) {
         return this.x == position.x && this.y == position.y;
     }
+
+    swap(otherPosition) {
+        let temp = this.value;
+        this.value = otherPosition.value;
+        otherPosition.value = temp;
+    }
 }

@@ -1,4 +1,5 @@
 import Position from "./position";
+import { Direction } from "./direction";
 
 export default class Grid {
     data;
@@ -16,6 +17,25 @@ export default class Grid {
 
     rows() {
         return this.data;
+    }
+
+    next(from, direction) {
+        let next = null;
+        switch (direction) {
+            case Direction.Left:
+                next = this.left(from);
+                break;
+            case Direction.Right:
+                next = this.right(from);
+                break;
+            case Direction.Up:
+                next = this.above(from);
+                break;
+            case Direction.Down:
+                next = this.below(from);
+                break;
+        }
+        return next;
     }
 
     left(position, predicate) {
@@ -36,6 +56,10 @@ export default class Grid {
 
     find(value) {
         return this.rows().reduce((matches, r) => [...matches, ...r.filter(element => element.value == value)], new Array());
+    }
+
+    findFirst(value) {
+        return this.find(value)[0];
     }
 
     height() {
