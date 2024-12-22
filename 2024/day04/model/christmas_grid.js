@@ -25,8 +25,6 @@ export class ChristmasGrid extends Grid {
 
         let nextPosition = this.next(currentPosition, direction);
         if (!nextPosition) return false;
-        if (this.isOutOfBounds(nextPosition.x, nextPosition.y)) return false;
-
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
     }
 
