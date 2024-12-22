@@ -34,6 +34,18 @@ export default class Grid {
             case Direction.South:
                 next = this.below(from);
                 break;
+            case Direction.NorthWest:
+                next = this.at(from.x - 1, from.y - 1);
+                break;
+            case Direction.NorthEast:
+                next = this.at(from.x + 1, from.y - 1);
+                break;
+            case Direction.SouthWest:
+                next = this.at(from.x - 1, from.y + 1);
+                break;
+            case Direction.SouthEast:
+                next = this.at(from.x + 1, from.y + 1);
+                break;
         }
         return next;
     }

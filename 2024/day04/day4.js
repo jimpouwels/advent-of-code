@@ -1,4 +1,4 @@
-import { ChristmasGrid } from "./model/grid";
+import { ChristmasGrid } from "./model/christmas_grid";
 
 export default function run(lines) {
     let grid = new ChristmasGrid(lines, v => v);
