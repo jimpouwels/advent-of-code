@@ -1,23 +1,7 @@
 import { Direction, allDirections } from "./direction";
+import Grid from "../../../common/grid/grid";
 
-export class Grid {
-    data;
-
-    constructor(data) {
-        this.data = data;
-    }
-
-    at(x, y) {
-        return this.data[y][x];
-    }
-
-    height() {
-        return this.data.length;
-    }
-
-    width() {
-        return this.data[0].length;
-    }
+export class ChristmasGrid extends Grid {
 
     findWordCount(word) {
         return this.data.reduce((sum, line, y) =>
@@ -27,16 +11,16 @@ export class Grid {
 
     findX_MASCount() {
         return this.data.reduce((sum, line, y) => sum + line.reduce((sum, _, x) =>
-            sum += this.at(x, y) == 'A' && !this.isEdge(x, y) &&
-                (((this.at(x - 1, y - 1) == 'M' && this.at(x + 1, y + 1) == 'S')
-                    || (this.at(x - 1, y - 1) == 'S' && this.at(x + 1, y + 1) == 'M')) &&
-                    ((this.at(x + 1, y - 1) == 'M' && this.at(x - 1, y + 1) == 'S')
-                        || (this.at(x + 1, y - 1) == 'S' && this.at(x - 1, y + 1) == 'M'))) ? 1 : 0
+            sum += this.at(x, y).value == 'A' && !this.isEdge(x, y) &&
+                (((this.at(x - 1, y - 1).value == 'M' && this.at(x + 1, y + 1).value == 'S')
+                    || (this.at(x - 1, y - 1).value == 'S' && this.at(x + 1, y + 1).value == 'M')) &&
+                    ((this.at(x + 1, y - 1).value == 'M' && this.at(x - 1, y + 1).value == 'S')
+                        || (this.at(x + 1, y - 1).value == 'S' && this.at(x - 1, y + 1).value == 'M'))) ? 1 : 0
             , 0), 0)
     }
 
     findAdjacentChars(chars, currentPosition, direction) {
-        if (this.at(currentPosition.x, currentPosition.y) != chars[0]) return false;
+        if (this.at(currentPosition.x, currentPosition.y).value != chars[0]) return false;
         if (chars.length == 1) return true;
 
         let nextPosition = { x: currentPosition.x, y: currentPosition.y };
@@ -49,11 +33,4 @@ export class Grid {
         return this.findAdjacentChars(chars.slice(1), nextPosition, direction);
     }
 
-    isEdge(x, y) {
-        return x == 0 || x == this.width() - 1 || y == 0 || y == this.height() - 1;
-    }
-
-    isOutOfBounds(x, y) {
-        return x < 0 || x >= this.width() || y < 0 || y >= this.height();
-    }
 }

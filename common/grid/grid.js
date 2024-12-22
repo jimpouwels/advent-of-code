@@ -5,7 +5,7 @@ export default class Grid {
     data;
 
     constructor(data, fieldParser) {
-        this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(parseInt(x), parseInt(y), fieldParser(val))));
+        this.data = data.map(l => l.split('')).map((l, y) => l.map((val, x) => new Position(x, y, fieldParser(val))));
     }
 
     at(x, y, predicate) {
@@ -36,6 +36,10 @@ export default class Grid {
                 break;
         }
         return next;
+    }
+
+    isEdge(x, y) {
+        return x == 0 || x == this.width() - 1 || y == 0 || y == this.height() - 1;
     }
 
     left(position, predicate) {
