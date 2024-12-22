@@ -22,16 +22,16 @@ export default class Grid {
     next(from, direction) {
         let next = null;
         switch (direction) {
-            case Direction.Left:
+            case Direction.West:
                 next = this.left(from);
                 break;
-            case Direction.Right:
+            case Direction.East:
                 next = this.right(from);
                 break;
-            case Direction.Up:
+            case Direction.North:
                 next = this.above(from);
                 break;
-            case Direction.Down:
+            case Direction.South:
                 next = this.below(from);
                 break;
         }

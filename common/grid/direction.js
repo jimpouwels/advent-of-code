@@ -1,19 +1,19 @@
 export const Direction = {
-    Left: 'left',
-    Right: 'right',
-    Up: 'up',
-    Down: 'down'
+    North: 'north',
+    South: 'south',
+    East: 'east',
+    West: 'west'
 }
 
-export function directionFrom(char) {
+export function directionFromString(char) {
     switch (char) {
         case '<':
-            return Direction.Left;
+            return Direction.West;
         case '>':
-            return Direction.Right;
+            return Direction.East;
         case '^':
-            return Direction.Up;
+            return Direction.North;
         case 'v':
-            return Direction.Down;
+            return Direction.South;
     }
 }
