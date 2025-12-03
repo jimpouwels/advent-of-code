@@ -19,6 +19,13 @@ export default class Grid {
         return this.data;
     }
 
+    findNeighbours(position, predicate) {
+        return [this.left(position, predicate),
+        this.right(position, predicate),
+        this.above(position, predicate),
+        this.below(position, predicate)].filter(n => n);
+    }
+
     next(from, direction) {
         let next = null;
         switch (direction) {
